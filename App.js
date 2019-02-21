@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Button, Text, View, ScrollView } from 'react-native';
+import { createStackNavigator, createAppContainer } from "react-navigation";
 
 class NavBar extends React.Component {
   render() {
@@ -12,23 +13,53 @@ class NavBar extends React.Component {
 }
 
 
-export default class App extends React.Component {
+class Menu extends React.Component {
+  render() {
+    return (
+         <NavBar/>
+    );
+  }
+}
+
+class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-         <NavBar/>
-         <ScrollView style={styles.content}>
+        <ScrollView style={styles.content}>
+          <Button
+            title="Go to Menu"
+            onPress={() => this.props.navigation.navigate('Menu')}
+          />
           <View style={styles.bloco500}>
             <Text>Bloco</Text>
           </View>
           <View style={styles.bloco500}>
             <Text>Mais um bloco</Text>
           </View>
-         </ScrollView>
+        </ScrollView>
        </View>
     );
   }
 }
+
+const AppNavigator = createStackNavigator(
+  {
+    Home: HomeScreen,
+    Menu: Menu,
+  },
+  {
+    initialRouteName: "Home"
+  }
+);
+
+const AppContainer = createAppContainer(AppNavigator);
+
+export default class App extends React.Component {
+  render() {
+    return <AppContainer />;
+  }
+}
+
 
 const styles = StyleSheet.create({
   container: {
@@ -48,7 +79,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'stretch',
     backgroundColor: '#ddd',
-    margin: 4
+    margin: 4,
   },
   menubar: {
     flexDirection: 'row',
