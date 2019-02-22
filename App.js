@@ -1,22 +1,29 @@
 import React from 'react';
-import { StyleSheet, Button, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Button, Text, View, ScrollView, Image } from 'react-native';
 import { createStackNavigator, createAppContainer } from "react-navigation";
+import { Menu, MenuIcon } from "./Menu"
 
-class NavBar extends React.Component {
+class AreaCliente extends React.Component {
+ static navigationOptions = {
+    title: 'Home',
+  };
   render() {
-    return <View style={styles.menubar}>
-      <View style={styles.flexBlock}><Text>Voltar</Text></View>
-      <View style={styles.flexGrow}><Text>Logo</Text></View>
-      <View style={styles.flexBlock}><Text>Menu</Text></View>
-    </View>
+    return (
+      <Text>Area do Cliente</Text>
+    );
   }
 }
 
-
-class Menu extends React.Component {
+class LogoTitle extends React.Component {
   render() {
     return (
-         <NavBar/>
+        <View style={{ flex: 1, alignItems: 'center' }}>
+          <Image
+            source={require('./assets/logofull.png')}
+            resizeMode="center"
+            style={{ height: 45, }}
+          />
+        </View>
     );
   }
 }
@@ -27,8 +34,8 @@ class HomeScreen extends React.Component {
       <View style={styles.container}>
         <ScrollView style={styles.content}>
           <Button
-            title="Go to Menu"
-            onPress={() => this.props.navigation.navigate('Menu')}
+            title="Area do cliente"
+            onPress={() => this.props.navigation.navigate('AreaCliente')}
           />
           <View style={styles.bloco500}>
             <Text>Bloco</Text>
@@ -45,21 +52,39 @@ class HomeScreen extends React.Component {
 const AppNavigator = createStackNavigator(
   {
     Home: HomeScreen,
-    Menu: Menu,
+    AreaCliente: AreaCliente,
   },
   {
-    initialRouteName: "Home"
+    initialRouteName: "Home",
+    defaultNavigationOptions: ({navigation}) => ({
+      headerTitle: <LogoTitle/>,
+      headerRight: <MenuIcon navigation={navigation}/>
+    })
   }
 );
 
-const AppContainer = createAppContainer(AppNavigator);
+const RootStack = createStackNavigator(
+  {
+    Main: {
+      screen: AppNavigator,
+    },
+    Menu: {
+      screen: Menu,
+    },
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+  }
+);
+
+const AppContainer = createAppContainer(RootStack);
 
 export default class App extends React.Component {
   render() {
     return <AppContainer />;
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -83,23 +108,16 @@ const styles = StyleSheet.create({
   },
   menubar: {
     flexDirection: 'row',
-    flex: 0,
-    height: 60,
-    flexGrow: 0,
-    backgroundColor: 'yellow',
+    flex: 1,
+    height: 50,
+    flexGrow: 1,
   },
   flexBlock : {
     flex: 1,
-    flexGrow: 1,
+    width: 30,
     justifyContent: 'center',
-    backgroundColor: 'green',
     alignItems: 'center',
   },
   flexGrow : {
-    flex: 1,
-    flexGrow: 3,
-    justifyContent: 'center',
-    backgroundColor: 'red',
-    alignItems: 'center',
   }
 });
