@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Text, View } from 'react-native';
+import { TouchableHighlight, Text, View } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons'
 
 class MenuButton extends React.Component {
@@ -32,18 +32,21 @@ class MenuButton extends React.Component {
 
 export class MenuIcon extends React.Component {
   render() {
-    return <Button
+    return <TouchableHighlight onPress={()=>{}}
         onPress = {
           () => this.props.navigation.navigate('Menu')
         }
-        navigation = {this.props.navigation}
-        title = "Info"
-        color = "#fff"
-    />
+    >
+        <Ionicons
+        name="ios-menu"
+        size={32}
+        style={{ paddingRight: 20 }}
+        />
+    </TouchableHighlight>
   }
 }
 
-export class Menu extends React.Component {
+export default class Menu extends React.Component {
   render() {
     return (
         <View style={{ 
@@ -111,9 +114,12 @@ export class Menu extends React.Component {
                 font={MaterialCommunityIcons}
                 noborder={true}
             />
-            <Button
-            onPress={() => this.props.navigation.goBack()}
-            title="Dismiss"
+            <MaterialCommunityIcons
+                onPress={() => this.props.navigation.goBack()}
+                name="arrow-left"
+                size={26}
+                style={{padding: 10, justifyContent: 'center', width: 46 }}
+                color="white"
             />
         </View>
     );

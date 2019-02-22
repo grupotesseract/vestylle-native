@@ -1,18 +1,13 @@
 import React from 'react';
-import { StyleSheet, Button, Text, View, ScrollView, Image } from 'react-native';
-import { createStackNavigator, createAppContainer } from "react-navigation";
-import { Menu, MenuIcon } from "./Menu"
+import { StyleSheet, Button, Text, View, AsyncStorage, Image } from 'react-native';
+import { createStackNavigator, createAppContainer, createSwitchNavigator } from "react-navigation";
+import { MenuIcon } from "./Menu"
+import Menu from "./Menu"
+import HomeScreen from "./screens/Home"
+import LoginScreen from "./screens/LoginScreen"
+import AreaCliente from "./screens/AreaCliente"
+import CadastroScreen from './screens/CadastroScreen';
 
-class AreaCliente extends React.Component {
- static navigationOptions = {
-    title: 'Home',
-  };
-  render() {
-    return (
-      <Text>Area do Cliente</Text>
-    );
-  }
-}
 
 class LogoTitle extends React.Component {
   render() {
@@ -28,26 +23,42 @@ class LogoTitle extends React.Component {
   }
 }
 
-class HomeScreen extends React.Component {
+class AuthLoadingScreen extends React.Component {
+  constructor() {
+    super();
+    this._bootstrapAsync();
+  }
+
+  // Fetch the token from storage then navigate to our appropriate place
+  _bootstrapAsync = async () => {
+    const userToken = await AsyncStorage.getItem('userToken');
+
+    // This will switch to the App screen or Auth screen and this loading
+    // screen will be unmounted and thrown away.
+    this.props.navigation.navigate(userToken ? 'Home' : 'Cadastro');
+  };
+
+  // Render any loading content that you like here
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.content}>
-          <Button
-            title="Area do cliente"
-            onPress={() => this.props.navigation.navigate('AreaCliente')}
-          />
-          <View style={styles.bloco500}>
-            <Text>Bloco</Text>
-          </View>
-          <View style={styles.bloco500}>
-            <Text>Mais um bloco</Text>
-          </View>
-        </ScrollView>
-       </View>
+        <Text>Loading...</Text>
+      </View>
     );
   }
 }
+
+const AuthStack = createStackNavigator(
+  { 
+    Cadastro: CadastroScreen, 
+    Login: LoginScreen, 
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+    initialRouteName: "Cadastro",
+  }
+);
 
 const AppNavigator = createStackNavigator(
   {
@@ -68,9 +79,7 @@ const RootStack = createStackNavigator(
     Main: {
       screen: AppNavigator,
     },
-    Menu: {
-      screen: Menu,
-    },
+    Menu: Menu,
   },
   {
     mode: 'modal',
@@ -78,7 +87,16 @@ const RootStack = createStackNavigator(
   }
 );
 
-const AppContainer = createAppContainer(RootStack);
+const AppContainer = createAppContainer(createSwitchNavigator(
+  {
+    AuthLoading: AuthLoadingScreen,
+    App: RootStack,
+    Auth: AuthStack,
+  },
+  {
+    initialRouteName: 'AuthLoading',
+  }
+));
 
 export default class App extends React.Component {
   render() {
@@ -93,31 +111,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
   },
-  content :{
-    alignSelf: 'stretch',
-  },
-  bloco500: {
-    flex: 0,
-    flexGrow: 0,
-    height: 350,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'stretch',
-    backgroundColor: '#ddd',
-    margin: 4,
-  },
-  menubar: {
-    flexDirection: 'row',
-    flex: 1,
-    height: 50,
-    flexGrow: 1,
-  },
-  flexBlock : {
-    flex: 1,
-    width: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  flexGrow : {
-  }
 });
