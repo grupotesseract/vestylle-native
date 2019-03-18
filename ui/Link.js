@@ -9,7 +9,8 @@ class Link extends Component {
 
   render() {
     return <TouchableHighlight 
-      onPress={() => this.props.navigation.navigate(this.props.to)}>
+      onPress={() => this.props.navigation.navigate(this.props.to)}
+      style={this.props.style}>
       <Text style={this.style.textoLink}>{this.props.title}</Text>
     </TouchableHighlight>
   }
