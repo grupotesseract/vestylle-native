@@ -1,13 +1,14 @@
 import React from 'react';
 import { StyleSheet, Button, Text, View, AsyncStorage, Image } from 'react-native';
 import { createStackNavigator, createAppContainer, createSwitchNavigator } from "react-navigation";
-import { MenuIcon } from "./Menu"
-import Menu from "./Menu"
+import { MenuIcon } from "./components/Menu"
+import Menu from "./components/Menu"
 import HomeScreen from "./screens/Home"
 import LoginScreen from "./screens/LoginScreen"
 import AreaCliente from "./screens/AreaCliente"
 import CadastroScreen from './screens/CadastroScreen';
-
+import CadastroSimples from './screens/CadastroSimples';
+import { Font, AppLoading } from 'expo';
 
 class LogoTitle extends React.Component {
   render() {
@@ -15,8 +16,8 @@ class LogoTitle extends React.Component {
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Image
             source={require('./assets/logofull.png')}
-            resizeMode="center"
-            style={{ height: 45, }}
+            resizeMode="contain"
+            style={{ height: 45, marginBottom: 5, marginTop: 2 }}
           />
         </View>
     );
@@ -60,6 +61,7 @@ const AuthStack = createStackNavigator(
   { 
     Cadastro: CadastroScreen, 
     Login: LoginScreen, 
+    CadastroSimples: CadastroSimples, 
   },
   {
     mode: 'modal',
@@ -107,7 +109,23 @@ const AppContainer = createAppContainer(createSwitchNavigator(
 ));
 
 export default class App extends React.Component {
+
+  state = {
+    fontLoaded: false
+  }
+
+  async componentDidMount() {
+    await Font.loadAsync({
+      'Rubik': require('./assets/fonts/Rubik-Medium.ttf')
+    });
+    this.setState({
+      fontLoaded: true
+    })
+  }
   render() {
+    if ( !this.state.fontLoaded ) {
+      return <AppLoading />;
+    }
     return <AppContainer />;
   }
 }

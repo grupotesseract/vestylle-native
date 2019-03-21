@@ -1,21 +1,20 @@
 import React from 'react';
-import { Image, View, StyleSheet, ImageBackground, Text, TextInput, AsyncStorage } from 'react-native';
+import { Image, View, StyleSheet, ImageBackground, TextInput, AsyncStorage } from 'react-native';
 import ButtonBorder from '../ui/ButtonBorder';
 import Link from '../ui/Link'
 import RubikText from '../ui/RubikText';
 import Alert from '../ui/Alert';
 
-export default class LoginScreen extends React.Component {
+export default class CadastroSimples extends React.Component {
   state = {
-    erroLogin: false,
+    cadastroConcluido: false,
+    erroCadastro: false,
+    passwordMismatch: false,
     msgErro: '',
     login: '',
-    password: ''
+    password: '',
+    passwordConfirm: ''
   }
-
-  static navigationOptions = {
-    title: 'Please sign in',
-  };
 
   render() {
     return (
@@ -43,16 +42,27 @@ export default class LoginScreen extends React.Component {
             onChangeText={(login) => this.setState({login})}
             value={this.state.login}
           />
-          <RubikText style={styles.label}>Senha</RubikText>
+          <RubikText style={styles.label}>Crie uma senha</RubikText>
           <TextInput
             style={styles.inputComBorda}
             secureTextEntry={true}
             onChangeText={(password) => this.setState({password})}
             value={this.state.password}
           />
+          <RubikText style={styles.label}>Confirme sua senha</RubikText>
+          <TextInput
+            style={styles.inputComBorda}
+            secureTextEntry={true}
+            onChangeText={(passwordConfirm) => this.setState({passwordConfirm})}
+            value={this.state.passwordConfirm}
+            onBlur={this.blurPasswordConfirm}
+          />
+          { this.state.passwordMismatch && (
+            <RubikText style={styles.erroText}>Campos de senha estão diferentes</RubikText>
+          )}
           <ButtonBorder 
-            title="LOGIN" 
-            onPress={this._signInAsync} 
+            title="CADASTRAR" 
+            onPress={this.cadastrarNovoUsuario} 
           />
         </View>
         <Link 
@@ -60,43 +70,56 @@ export default class LoginScreen extends React.Component {
           title="Saiba mais sobre o aplicativo Megastore Jaú" 
           to="Home"
           fontSize="12"
-          style={{marginTop: 100, marginBottom: 25}}
+          style={{marginTop: 50, marginBottom: 25}}
         />
-        { this.state.erroLogin && (
+        { this.state.cadastroConcluido && (
           <Alert
-            title = "Erro"
+            title = "Obrigado!"
+            message = "Cadastro realizado com sucesso."
+            btnText = "começar"
+            onClickButton = {this.onClickAlertButton}
+            dismissAlert = {this.onClickAlertButton}
+          />
+        )}
+        { this.state.erroCadastro && (
+          <Alert
+            title = "Atenção"
             message = {this.state.msgErro}
             btnText = "OK"
             onClickButton = {this.dismissAlertErro}
             dismissAlert = {this.dismissAlertErro}
           />
         )}
+        
       </ImageBackground>
     );
   }
 
-  _signInAsync = async () => {
-    const jsonRes = await this.fetchLogin();
+  cadastrarNovoUsuario = async () => {
+    const jsonRes = await this.fetchCadastro();
     if(jsonRes.success) {
-      await AsyncStorage.setItem('userToken', jsonRes.data.token);
-      this.props.navigation.navigate('App');
-      return;
+      const token = jsonRes.data.token.token
+      await AsyncStorage.setItem('userToken', token);
+      this.setState({
+        cadastroConcluido: true
+      })
+      return
     }
     const msgErro = jsonRes.message;
     this.setState({
-      erroLogin: true,
+      erroCadastro: true,
       msgErro
     })
   };
 
-  fetchLogin = async () => {
-    const rawResponse = await fetch('https://develop-api.vestylle.grupotesseract.com.br/api/login', {
+  fetchCadastro = async () => {
+    const rawResponse = await fetch('https://develop-api.vestylle.grupotesseract.com.br/api/pessoas', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({email: this.state.login, password: this.state.password})
+      body: JSON.stringify({email: this.state.login, password: this.state.password, nome:'teste', cpf: this.state.login})
     })
     const jsonRes = await rawResponse.json();
     return jsonRes;
@@ -104,8 +127,24 @@ export default class LoginScreen extends React.Component {
 
   dismissAlertErro = () => {
     this.setState({
-      erroLogin: false
+      erroCadastro: false
     })
+  }
+
+  onClickAlertButton = () => {
+    this.props.navigation.navigate('App');
+  }
+
+  blurPasswordConfirm = () => {
+    if(this.state.password != this.state.passwordConfirm) {
+      this.setState({
+        passwordMismatch: true
+      })
+    } else {
+      this.setState({
+        passwordMismatch: false
+      })
+    }
   }
 }
 
@@ -121,6 +160,10 @@ const styles = StyleSheet.create({
   label: {
     color: '#feca03',
     marginTop: 5,
+    textAlign: 'left'
+  },
+  erroText: {
+    color: 'white',
     textAlign: 'left'
   },
   textoBranco: {

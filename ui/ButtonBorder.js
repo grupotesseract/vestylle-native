@@ -9,7 +9,7 @@ class ButtonBorder extends Component {
 
   render() {
     return <TouchableHighlight 
-      onPress={() => this.props.onPress}
+      onPress={this.props.onPress}
       style={this.style.btnBorda}>
       <Text style={this.style.txtBtnBorda}>{this.props.title}</Text>
     </TouchableHighlight>

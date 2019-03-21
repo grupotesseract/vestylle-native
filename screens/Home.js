@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, AsyncStorage, Button, ScrollView } from 'react-native';
 import BoasVindas from './BoasVindas'
+import SimpleMenu from '../components/SimpleMenu'
 
 export default class HomeScreen extends React.Component {
 
@@ -8,7 +9,7 @@ export default class HomeScreen extends React.Component {
     return (
       <View>
         <ScrollView style={{ alignSelf: 'stretch' }}>
-          <Text>Home</Text>
+          <SimpleMenu/>
           <BoasVindas/>
           <Button title="Logoff" onPress={this._signOutAsync} />
         </ScrollView>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Text,TouchableHighlight } from 'react-native';
+import { TouchableHighlight } from 'react-native';
+import RubikText from '../ui/RubikText';
 
 class Link extends Component {
 
@@ -11,7 +12,11 @@ class Link extends Component {
     return <TouchableHighlight 
       onPress={() => this.props.navigation.navigate(this.props.to)}
       style={this.props.style}>
-      <Text style={this.style.textoLink}>{this.props.title}</Text>
+      <RubikText 
+        style={[this.style.textoLink, { fontSize: Number(this.props.fontSize) }]}
+      >
+        {this.props.title}
+      </RubikText>
     </TouchableHighlight>
   }
 
