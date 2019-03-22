@@ -9,7 +9,7 @@ class RubikText extends Component {
 
   render() {
     return <Text 
-      style={[this.style.textoRubik, this.props.style]}>
+      style={[this.style.textoRubik, this.props.style, this.props.bold ? this.style.bold : {}]}>
       {this.props.children}
     </Text>
   }
@@ -17,6 +17,9 @@ class RubikText extends Component {
   style = {
     textoRubik: {
       fontFamily: 'Rubik'
+    },
+    bold: {
+      fontFamily: 'RubikBold'
     }
   }
 }

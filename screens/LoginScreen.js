@@ -12,11 +12,7 @@ export default class LoginScreen extends React.Component {
     login: '',
     password: ''
   }
-
-  static navigationOptions = {
-    title: 'Please sign in',
-  };
-
+  
   render() {
     return (
       <ImageBackground

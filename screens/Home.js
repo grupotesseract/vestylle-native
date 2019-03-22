@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, AsyncStorage, Button, ScrollView } from 'react-native';
 import BoasVindas from './BoasVindas'
 import SimpleMenu from '../components/SimpleMenu'
+import RodapeCompleto from '../components/RodapeCompleto'
 
 export default class HomeScreen extends React.Component {
 
@@ -12,6 +13,7 @@ export default class HomeScreen extends React.Component {
           <SimpleMenu/>
           <BoasVindas/>
           <Button title="Logoff" onPress={this._signOutAsync} />
+          <RodapeCompleto/>
         </ScrollView>
        </View>
     );
