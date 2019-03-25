@@ -4,6 +4,7 @@ import BoasVindas from './BoasVindas'
 import SimpleMenu from '../components/SimpleMenu'
 import RodapeCompleto from '../components/RodapeCompleto'
 import SliderCupom from '../components/SliderCupom';
+import SliderOfertas from '../components/SliderOfertas';
 
 export default class HomeScreen extends React.Component {
 
@@ -15,6 +16,7 @@ export default class HomeScreen extends React.Component {
           <SliderCupom/>
           <BoasVindas/>
           <Button title="Logoff" onPress={this._signOutAsync} />
+          <SliderOfertas/>
           <RodapeCompleto/>
         </ScrollView>
        </View>

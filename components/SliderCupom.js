@@ -109,7 +109,7 @@ class SliderCupom extends Component {
       <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: -5}}>
         {this.cupomData.map((item, key)=> {
           return <TouchableHighlight
-          style={{paddingRight: 4, paddingLeft: 4}}
+          style={{paddingRight: 2, paddingLeft: 2}}
           key={key}
           onPress={() => this.setState({ currentIndex: key })}>
             <MaterialCommunityIcons

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, AsyncStorage, Image, ImageBackground, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, AsyncStorage, Image, ImageBackground, TouchableHighlight } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'
 import Link from '../ui/Link'
 import RubikText from '../ui/RubikText';

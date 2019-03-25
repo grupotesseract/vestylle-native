@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableHighlight, Text, View } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons'
+import RubikText from '../ui/RubikText'
 
 class MenuButton extends React.Component {
   render() {
@@ -15,7 +16,7 @@ class MenuButton extends React.Component {
             style={{padding: 10, justifyContent: 'center', width: 46 }}
             color="white"
           />
-          <Text style={{
+          <RubikText style={{
             flexGrow: 1,
             borderBottomColor: '#fff',
             borderBottomWidth: this.props.noborder ? 0 : 1,
@@ -24,7 +25,7 @@ class MenuButton extends React.Component {
             padding: 5,
             paddingTop: 15,
             fontSize: 14
-          }}>{this.props.label.toUpperCase()}</Text>
+          }}>{this.props.label.toUpperCase()}</RubikText>
         </View>
     )
   }
@@ -74,7 +75,7 @@ export default class Menu extends React.Component {
             <MenuButton 
                 navigation={this.props.navigation} 
                 label="Meus Pontos"
-                page="AreaCliente"
+                page="MeuPerfil"
                 icon="star"
                 font={FontAwesome}
             />

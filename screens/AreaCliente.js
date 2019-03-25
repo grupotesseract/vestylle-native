@@ -1,8 +1,9 @@
 import React from 'react';
-import { Text } from 'react-native';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, TouchableHighlight } from 'react-native';
+import RubikText from '../ui/RubikText';
 
 export default class AreaCliente extends React.Component {
+  
   componentDidMount() {
     this.state = {
       userToken: null
@@ -17,7 +18,11 @@ export default class AreaCliente extends React.Component {
 
   render() {
     return (
-      <Text>Area do Cliente</Text>
+      <TouchableHighlight
+        onPress={() => this.props.navigation.navigate('MeuPerfil')}
+      >
+        <RubikText>Meu Perfil</RubikText>
+      </TouchableHighlight>
     );
   }
 

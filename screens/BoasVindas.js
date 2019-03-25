@@ -12,7 +12,7 @@ class BoasVindas extends React.Component {
             <Text>Faça seu cadastro e ganhe um cupom de boas vindas</Text>
             <Button title="Quero me cadastrar" onPress={() => this.props.navigation.navigate('Cadastro')} />
         </View>
-       </View>
+      </View>
     );
   }
 }
