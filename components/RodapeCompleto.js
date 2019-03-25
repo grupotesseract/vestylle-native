@@ -145,7 +145,7 @@ class RodapeCompleto extends Component {
       paddingRight: 10,
       borderBottomRightRadius: 15,
       borderTopRightRadius: 15,
-      flexGrow: 3
+      flexGrow: 4
     },
     faleComAtendentes: {
       flexGrow: 8

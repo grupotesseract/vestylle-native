@@ -5,10 +5,6 @@ import RubikText from '../ui/RubikText';
 import { withNavigation } from 'react-navigation';
 
 class BoasVindas extends React.Component {
-/*
-          <Link>
-          </Link>
-          */
   render() {
     return (
       <View>
@@ -16,9 +12,6 @@ class BoasVindas extends React.Component {
             <Text>Faça seu cadastro e ganhe um cupom de boas vindas</Text>
             <Button title="Quero me cadastrar" onPress={() => this.props.navigation.navigate('Cadastro')} />
         </View>
-          <RubikText>
-            Com os cupons promocionais _Vestylle Megastore Jaú_, você tem desconto o ano inteiro
-          </RubikText>
        </View>
     );
   }
