@@ -1,9 +1,61 @@
 import React from 'react';
-import { Image, View, StyleSheet, ImageBackground, TextInput, AsyncStorage } from 'react-native';
+import { TouchableHighlight, ScrollView, View, StyleSheet, ImageBackground, TextInput, AsyncStorage } from 'react-native';
 import ButtonBorder from '../ui/ButtonBorder';
-import Link from '../ui/Link'
 import RubikText from '../ui/RubikText';
 import Alert from '../ui/Alert';
+import MiniRodape from '../components/MiniRodape';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+
+class Checkbox extends React.Component {
+
+  render() { 
+    return <TouchableHighlight
+      onPress={this.toggleCheckbox}
+      style={this.props.style}
+      >
+    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      <MaterialCommunityIcons
+        name={this.props.value ? 'checkbox-marked-outline' : 'checkbox-blank-outline'}
+        size={26}
+        style={{color:'white'}}
+      />
+      <RubikText style={{color: 'white', paddingLeft: 5}}>{this.props.title}</RubikText>
+    </View>
+    </TouchableHighlight>
+  }
+
+  toggleCheckbox = () => {
+    const newValue = !this.props.value;
+    this.props.onChange(newValue);
+  }
+}
+class InputValidacao extends React.Component {
+
+  render() {
+    return (
+      <View>
+        <RubikText bold={true} style={{color: '#feca03', fontSize:12, marginTop: 3}}>{this.props.title}</RubikText>
+        <TextInput 
+          style={this.style.inputSublinhado} 
+          value={this.props.value}
+          onChangeText={this.props.onChange}
+          />
+      </View>
+    )
+  }  
+
+  style = {
+    inputSublinhado: {
+      borderBottomWidth: 1,
+      color: 'white',
+      borderColor: '#585756',
+      marginTop: 5,
+      marginBottom: 8,
+      paddingBottom: 2,
+      fontSize: 15
+    }
+  }
+}
 
 export default class MeuPerfil extends React.Component {
 
@@ -27,95 +79,65 @@ export default class MeuPerfil extends React.Component {
   }
 
   state = {
-    erroCadastro: false,
-    passwordMismatch: false,
+    erroAtualizaPerfil: false,
     msgErro: '',
-    login: '',
-    password: '',
-    passwordConfirm: ''
+    nome: '',
+    email: '',
+    cpf: '',
+    nascimento: '',
+    celular: '',
+    receberNovidades: false
   }
 
   render() {
     return (
       <ImageBackground
         source={require('../assets/fundologin.jpg')}
-        style={{width: '100%', minHeight: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
+        style={{width: '100%', height: '100%'}}>
+        <ScrollView style={{ alignSelf: 'stretch'}}>
+        <View style={{padding: 20}}>
+          <RubikText bold={true} style={{color:'white', fontSize: 14, marginTop: 10, marginBottom: 10}} >Meu perfil</RubikText>
+          <InputValidacao 
+            title="Nome" 
+            value={this.state.nome}
+            onChange={(nome) => this.setState({nome})}/>
+          <InputValidacao 
+            title="E-mail" 
+            value={this.state.email}
+            onChange={(email) => this.setState({email})}/>
+          <InputValidacao 
+            title="CPF" 
+            value={this.state.cpf}
+            onChange={(cpf) => this.setState({cpf})}/>
+          <InputValidacao 
+            title="Data de Nascimento" 
+            value={this.state.nascimento}
+            onChange={(nascimento) => this.setState({nascimento})}/>
+          <InputValidacao 
+            title="Celular" 
+            value={this.state.celular}
+            onChange={(celular) => this.setState({celular})}/>
 
-        <View
-          style={{width: '80%', flexGrow:1, marginBottom: 'auto', justifyContent: 'center'}}>
-          <Image
-            source={require('../assets/logobranco.png')}
-            resizeMode="contain"
-            style={{ width:'80%', height:60 }}
-          />
-          <RubikText style={styles.textoBranco}>Faça seu cadastro </RubikText>
-          <RubikText style={styles.textoBranco}>e receba benefícios exclusivos</RubikText>
-        </View>
-
-        <View
-          style={{width: '80%'}}>
-
-          <RubikText style={styles.label}>CPF ou E-mail</RubikText>
-          <TextInput
-            style={styles.inputComBorda}
-            onChangeText={(login) => this.setState({login})}
-            value={this.state.login}
-          />
-          <RubikText style={styles.label}>Crie uma senha</RubikText>
-          <TextInput
-            style={styles.inputComBorda}
-            secureTextEntry={true}
-            onChangeText={(password) => this.setState({password})}
-            value={this.state.password}
-          />
-          <RubikText style={styles.label}>Confirme sua senha</RubikText>
-          <TextInput
-            style={styles.inputComBorda}
-            secureTextEntry={true}
-            onChangeText={(passwordConfirm) => this.setState({passwordConfirm})}
-            value={this.state.passwordConfirm}
-            onBlur={this.blurPasswordConfirm}
-          />
-          { this.state.passwordMismatch && (
-            <RubikText style={styles.erroText}>Campos de senha estão diferentes</RubikText>
-          )}
-          <ButtonBorder 
-            title="CADASTRAR" 
-            onPress={this.cadastrarNovoUsuario} 
+          <Checkbox
+            title="Quero receber novidades e ofertas da Vestylle Megastore Jaú"
+            value={this.state.receberNovidades}
+            onChange={(receberNovidades) => this.setState({receberNovidades})}
+            style={{paddingTop: 20, paddingBottom: 15}}/>
+          
+          <ButtonBorder
+            title="CONTINUAR"
+            onPress={this.atualizarPerfil}
+            style={{marginBottom: 40}}
           />
         </View>
-        <Link 
-          navigation={this.props.navigation}
-          title="Saiba mais sobre o aplicativo Megastore Jaú" 
-          to="Home"
-          fontSize="12"
-          style={{marginTop: 50, marginBottom: 25}}
-        />
-        { this.state.cadastroConcluido && (
-          <Alert
-            title = "Obrigado!"
-            message = "Cadastro realizado com sucesso."
-            btnText = "começar"
-            onClickButton = {this.onClickAlertButton}
-            dismissAlert = {this.onClickAlertButton}
-          />
-        )}
-        { this.state.erroCadastro && (
-          <Alert
-            title = "Atenção"
-            message = {this.state.msgErro}
-            btnText = "OK"
-            onClickButton = {this.dismissAlertErro}
-            dismissAlert = {this.dismissAlertErro}
-          />
-        )}
-        
+        <MiniRodape/>
+        </ScrollView>
       </ImageBackground>
     );
   }
 
-  cadastrarNovoUsuario = async () => {
-    const jsonRes = await this.fetchCadastro();
+  atualizarPerfil = async () => {
+    const jsonRes = await this.fetchPerfil();
     if(jsonRes.success) {
       const token = jsonRes.data.token.token
       await AsyncStorage.setItem('userToken', token);
@@ -131,7 +153,7 @@ export default class MeuPerfil extends React.Component {
     })
   };
 
-  fetchCadastro = async () => {
+  fetchPerfil = async () => {
     const rawResponse = await fetch('https://develop-api.vestylle.grupotesseract.com.br/api/pessoas', {
       method: 'POST',
       headers: {
@@ -154,42 +176,4 @@ export default class MeuPerfil extends React.Component {
     this.props.navigation.navigate('App');
   }
 
-  blurPasswordConfirm = () => {
-    if(this.state.password != this.state.passwordConfirm) {
-      this.setState({
-        passwordMismatch: true
-      })
-    } else {
-      this.setState({
-        passwordMismatch: false
-      })
-    }
-  }
 }
-
-const styles = StyleSheet.create({
-  inputComBorda: {
-    height: 40,
-    width:'100%',
-    borderColor: 'gray',
-    color: 'white',
-    borderWidth: 1,
-    borderRadius: 5
-  },
-  label: {
-    color: '#feca03',
-    marginTop: 5,
-    textAlign: 'left'
-  },
-  erroText: {
-    color: 'white',
-    textAlign: 'left'
-  },
-  textoBranco: {
-    color: '#FFFFFF',
-    fontSize: 10,
-    paddingLeft: 12,
-    alignSelf: 'flex-start'
-  }
-  
-})
