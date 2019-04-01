@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import { TouchableHighlight, View } from 'react-native';
-import { MaterialCommunityIcons, MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons'
+import { View } from 'react-native';
 import RubikText from '../ui/RubikText';
 
 class MiniRodape extends Component {
-
-  constructor() {
-    super();
-  }
 
   render() {
     return <View style={this.style.container}>

@@ -6,10 +6,6 @@ import MiniRodape from './MiniRodape'
 
 class RodapeCompleto extends Component {
 
-  constructor() {
-    super();
-  }
-
   render() {
     return <React.Fragment>
       <View style={this.style.container}>

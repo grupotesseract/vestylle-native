@@ -3,10 +3,6 @@ import { Text,TouchableHighlight } from 'react-native';
 
 class ButtonBorder extends Component {
 
-  constructor() {
-    super();
-  }
-
   render() {
     return <TouchableHighlight 
       onPress={this.props.onPress}

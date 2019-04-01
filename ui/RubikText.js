@@ -16,7 +16,7 @@ class RubikText extends Component {
 
   style = {
     textoRubik: {
-      fontFamily: 'Rubik'
+      fontFamily: 'Rubik',
     },
     bold: {
       fontFamily: 'RubikBold'

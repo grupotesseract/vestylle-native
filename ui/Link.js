@@ -12,11 +12,14 @@ class Link extends Component {
     return <TouchableHighlight 
       onPress={() => this.props.navigation.navigate(this.props.to)}
       style={this.props.style}>
-      <RubikText 
-        style={[this.style.textoLink, { fontSize: Number(this.props.fontSize) }]}
-      >
-        {this.props.title}
-      </RubikText>
+      <>
+        <RubikText 
+          style={[this.style.textoLink, { fontSize: Number(this.props.fontSize) }]}
+        >
+          {this.props.title}
+        </RubikText>
+        {this.props.children}
+      </>
     </TouchableHighlight>
   }
 
