@@ -75,7 +75,7 @@ export default class Menu extends React.Component {
             <MenuButton 
                 navigation={this.props.navigation} 
                 label="Meus Pontos"
-                page="MeuPerfil"
+                page="MeusPontos"
                 icon="star"
                 font={FontAwesome}
             />

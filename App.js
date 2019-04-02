@@ -7,6 +7,7 @@ import HomeScreen from "./screens/Home"
 import LoginScreen from "./screens/LoginScreen"
 import AreaCliente from "./screens/AreaCliente"
 import MeuPerfil from "./screens/MeuPerfil"
+import MeusPontos from "./screens/MeusPontos"
 import CadastroScreen from './screens/CadastroScreen';
 import CadastroSimples from './screens/CadastroSimples';
 import { Font, AppLoading } from 'expo';
@@ -75,7 +76,8 @@ const AppNavigator = createStackNavigator(
   {
     Home: HomeScreen,
     AreaCliente: AreaCliente,
-    MeuPerfil: MeuPerfil
+    MeuPerfil: MeuPerfil,
+    MeusPontos: MeusPontos
   },
   {
     initialRouteName: "Home",

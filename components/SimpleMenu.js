@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { TouchableHighlight, View } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons'
+import { withNavigation } from 'react-navigation';
 
 class SimpleMenu extends Component {
 
@@ -11,7 +12,7 @@ class SimpleMenu extends Component {
   render() {
     return <View style={this.style.container}>
       <TouchableHighlight
-        onPress = {this.goTo("qrcode")}
+        onPress = {() => this.goTo("qrcode")}
       >
         <MaterialCommunityIcons
           name="qrcode-scan"
@@ -20,7 +21,7 @@ class SimpleMenu extends Component {
         />
       </TouchableHighlight>
       <TouchableHighlight
-        onPress = {this.goTo("")}
+        onPress = {() => this.goTo("MeusPontos")}
       >
         <MaterialCommunityIcons
           name="star"
@@ -29,7 +30,7 @@ class SimpleMenu extends Component {
         />
       </TouchableHighlight>
       <TouchableHighlight
-        onPress = {this.goTo("")}
+        onPress = {() => this.goTo("MeusPontos")}
       >
         <MaterialCommunityIcons
           name="cards-heart"
@@ -38,7 +39,7 @@ class SimpleMenu extends Component {
         />
       </TouchableHighlight>
       <TouchableHighlight
-        onPress = {this.goTo("")}
+        onPress = {() => this.goTo("")}
       >
         <MaterialCommunityIcons
           name="whatsapp"
@@ -50,7 +51,7 @@ class SimpleMenu extends Component {
   }
 
   goTo = (page) => {
-    
+    this.props.navigation.navigate(page)
   }
 
   style = {
@@ -70,4 +71,4 @@ class SimpleMenu extends Component {
   }
 }
 
-export default SimpleMenu;
+export default withNavigation(SimpleMenu)
