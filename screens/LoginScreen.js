@@ -6,6 +6,7 @@ import RubikText from '../ui/RubikText';
 import Alert from '../ui/Alert';
 
 export default class LoginScreen extends React.Component {
+  
   state = {
     erroLogin: false,
     msgErro: '',
