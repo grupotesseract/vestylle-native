@@ -11,6 +11,8 @@ import MeusPontos from "./screens/MeusPontos"
 import CadastroScreen from './screens/CadastroScreen';
 import CadastroSimples from './screens/CadastroSimples';
 import { Font, AppLoading } from 'expo';
+import ListaDesejos from './screens/ListaDesejos';
+import { UserProvider } from './UserContext';
 
 class LogoTitle extends React.Component {
   render() {
@@ -77,7 +79,8 @@ const AppNavigator = createStackNavigator(
     Home: HomeScreen,
     AreaCliente: AreaCliente,
     MeuPerfil: MeuPerfil,
-    MeusPontos: MeusPontos
+    MeusPontos: MeusPontos,
+    ListaDesejos: ListaDesejos
   },
   {
     initialRouteName: "Home",
@@ -131,7 +134,9 @@ export default class App extends React.Component {
     if ( !this.state.fontLoaded ) {
       return <AppLoading />;
     }
-    return <AppContainer />;
+    return <UserProvider>
+      <AppContainer />
+    </UserProvider>;
   }
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableHighlight, Text, View } from 'react-native';
+import { TouchableHighlight, AsyncStorage, View } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons'
 import RubikText from '../ui/RubikText'
 
@@ -115,14 +115,28 @@ export default class Menu extends React.Component {
                 font={MaterialCommunityIcons}
                 noborder={true}
             />
-            <MaterialCommunityIcons
-                onPress={() => this.props.navigation.goBack()}
-                name="arrow-left"
-                size={26}
-                style={{padding: 10, justifyContent: 'center', width: 46 }}
-                color="white"
-            />
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <MaterialCommunityIcons
+                  onPress={() => this.props.navigation.goBack()}
+                  name="arrow-left"
+                  size={26}
+                  style={{padding: 10, justifyContent: 'center', width: 46 }}
+                  color="white"
+              />
+              <MaterialCommunityIcons
+                  onPress={this._signOutAsync}
+                  name="power-standby"
+                  size={26}
+                  style={{padding: 10, justifyContent: 'center', width: 46 }}
+                  color="white"
+              />
+            </View>
         </View>
     );
   }
+
+  _signOutAsync = async () => {
+    await AsyncStorage.clear();
+    this.props.navigation.navigate('Auth');
+  };
 }

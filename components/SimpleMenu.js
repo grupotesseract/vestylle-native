@@ -30,7 +30,7 @@ class SimpleMenu extends Component {
         />
       </TouchableHighlight>
       <TouchableHighlight
-        onPress = {() => this.goTo("MeusPontos")}
+        onPress = {() => this.goTo("ListaDesejos")}
       >
         <MaterialCommunityIcons
           name="cards-heart"
