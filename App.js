@@ -13,6 +13,7 @@ import CadastroSimples from './screens/CadastroSimples';
 import { Font, AppLoading } from 'expo';
 import ListaDesejos from './screens/ListaDesejos';
 import { UserProvider } from './UserContext';
+import { LojaProvider } from './LojaContext';
 
 class LogoTitle extends React.Component {
   render() {
@@ -134,9 +135,11 @@ export default class App extends React.Component {
     if ( !this.state.fontLoaded ) {
       return <AppLoading />;
     }
-    return <UserProvider>
-      <AppContainer />
-    </UserProvider>;
+    return <LojaProvider>
+      <UserProvider>
+        <AppContainer />
+      </UserProvider>
+    </LojaProvider>;
   }
 }
 

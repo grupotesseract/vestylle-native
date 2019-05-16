@@ -3,17 +3,19 @@ import { TouchableHighlight, View, Dimensions, Image } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons'
 import RubikText from '../ui/RubikText';
 import SideSwipe from 'react-native-sideswipe';
+import { LojaConsumer } from '../LojaContext';
 
 class CupomCard extends Component {
 
   render() {
     const { width } = Dimensions.get('window');
+    console.log(this.props)
     return (
       <View style={{width, alignItems: 'center'}}>
         <TouchableHighlight
-          onPress={() => console.log("clicou na img")}>
+          onPress={() => console.log("clicou no"+this.props.id)}>
           <Image
-            source={{uri: this.props.illustration}}
+            source={{ uri : "http:"+(this.props.foto_caminho || "//via.placeholder.com/500x500")}}
             resizeMode="cover"
             style={{ width: width*0.85, height: width*0.9 }}
           />
@@ -40,31 +42,25 @@ class CupomCard extends Component {
 
 }
 
-class SliderCupom extends Component {
-
-  cupomData = [
-    {
-      title: 'Beautiful and dramatic Antelope Canyon',
-      illustration: 'https://i.imgur.com/UYiroysl.jpg'
-    },
-    {
-      title: 'Earlier this morning, NYC',
-      illustration: 'https://i.imgur.com/UPrs1EWl.jpg'
-    },
-    {
-      title: 'White Pocket Sunset',
-      illustration: 'https://i.imgur.com/MABUbpDl.jpg'
-    }
-  ];
+class ListaCupons extends React.Component {
 
   state = {
-    currentIndex: 0,
-  };
+    cupons: null,
+    currentIndex: 0
+  }
 
   componentDidMount() {
     const intervalSlide = setInterval( this.avancaSlide , 5000);
-    this.setState({ intervalSlide })
-  } 
+    this.setState({
+      cupons: this.props.cupons,
+      intervalSlide
+    })
+    this.props.atualizaCupons()
+    .then((cupons)=>{
+      cupons = cupons.slice(0,10)
+      this.setState({cupons})
+    })
+  }
 
   componentWillUnmount() {
     clearInterval(this.state.intervalSlide);
@@ -72,20 +68,42 @@ class SliderCupom extends Component {
 
   avancaSlide = () => {
     let nextIndex = this.state.currentIndex+1;
-    if(nextIndex >= this.cupomData.length) nextIndex = 0;
+    if(nextIndex >= this.state.cupons.length) nextIndex = 0;
     this.setState(() => ({ currentIndex: nextIndex }))
   }
+
   render() {
     // center items on screen
     const { width } = Dimensions.get('window');
-
-    return ( <React.Fragment>
+    if(this.state.cupons === null) {
+      return <></>
+      /*<FaSpinner
+        style={{
+          fontSize: 72,
+          color: 'white',
+          alignSelf: 'center',
+          marginTop: 60
+        }}
+        className='spin'
+      />*/
+    }
+    if(this.state.cupons.length === 0) {
+      return <RubikText
+        style={{
+          color: 'white',
+          alignSelf: 'center',
+          marginTop: 80,
+          zIndex: 2
+        }}
+        >Nenhum cupom encontrado.</RubikText>
+    }
+    return <>
       <View style={{backgroundColor: '#55bcba', height: width/2, marginTop: width/2.9, width: '100%'}}></View>
       <SideSwipe
         index={this.state.currentIndex}
         itemWidth={CupomCard.WIDTH}
         style={{ width , marginTop: -width/1.3}}
-        data={this.cupomData}
+        data={this.state.cupons}
         contentOffset={0}
         useVelocityForIndex={false}
         onIndexChange={index => {
@@ -107,7 +125,7 @@ class SliderCupom extends Component {
       >
       </SideSwipe>
       <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: -5}}>
-        {this.cupomData.map((item, key)=> {
+        {this.state.cupons.map((item, key)=> {
           return <TouchableHighlight
           style={{paddingRight: 2, paddingLeft: 2}}
           key={key}
@@ -119,42 +137,27 @@ class SliderCupom extends Component {
           </TouchableHighlight>
         })}
       </View>
-      <View style={{alignItems: 'center', paddingTop: 4}}>
-        <RubikText bold={true} style={{fontSize: 25}}>
-        preparamos
-        </RubikText>
-        <RubikText bold={true} style={{fontSize: 26}}>
-        benefícios exclusivos
-        </RubikText>
-        <RubikText bold={true} style={{fontSize: 25}}>
-        para você
-        </RubikText>
-      </View>
-      <View 
-      style={{
-        alignItems: 'center', 
-        margin: 28, 
-        paddingTop: 15,
-        paddingBottom: 10,
-        borderTopWidth: 1,
-        borderColor: '#585756'
-      }}>
-        <RubikText bold={true} style={this.style.textoCinza}>Com os cupons promocionais</RubikText>
-        <RubikText bold={true} style={this.style.textoCinza}>
-        Vestylle Megastore Jaú, você tem
-        </RubikText>
-        <RubikText bold={true} style={this.style.textoCinza}>desconto o ano inteiro.</RubikText>
-      </View>
-    </React.Fragment>
+    </>
+  }
+}
+
+class SliderCupom extends Component {
+
+  render() {
+
+    return ( <>
+    <LojaConsumer>
+        {({atualizaCupons, cupons}) => (
+        <ListaCupons
+          atualizaCupons={atualizaCupons}
+          cupons={cupons}
+        />
+        )}
+    </LojaConsumer>
+    </>
     );
   }
 
-  style = {
-    textoCinza: {
-      fontSize: 15,
-      color: '#585756'
-    }
-  }
   
 }
 
