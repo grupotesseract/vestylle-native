@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableHighlight, View, Dimensions, Image } from 'react-native';
+import { TouchableHighlight, View, Dimensions, Image, Animated, Easing } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons'
 import RubikText from '../ui/RubikText';
 import SideSwipe from 'react-native-sideswipe';
@@ -9,7 +9,6 @@ class CupomCard extends Component {
 
   render() {
     const { width } = Dimensions.get('window');
-    console.log(this.props)
     return (
       <View style={{width, alignItems: 'center'}}>
         <TouchableHighlight
@@ -49,6 +48,11 @@ class ListaCupons extends React.Component {
     currentIndex: 0
   }
 
+  constructor() {
+    super()
+    this.RotateValueHolder = new Animated.Value(0);
+  }
+
   componentDidMount() {
     const intervalSlide = setInterval( this.avancaSlide , 5000);
     this.setState({
@@ -60,6 +64,7 @@ class ListaCupons extends React.Component {
       cupons = cupons.slice(0,10)
       this.setState({cupons})
     })
+    this.StartImageRotateFunction();
   }
 
   componentWillUnmount() {
@@ -71,21 +76,40 @@ class ListaCupons extends React.Component {
     if(nextIndex >= this.state.cupons.length) nextIndex = 0;
     this.setState(() => ({ currentIndex: nextIndex }))
   }
+  
+  StartImageRotateFunction() {
+    this.RotateValueHolder.setValue(0);
+    Animated.timing(this.RotateValueHolder, {
+      toValue: 1,
+      duration: 3000,
+      easing: Easing.linear,
+    }).start(() => this.StartImageRotateFunction());
+  }
 
   render() {
     // center items on screen
     const { width } = Dimensions.get('window');
     if(this.state.cupons === null) {
-      return <></>
-      /*<FaSpinner
-        style={{
-          fontSize: 72,
-          color: 'white',
-          alignSelf: 'center',
-          marginTop: 60
-        }}
-        className='spin'
-      />*/
+      const RotationDeg = this.RotateValueHolder.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0deg', '360deg'],
+      });
+      return <Animated.View style={{
+        width: '100%',
+        height: 200,
+        transform: [{rotate: RotationDeg}]
+      }}>
+          <FontAwesome
+            name="spinner"
+            size={72}
+            style={{
+              fontSize: 72,
+              color: 'black',
+              alignSelf: 'center',
+              marginTop: 60
+            }}
+          />
+      </Animated.View>
     }
     if(this.state.cupons.length === 0) {
       return <RubikText

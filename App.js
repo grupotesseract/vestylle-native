@@ -14,11 +14,12 @@ import { Font, AppLoading } from 'expo';
 import ListaDesejos from './screens/ListaDesejos';
 import { UserProvider } from './UserContext';
 import { LojaProvider } from './LojaContext';
+import Loja from './screens/Loja';
 
 class LogoTitle extends React.Component {
   render() {
     return (
-        <View style={{ flex: 1, alignItems: 'center' }}>
+        <View style={{ flex: 1, alignItems: 'center', paddingBottom: 10 }}>
           <Image
             source={require('./assets/logofull.png')}
             resizeMode="contain"
@@ -81,7 +82,8 @@ const AppNavigator = createStackNavigator(
     AreaCliente: AreaCliente,
     MeuPerfil: MeuPerfil,
     MeusPontos: MeusPontos,
-    ListaDesejos: ListaDesejos
+    ListaDesejos: ListaDesejos,
+    Loja: Loja
   },
   {
     initialRouteName: "Home",
@@ -124,6 +126,7 @@ export default class App extends React.Component {
 
   async componentDidMount() {
     await Font.loadAsync({
+      'LaughingSmiling': require('./assets/fonts/ls.ttf'),
       'Rubik': require('./assets/fonts/Rubik-Regular.ttf'),
       'RubikBold': require('./assets/fonts/Rubik-Bold.ttf')
     });

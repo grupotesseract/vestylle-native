@@ -103,7 +103,7 @@ export default class Menu extends React.Component {
             <MenuButton 
                 navigation={this.props.navigation} 
                 label="Loja"
-                page="AreaCliente"
+                page="Loja"
                 icon="md-pin"
                 font={Ionicons}
             />

@@ -7,6 +7,7 @@ class LojaProvider extends React.Component {
     state = {
         ofertas: null,
         cupons: null,
+        dadosLoja: null
     }
 
     constructor() {
@@ -16,7 +17,25 @@ class LojaProvider extends React.Component {
         this.getOfertasComLike = this.getOfertasComLike.bind(this)
         this.getOfertaById = this.getOfertaById.bind(this)
         this.faleConosco = this.faleConosco.bind(this)
+        this.atualizaDadosLoja = this.atualizaDadosLoja.bind(this)
     }
+
+  async atualizaDadosLoja() {
+    const res = await fetch(Api.url+'/lojas')
+    .then(response => response.json())
+    .catch(erro => console.error('Erro no atualizaDadosLoja',erro))
+    if(res && res.success) {
+      const dadosLoja = res.data;
+      this.setState({dadosLoja})
+      return dadosLoja
+    } 
+    if(res && !res.success) {
+      throw res.message
+    }
+    if(!res) {
+      return {}
+    }
+  }
 
   async atualizaOfertas() {
     const res = await fetch(Api.url+'/ofertas')
@@ -26,8 +45,12 @@ class LojaProvider extends React.Component {
       const ofertas = res.data;
       this.setState({ofertas})
       return ofertas
-    } else {
+    } 
+    if(res && !res.success) {
       throw res.message
+    }
+    if(!res) {
+      return []
     }
   }
 
@@ -116,6 +139,8 @@ class LojaProvider extends React.Component {
           getOfertasComLike: this.getOfertasComLike,
           getOfertaById: this.getOfertaById,
           faleConosco: this.faleConosco,
+          atualizaDadosLoja: this.atualizaDadosLoja,
+          dadosLoja: this.state.dadosLoja
         }}
       >
         {this.props.children}

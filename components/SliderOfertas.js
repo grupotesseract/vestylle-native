@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableHighlight, View, Dimensions, Image } from 'react-native';
+import { TouchableHighlight, View, Dimensions, Image, Animated, Easing } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons'
 import RubikText from '../ui/RubikText';
 import SideSwipe from 'react-native-sideswipe';
@@ -53,6 +53,11 @@ class ListaOfertas extends React.Component {
     error: null
   }
 
+  constructor() {
+    super()
+    this.RotateValueHolder = new Animated.Value(0);
+  }
+
   atualizaOfertas(props) {
     const listaDesejosIds = props.listaDesejos ? props.listaDesejos.map((produto)=> produto.id) : []
     this.props.getOfertasComLike(listaDesejosIds)
@@ -76,6 +81,7 @@ class ListaOfertas extends React.Component {
       ofertas: this.props.ofertas.slice(0,10)
     })
     this.atualizaOfertas(this.props)
+    this.StartImageRotateFunction();
   }
   
   componentWillReceiveProps(props) {
@@ -84,6 +90,7 @@ class ListaOfertas extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.state.intervalSlide);
+    Animated.timing(this.RotateValueHolder).stop();    
   } 
 
   avancaSlide = () => {
@@ -91,20 +98,39 @@ class ListaOfertas extends React.Component {
     if(nextIndex >= this.state.ofertas.length) nextIndex = 0;
     this.setState(() => ({ currentIndex: nextIndex }))
   }
+  
+  StartImageRotateFunction() {
+    this.RotateValueHolder.setValue(0);
+    Animated.timing(this.RotateValueHolder, {
+      toValue: 1,
+      duration: 3000,
+      easing: Easing.linear,
+    }).start(() => this.StartImageRotateFunction());
+  }
+
 
   render() {
     if(this.state.ofertas === null) {
-      return <></>
-      /*
-      <FaSpinner
-        style={{
-          fontSize: 72,
-          color: 'white',
-          alignSelf: 'center',
-          marginTop: 60
-        }}
-        className='spin'
-      />*/
+      const RotationDeg = this.RotateValueHolder.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0deg', '360deg'],
+      });
+      return <Animated.View style={{
+        width: '100%',
+        height: 200,
+        transform: [{rotate: RotationDeg}]
+      }}>
+          <FontAwesome
+            name="spinner"
+            size={72}
+            style={{
+              fontSize: 72,
+              color: 'black',
+              alignSelf: 'center',
+              marginTop: 60
+            }}
+          />
+      </Animated.View>
     }
 
     if(this.state.ofertas.length === 0) {
@@ -169,7 +195,8 @@ class ListaOfertas extends React.Component {
 class SliderOfertas extends Component {
 
   render() {
-    return <LojaConsumer>
+    return <View style={{marginTop:20}}>
+      <LojaConsumer>
         {({getOfertasComLike, ofertas}) => (
         <ListaOfertas
           getOfertasComLike={getOfertasComLike}
@@ -177,6 +204,7 @@ class SliderOfertas extends Component {
         />
         )}
     </LojaConsumer>
+    </View>
   }
   
 }
