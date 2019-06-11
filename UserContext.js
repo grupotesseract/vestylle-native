@@ -30,16 +30,16 @@ class UserProvider extends React.Component {
     this.receberNotificacoes = this.receberNotificacoes.bind(this)
   }
 
-  loadFromLocalStorage() {
+  async loadFromLocalStorage() {
     if(!this.state.isAuth) {
-      const userToken = localStorage.getItem('userToken')
-      const userId = localStorage.getItem('userId')
+      const userToken = await AsyncStorage.getItem('userToken')
+      const userId = await AsyncStorage.getItem('userId')
       if(userToken && userId) {
         this.setState({userToken, userId, isAuth: true})
         if(!this.state.perfil) {
-          const perfil = JSON.parse(localStorage.getItem('perfil'))
+          const perfil = JSON.parse(await AsyncStorage.getItem('perfil'))
           console.log("perfil carregado do localStorage", perfil)
-          const ofertas = JSON.parse(localStorage.getItem('ofertas'))
+          const ofertas = JSON.parse(await AsyncStorage.getItem('ofertas'))
           this.setState({perfil, ofertas})
         }
       }
@@ -47,7 +47,7 @@ class UserProvider extends React.Component {
   }
 
   componentDidMount() {
-    //this.loadFromLocalStorage();
+    this.loadFromLocalStorage();
   }
 
   async signup(login, passwd) {
@@ -82,14 +82,16 @@ class UserProvider extends React.Component {
       },
       body: JSON.stringify({email: user, password: passwd})
     })
-    .then(response => response.json())
+    .then(response => {
+      return response.json().then((jsonRes) => {
+        if(jsonRes.success) {
+          this.setToken(jsonRes.data.token.token)
+          this.setPerfil(jsonRes.data.pessoa)
+        }
+        return jsonRes
+      })
+    })
     .catch(erro => console.error('Erro no login',erro))
-    if(res && res.success) {
-      const meuPerfil = res.data.pessoa
-      const userToken = res.data.token.token
-      this.setToken(userToken)
-      this.setPerfil(meuPerfil)
-    }
     return res;
   }
 

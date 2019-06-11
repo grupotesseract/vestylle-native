@@ -1,11 +1,11 @@
 import React from 'react';
 import { Image, View, StyleSheet, ImageBackground, TextInput, AsyncStorage } from 'react-native';
 import ButtonBorder from '../ui/ButtonBorder';
-import Link from '../ui/Link'
 import RubikText from '../ui/RubikText';
 import Alert from '../ui/Alert';
+import { UserConsumer } from '../UserContext';
 
-export default class LoginScreen extends React.Component {
+class FormLogin extends React.Component {
   
   state = {
     erroLogin: false,
@@ -13,6 +13,75 @@ export default class LoginScreen extends React.Component {
     login: '',
     password: ''
   }
+
+  render() {
+    return  <>
+        <View
+          style={{width: '80%', paddingBottom: 120}}>
+
+          <RubikText style={styles.label}>CPF ou E-mail</RubikText>
+          <TextInput
+            style={styles.inputComBorda}
+            onChangeText={(login) => this.setState({login})}
+            value={this.state.login}
+          />
+          <RubikText style={styles.label}>Senha</RubikText>
+          <TextInput
+            style={styles.inputComBorda}
+            secureTextEntry={true}
+            onChangeText={(password) => this.setState({password})}
+            value={this.state.password}
+          />
+          <ButtonBorder 
+            title="LOGIN" 
+            onPress={this._signInAsync} 
+            loading={this.state.loading}
+          />
+        </View>
+        { this.state.erroLogin && (
+          <Alert
+            title = "Erro"
+            message = {this.state.msgErro}
+            btnText = "OK"
+            onClickButton = {this.dismissAlertErro}
+            dismissAlert = {this.dismissAlertErro}
+          />
+        )}
+    </>
+  }
+
+  _signInAsync = async () => {
+    const self = this;
+    this.setState({loading:true})
+    await this.props.login(this.state.login, this.state.password)
+    .then(jsonRes => {
+      if(jsonRes.success) {
+        this.props.navigation.navigate('AreaCliente');
+        return;
+      }
+      const msgErro = jsonRes.message;
+      self.setState({
+        erroLogin: true,
+        loading: false,
+        msgErro
+      })
+    })
+    .catch(erro => {
+      self.setState({
+        erroLogin: true, 
+        msgErro: erro.toString(),
+        loading: false
+      })
+    })
+  };
+
+  dismissAlertErro = () => {
+    this.setState({
+      erroLogin: false
+    })
+  }
+}
+export default class LoginScreen extends React.Component {
   
   render() {
     return (
@@ -31,79 +100,18 @@ export default class LoginScreen extends React.Component {
           <RubikText style={styles.textoBranco}>e receba benefícios exclusivos</RubikText>
         </View>
 
-        <View
-          style={{width: '80%'}}>
-
-          <RubikText style={styles.label}>CPF ou E-mail</RubikText>
-          <TextInput
-            style={styles.inputComBorda}
-            onChangeText={(login) => this.setState({login})}
-            value={this.state.login}
-          />
-          <RubikText style={styles.label}>Senha</RubikText>
-          <TextInput
-            style={styles.inputComBorda}
-            secureTextEntry={true}
-            onChangeText={(password) => this.setState({password})}
-            value={this.state.password}
-          />
-          <ButtonBorder 
-            title="LOGIN" 
-            onPress={this._signInAsync} 
-          />
-        </View>
-        <Link 
+        <UserConsumer>
+        {({ login }) => (
+        <FormLogin
+          login={login}
           navigation={this.props.navigation}
-          title="Saiba mais sobre o aplicativo Megastore Jaú" 
-          to="Home"
-          fontSize="12"
-          style={{marginTop: 100, marginBottom: 25}}
         />
-        { this.state.erroLogin && (
-          <Alert
-            title = "Erro"
-            message = {this.state.msgErro}
-            btnText = "OK"
-            onClickButton = {this.dismissAlertErro}
-            dismissAlert = {this.dismissAlertErro}
-          />
         )}
+        </UserConsumer>
       </ImageBackground>
     );
   }
 
-  _signInAsync = async () => {
-    const jsonRes = await this.fetchLogin();
-    if(jsonRes.success) {
-      await AsyncStorage.setItem('userToken', jsonRes.data.token);
-      this.props.navigation.navigate('App');
-      return;
-    }
-    const msgErro = jsonRes.message;
-    this.setState({
-      erroLogin: true,
-      msgErro
-    })
-  };
-
-  fetchLogin = async () => {
-    const rawResponse = await fetch('https://develop-api.vestylle.grupotesseract.com.br/api/login', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({email: this.state.login, password: this.state.password})
-    })
-    const jsonRes = await rawResponse.json();
-    return jsonRes;
-  }
-
-  dismissAlertErro = () => {
-    this.setState({
-      erroLogin: false
-    })
-  }
 }
 
 const styles = StyleSheet.create({

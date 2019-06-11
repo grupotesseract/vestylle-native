@@ -4,8 +4,10 @@ import ButtonBorder from '../ui/ButtonBorder';
 import Link from '../ui/Link'
 import RubikText from '../ui/RubikText';
 import Alert from '../ui/Alert';
+import { UserConsumer } from '../UserContext';
 
-export default class CadastroSimples extends React.Component {
+class FormCadastro extends React.Component {
+
   state = {
     cadastroConcluido: false,
     erroCadastro: false,
@@ -13,65 +15,42 @@ export default class CadastroSimples extends React.Component {
     msgErro: '',
     login: '',
     password: '',
-    passwordConfirm: ''
+    passwordConfirm: '',
+    loading: false
   }
 
   render() {
-    return (
-      <ImageBackground
-        source={require('../assets/fundologin.jpg')}
-        style={{width: '100%', minHeight: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
+    return <View
+      style={{width: '80%'}}>
 
-        <View
-          style={{width: '80%', flexGrow:1, marginBottom: 'auto', justifyContent: 'center'}}>
-          <Image
-            source={require('../assets/logobranco.png')}
-            resizeMode="contain"
-            style={{ width:'80%', height:60 }}
-          />
-          <RubikText style={styles.textoBranco}>Faça seu cadastro </RubikText>
-          <RubikText style={styles.textoBranco}>e receba benefícios exclusivos</RubikText>
-        </View>
-
-        <View
-          style={{width: '80%'}}>
-
-          <RubikText style={styles.label}>CPF ou E-mail</RubikText>
-          <TextInput
-            style={styles.inputComBorda}
-            onChangeText={(login) => this.setState({login})}
-            value={this.state.login}
-          />
-          <RubikText style={styles.label}>Crie uma senha</RubikText>
-          <TextInput
-            style={styles.inputComBorda}
-            secureTextEntry={true}
-            onChangeText={(password) => this.setState({password})}
-            value={this.state.password}
-          />
-          <RubikText style={styles.label}>Confirme sua senha</RubikText>
-          <TextInput
-            style={styles.inputComBorda}
-            secureTextEntry={true}
-            onChangeText={(passwordConfirm) => this.setState({passwordConfirm})}
-            value={this.state.passwordConfirm}
-            onBlur={this.blurPasswordConfirm}
-          />
-          { this.state.passwordMismatch && (
-            <RubikText style={styles.erroText}>Campos de senha estão diferentes</RubikText>
-          )}
-          <ButtonBorder 
-            title="CADASTRAR" 
-            onPress={this.cadastrarNovoUsuario} 
-          />
-        </View>
-        <Link 
-          navigation={this.props.navigation}
-          title="Saiba mais sobre o aplicativo Megastore Jaú" 
-          to="Home"
-          fontSize="12"
-          style={{marginTop: 50, marginBottom: 25}}
-        />
+      <RubikText style={styles.label}>CPF ou E-mail</RubikText>
+      <TextInput
+        style={styles.inputComBorda}
+        onChangeText={(login) => this.setState({login})}
+        value={this.state.login}
+      />
+      <RubikText style={styles.label}>Crie uma senha</RubikText>
+      <TextInput
+        style={styles.inputComBorda}
+        secureTextEntry={true}
+        onChangeText={(password) => this.setState({password})}
+        value={this.state.password}
+      />
+      <RubikText style={styles.label}>Confirme sua senha</RubikText>
+      <TextInput
+        style={styles.inputComBorda}
+        secureTextEntry={true}
+        onChangeText={(passwordConfirm) => this.setState({passwordConfirm})}
+        value={this.state.passwordConfirm}
+        onBlur={this.blurPasswordConfirm}
+      />
+      { this.state.passwordMismatch && (
+        <RubikText style={styles.erroText}>Campos de senha estão diferentes</RubikText>
+      )}
+      <ButtonBorder 
+        title="CADASTRAR" 
+        onPress={this.cadastrarNovoUsuario} 
+      />
         { this.state.cadastroConcluido && (
           <Alert
             title = "Obrigado!"
@@ -91,39 +70,36 @@ export default class CadastroSimples extends React.Component {
           />
         )}
         
-      </ImageBackground>
-    );
+    </View>
   }
 
   cadastrarNovoUsuario = async () => {
-    const jsonRes = await this.fetchCadastro();
-    if(jsonRes.success) {
-      const token = jsonRes.data.token.token
-      await AsyncStorage.setItem('userToken', token);
-      this.setState({
-        cadastroConcluido: true
+    const self = this;
+    this.setState({loading:true})
+    await this.props.signup(this.state.login, this.state.password)
+    .then(jsonRes => {
+      if(jsonRes.success) {
+        self.setState({
+          cadastroConcluido: true
+        })
+        return
+      }
+      let msgErro = jsonRes.message;
+      if(jsonRes.errors) {
+        msgErro = ""
+        Object.keys(jsonRes.errors).map((campo) => {
+          msgErro += " "+jsonRes.errors[campo]
+          return msgErro
+        })
+      }
+      self.setState({
+        erroCadastro: true,
+        msgErro
       })
-      return
-    }
-    const msgErro = jsonRes.message;
-    this.setState({
-      erroCadastro: true,
-      msgErro
     })
+    .catch(error => console.error('Deu ruim memo:', error));
+    this.setState({loading:false})
   };
-
-  fetchCadastro = async () => {
-    const rawResponse = await fetch('https://develop-api.vestylle.grupotesseract.com.br/api/pessoas', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({email: this.state.login, password: this.state.password, nome:'teste', cpf: this.state.login})
-    })
-    const jsonRes = await rawResponse.json();
-    return jsonRes;
-  }
 
   dismissAlertErro = () => {
     this.setState({
@@ -132,7 +108,7 @@ export default class CadastroSimples extends React.Component {
   }
 
   onClickAlertButton = () => {
-    this.props.navigation.navigate('App');
+    this.props.navigation.navigate('AreaCliente');
   }
 
   blurPasswordConfirm = () => {
@@ -146,6 +122,40 @@ export default class CadastroSimples extends React.Component {
       })
     }
   }
+}
+
+export default class CadastroSimples extends React.Component {
+
+  render() {
+    return (
+      <ImageBackground
+        source={require('../assets/fundologin.jpg')}
+        style={{width: '100%', minHeight: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
+
+        <View
+          style={{width: '80%', flexGrow:1, marginBottom: 'auto', justifyContent: 'center'}}>
+          <Image
+            source={require('../assets/logobranco.png')}
+            resizeMode="contain"
+            style={{ width:'80%', height:60 }}
+          />
+          <RubikText style={styles.textoBranco}>Faça seu cadastro </RubikText>
+          <RubikText style={styles.textoBranco}>e receba benefícios exclusivos</RubikText>
+        </View>
+
+        <UserConsumer>
+        {({ signup }) => (
+          <FormCadastro
+            signup={signup}
+            navigation={this.props.navigation}
+          />
+        )}
+        </UserConsumer>
+
+      </ImageBackground>
+    );
+  }
+
 }
 
 const styles = StyleSheet.create({

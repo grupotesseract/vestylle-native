@@ -5,7 +5,8 @@ import RubikText from '../ui/RubikText';
 import Alert from '../ui/Alert';
 import MiniRodape from '../components/MiniRodape';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-
+import { TextInputMask } from 'react-native-masked-text'
+import { UserConsumer } from '../UserContext';
 class Checkbox extends React.Component {
 
   render() { 
@@ -35,11 +36,21 @@ class InputValidacao extends React.Component {
     return (
       <View>
         <RubikText bold={true} style={{color: '#feca03', fontSize:12, marginTop: 3}}>{this.props.title}</RubikText>
+        { this.props.mask ? (
+          <TextInputMask
+            style={this.style.inputSublinhado} 
+            value={this.props.value}
+            onChangeText={this.props.onChange}
+            option={this.props.maskOptions}
+            type={this.props.mask}
+          />
+        ):(
         <TextInput 
           style={this.style.inputSublinhado} 
           value={this.props.value}
           onChangeText={this.props.onChange}
           />
+        )}
       </View>
     )
   }  
@@ -57,26 +68,178 @@ class InputValidacao extends React.Component {
   }
 }
 
-export default class MeuPerfil extends React.Component {
+class FormMeuPerfil extends React.Component {
+
+  state = {
+    nome: '',
+    email: '',
+    cpf: '',
+    data_nascimento: '',
+    celular: '',
+    genero: '',
+    receberNovidades: false,
+    loading: true,
+    atualizando: false
+  }
+  
+  loadPerfil() {
+    if(this.state.loading) {
+      this.props.getData()
+      .then(perfil => {
+        if(perfil.data_nascimento) {
+          perfil.data_nascimento = this.utf2ddmmaaaa(perfil.data_nascimento)
+        }
+        this.setState({
+          ...perfil,
+          loading: false
+        })
+      })
+      .catch(erro => console.error('Erro no form de meu perfil',erro))
+    }
+  }
+
+  componentDidUpdate() {
+    this.loadPerfil();
+  }
 
   componentDidMount() {
-    this.state = {
-      userToken: null
-    }
-    this._loadUser().then(() => {
-      this.state.userToken === null &&
-        this.props.navigation.navigate("Cadastro")
-      console.log(this.state.userToken)
-    })
-    .catch((e) => console.log("erro: ", e))
+    this.loadPerfil();
   }
 
-  _loadUser = async () => {
-    const userToken = await AsyncStorage.getItem('userToken');
+  render() {
+    return <>
+          <InputValidacao 
+            title="Nome" 
+            value={this.state.nome}
+            onChange={(nome) => this.setState({nome})}/>
+          <InputValidacao 
+            title="E-mail" 
+            value={this.state.email}
+            onChange={(email) => this.setState({email})}/>
+          <InputValidacao 
+            mask="cpf"
+            title="CPF" 
+            value={this.state.cpf}
+            onChange={(cpf) => this.setState({cpf})}/>
+          <InputValidacao 
+            mask="datetime"
+            title="Data de Nascimento" 
+            value={this.state.data_nascimento}
+            onChange={(data_nascimento) => this.setState({data_nascimento})}/>
+          <InputValidacao 
+            mask="cel-phone"
+            title="Celular" 
+            value={this.state.celular}
+            onChange={(celular) => this.setState({celular})}/>
+
+          <Checkbox
+            title="Quero receber novidades e ofertas da Vestylle Megastore Jaú"
+            value={this.state.receberNovidades}
+            onChange={(receberNovidades) => this.toggleNotificacoes(receberNovidades)}
+            style={{paddingTop: 20, paddingBottom: 15}}/>
+          
+          <ButtonBorder
+            title="CONTINUAR"
+            onPress={() => this.atualizarPerfil()}
+            style={{marginBottom: 40}}
+            loading={this.state.loading}
+          />
+
+        { this.state.erroUpdate && (
+          <Alert
+            title = "Atenção"
+            message = {this.state.msgErro}
+            btnText = "OK"
+            onClickButton = {this.dismissAlertErro}
+            dismissAlert = {this.dismissAlertErro}
+          />
+        )}
+    </>
+  }
+
+  toggleNotificacoes(receberNovidades) {
+    this.setState({receberNovidades})
+    if(receberNovidades) {
+      this.props.receberNotificacoes();
+    }
+  }
+
+  dismissAlertErro = () => {
     this.setState({
-      userToken
+      erroUpdate: false
     })
   }
+
+  async atualizarPerfil(event) {
+    if(event) {
+      event.preventDefault()
+    }
+    this.setState({loading: true})
+    let perfil = {
+      nome: this.state.nome,
+      email: this.state.email,
+      cpf: this.state.cpf,
+      genero: this.state.genero,
+      data_nascimento: this.state.data_nascimento,
+      celular: this.state.celular,
+      receberNovidades: this.state.receberNovidades
+    }
+    
+    // Trata data de nascimento e cpf
+    if(perfil.data_nascimento) {
+      perfil.data_nascimento = this.ddmmaaaa2utf(perfil.data_nascimento)
+    }
+    if(perfil.cpf) {
+      perfil.cpf = perfil.cpf.replace(/\D/g,'')
+    }
+
+    this.setState({
+      atualizando: true
+    })
+
+    await this.props.setData(perfil)
+    .then((res) => {
+      if(res && res.succes && res.data) {
+        const meuPerfil = res.data
+        this.props.atualizaPerfil(meuPerfil)
+      }
+      this.props.getData()
+      this.setState({atualizando: false})
+      this.props.navigation.navigate('AreaCliente')
+    })
+    .catch((e) => {
+      let msgErro = ""
+      Object.keys(e).map((campo) => {
+        msgErro += " "+e[campo]
+        return msgErro
+      })
+      this.setState({
+        atualizando: false,
+        loading: false,
+        erroUpdate:true,
+        msgErro
+      })
+    })
+  }
+
+  ddmmaaaa2utf = (stringDate) => {
+    const splittedDate = stringDate.split('/');
+    const day = splittedDate[0]
+    const month = splittedDate[1]
+    const year = splittedDate[2]
+    return year+'-'+month+'-'+day;
+  }
+  utf2ddmmaaaa = (utfDate) => {
+    const date = utfDate.split(' ')[0];
+    const splittedDate = date.split('-');
+    const day = splittedDate[2]
+    const month = splittedDate[1]
+    const year = splittedDate[0]
+    return day+''+month+''+year;
+  }
+}
+
+export default class MeuPerfil extends React.Component {
 
   state = {
     erroAtualizaPerfil: false,
@@ -97,83 +260,22 @@ export default class MeuPerfil extends React.Component {
         <ScrollView style={{ alignSelf: 'stretch'}}>
         <View style={{padding: 20}}>
           <RubikText bold={true} style={{color:'white', fontSize: 14, marginTop: 10, marginBottom: 10}} >Meu perfil</RubikText>
-          <InputValidacao 
-            title="Nome" 
-            value={this.state.nome}
-            onChange={(nome) => this.setState({nome})}/>
-          <InputValidacao 
-            title="E-mail" 
-            value={this.state.email}
-            onChange={(email) => this.setState({email})}/>
-          <InputValidacao 
-            title="CPF" 
-            value={this.state.cpf}
-            onChange={(cpf) => this.setState({cpf})}/>
-          <InputValidacao 
-            title="Data de Nascimento" 
-            value={this.state.nascimento}
-            onChange={(nascimento) => this.setState({nascimento})}/>
-          <InputValidacao 
-            title="Celular" 
-            value={this.state.celular}
-            onChange={(celular) => this.setState({celular})}/>
-
-          <Checkbox
-            title="Quero receber novidades e ofertas da Vestylle Megastore Jaú"
-            value={this.state.receberNovidades}
-            onChange={(receberNovidades) => this.setState({receberNovidades})}
-            style={{paddingTop: 20, paddingBottom: 15}}/>
-          
-          <ButtonBorder
-            title="CONTINUAR"
-            onPress={this.atualizarPerfil}
-            style={{marginBottom: 40}}
-          />
+          <UserConsumer>
+          {({ getDadosMeuPerfil, setDadosMeuPerfil, setPerfil, receberNotificacoes }) => (
+              <FormMeuPerfil
+                getData={getDadosMeuPerfil}
+                setData={setDadosMeuPerfil}
+                atualizaPerfil={setPerfil}
+                navigation={this.props.navigation}
+                receberNotificacoes={receberNotificacoes}
+              />
+          )}
+          </UserConsumer>
         </View>
         <MiniRodape/>
         </ScrollView>
       </ImageBackground>
     );
-  }
-
-  atualizarPerfil = async () => {
-    const jsonRes = await this.fetchPerfil();
-    if(jsonRes.success) {
-      const token = jsonRes.data.token.token
-      await AsyncStorage.setItem('userToken', token);
-      this.setState({
-        cadastroConcluido: true
-      })
-      return
-    }
-    const msgErro = jsonRes.message;
-    this.setState({
-      erroCadastro: true,
-      msgErro
-    })
-  };
-
-  fetchPerfil = async () => {
-    const rawResponse = await fetch('https://develop-api.vestylle.grupotesseract.com.br/api/pessoas', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({email: this.state.login, password: this.state.password, nome:'teste', cpf: this.state.login})
-    })
-    const jsonRes = await rawResponse.json();
-    return jsonRes;
-  }
-
-  dismissAlertErro = () => {
-    this.setState({
-      erroCadastro: false
-    })
-  }
-
-  onClickAlertButton = () => {
-    this.props.navigation.navigate('App');
   }
 
 }

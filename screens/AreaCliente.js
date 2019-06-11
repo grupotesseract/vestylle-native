@@ -1,10 +1,11 @@
 import React from 'react';
-import { AsyncStorage, View, Image, ScrollView } from 'react-native';
+import { View, Image, ScrollView, TouchableHighlight } from 'react-native';
 import RubikText from '../ui/RubikText';
 import Link from '../ui/Link'
 import Breadcrumb from '../ui/Breadcrumb'
 import MiniRodape from '../components/MiniRodape'
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
+import { UserConsumer } from '../UserContext';
 
 export default class AreaCliente extends React.Component {
   
@@ -12,11 +13,6 @@ export default class AreaCliente extends React.Component {
     this.state = {
       userToken: null
     }
-    this._loadUser().then(() => {
-      this.state.userToken === null &&
-        this.props.navigation.navigate("Cadastro")
-    })
-    .catch((e) => console.log("erro: ", e))
   }
 
   render() {
@@ -27,10 +23,25 @@ export default class AreaCliente extends React.Component {
         <View style={{flexDirection:'row', textAlign: 'center'}}>
           <View style={{width: '20%'}}>
           </View>
-          <View style={{width:'60%',justifyContent: 'center', alignItems:'center', padding: 5}}>
-            <RubikText style={{color: 'white', fontSize: 20}}>Olá Ciclana,</RubikText>
-            <RubikText style={{color: 'white', fontSize: 20}}>seja bem-vinda</RubikText>
-          </View>
+          <UserConsumer>
+          {({perfil}) => {
+            if(!perfil) return <View style={{width:'60%'}}></View>
+            return (
+            <View style={{width:'60%',justifyContent: 'center', alignItems:'center', padding: 5}}>
+              <RubikText style={{color: 'white', fontSize: 20}}>Olá {perfil.nomeSimples || perfil.nome}{perfil.genero !== '' ? ",":"!"}</RubikText>
+              {perfil.genero && perfil.genero === 'Feminino' ?
+                <RubikText style={{color: 'white', fontSize: 20}}>
+                  seja bem-vinda!
+                </RubikText>
+              : (perfil.genero && perfil.genero === 'Masculino' ?
+                <RubikText style={{color: 'white', fontSize: 20}}>
+                  seja bem-vindo!
+                </RubikText>
+                : <></>)
+              }
+            </View>
+          )}}
+          </UserConsumer>
           <Link 
             navigation={this.props.navigation} 
             to="AdicionarCupom"
@@ -95,6 +106,7 @@ export default class AreaCliente extends React.Component {
           </Link>
         
         </View>
+
       <MiniRodape/>
       </ScrollView>
     
@@ -122,11 +134,4 @@ export default class AreaCliente extends React.Component {
     }
   }
 
-  _loadUser = async () => {
-    // carregar nome ao invés de token
-    const userToken = await AsyncStorage.getItem('userToken');
-    this.setState({
-      userToken
-    })
-  }
 }

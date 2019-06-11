@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Button, Text, View, AsyncStorage, Image } from 'react-native';
+import { StyleSheet, Text, View, AsyncStorage, Image } from 'react-native';
 import { createStackNavigator, createAppContainer, createSwitchNavigator } from "react-navigation";
 import { MenuIcon } from "./components/Menu"
 import Menu from "./components/Menu"
@@ -40,11 +40,7 @@ class AuthLoadingScreen extends React.Component {
   _bootstrapAsync = async () => {
     //this.props.navigation.navigate('Cadastro');
     
-    //const userToken = await AsyncStorage.getItem('userToken');
-
-    const userToken = await new Promise((resolve, reject) => {
-      setTimeout(() => resolve(false), 1000)
-    });
+    const userToken = await AsyncStorage.getItem('userToken');
 
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
@@ -114,7 +110,7 @@ const AppContainer = createAppContainer(createSwitchNavigator(
     Auth: AuthStack,
   },
   {
-    initialRouteName: 'App',
+    initialRouteName: 'AuthLoading',
   }
 ));
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, TouchableHighlight } from 'react-native';
+import { View, ScrollView, TouchableHighlight } from 'react-native';
 import BoasVindas from './BoasVindas'
 import SimpleMenu from '../components/SimpleMenu'
 import RodapeCompleto from '../components/RodapeCompleto'

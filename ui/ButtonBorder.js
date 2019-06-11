@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Text,TouchableHighlight } from 'react-native';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 class ButtonBorder extends Component {
 
@@ -7,7 +9,10 @@ class ButtonBorder extends Component {
     return <TouchableHighlight 
       onPress={this.props.onPress}
       style={this.style.btnBorda}>
-      <Text style={this.style.txtBtnBorda}>{this.props.title}</Text>
+      <Text style={this.style.txtBtnBorda}>
+      {this.props.title}
+      {this.props.loading ? (<FontAwesome name="spinner" color="white"/>) : ''}
+      </Text>
     </TouchableHighlight>
   }
 
