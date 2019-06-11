@@ -196,14 +196,14 @@ class SliderOfertas extends Component {
 
   render() {
     return <View style={{marginTop:20}}>
-      <LojaConsumer>
+      {/* <LojaConsumer>
         {({getOfertasComLike, ofertas}) => (
         <ListaOfertas
           getOfertasComLike={getOfertasComLike}
           ofertas={ofertas}
         />
         )}
-    </LojaConsumer>
+    </LojaConsumer> */}
     </View>
   }
   

@@ -1,8 +1,11 @@
 import React  from 'react';
+import Api from './constants/Api';
+import {AsyncStorage} from 'react-native';
 
 const UserContext = React.createContext();
 
 class UserProvider extends React.Component {
+
   state = { 
     isAuth: false,
     userToken: null,
@@ -49,7 +52,7 @@ class UserProvider extends React.Component {
 
   async signup(login, passwd) {
     const params = JSON.stringify({email: login, password: passwd})
-    const res = await fetch(process.env.REACT_APP_API_URL+'/pessoas', {
+    const res = await fetch(Api.url+'/pessoas', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -71,7 +74,7 @@ class UserProvider extends React.Component {
   }
 
   async login(user,passwd) {
-    const res = await fetch(process.env.REACT_APP_API_URL+'/login', {
+    const res = await fetch(Api.url+'/login', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -103,24 +106,29 @@ class UserProvider extends React.Component {
     });
   }
 
-  setToken(userToken) {
+  async setToken(userToken) {
     this.setState({
       isAuth: true,
       userToken
     })
-    localStorage.setItem('userToken', userToken);
-    localStorage.setItem('isAuth', true);
+    console.log("setUserToken",userToken);
+    await AsyncStorage.setItem('userToken', userToken.toString());
+    await AsyncStorage.setItem('isAuth', "true");
   }
 
-  async setFacebookToken(fbResponse) {
-    if(!fbResponse.accessToken || fbResponse.accessToken === '') {
+  async setFacebookToken(fbToken) {
+    if(!fbToken || fbToken === '') {
       return null
     }
-    const fbData = fbResponse
+    
+    // Get the user's name using Facebook's Graph API
+    const response = await fetch('https://graph.facebook.com/me?fields=name,email&access_token=' + fbToken);
+    const fbData = await response.json()
+    fbData.accessToken = fbToken
     this.setState({
       fbData
     })
-    localStorage.setItem('fbData', JSON.stringify(fbData));
+    await AsyncStorage.setItem('fbData', JSON.stringify(fbData));
     const res = await this.getAPITokenFromFacebookData(fbData)
     .then((response) => {
       if(response && response.success) {
@@ -140,7 +148,7 @@ class UserProvider extends React.Component {
     return res
   }
 
-  setPerfil(perfil) {
+  async setPerfil(perfil) {
     let perfilCompleto = this.null2emptystring(perfil)
 
     // Inclui o primeiro nome no obj de perfil
@@ -153,8 +161,9 @@ class UserProvider extends React.Component {
       userId: perfil.id,
       perfil: perfilCompleto
     })
-    localStorage.setItem('userId', perfil.id);
-    localStorage.setItem('perfil', JSON.stringify(perfil));
+    console.log("perfil",perfilCompleto);
+    await AsyncStorage.setItem('userId', perfil.id.toString());
+    await AsyncStorage.setItem('perfil', JSON.stringify(perfil));
   }
 
   async setOfertas(ofertas) {
@@ -172,7 +181,7 @@ class UserProvider extends React.Component {
       social_token: fbData.accessToken,
       nome: fbData.name
     }
-    const res = await fetch(process.env.REACT_APP_API_URL+'/login/facebook', {
+    const res = await fetch(Api.url+'/login/facebook', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -190,7 +199,7 @@ class UserProvider extends React.Component {
     if(!this.state.userId) {
       return
     }
-    const res = await fetch(process.env.REACT_APP_API_URL+'/pessoas/'+this.state.userId+'/ofertas', {
+    const res = await fetch(Api.url+'/pessoas/'+this.state.userId+'/ofertas', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -218,7 +227,7 @@ class UserProvider extends React.Component {
     if(!this.state.userId) {
       return []
     }
-    const res = await fetch(process.env.REACT_APP_API_URL+'/pessoas/'+this.state.userId+'/ofertas',
+    const res = await fetch(Api.url+'/pessoas/'+this.state.userId+'/ofertas',
       {
         credentials: 'include',
         headers: {
@@ -242,7 +251,7 @@ class UserProvider extends React.Component {
   }
 
   async getDadosMeuPerfil() {
-    const res = await fetch(process.env.REACT_APP_API_URL+'/pessoas/'+this.state.userId,
+    const res = await fetch(Api.url+'/pessoas/'+this.state.userId,
       {
         credentials: 'include',
         headers: {
@@ -265,7 +274,7 @@ class UserProvider extends React.Component {
   }
 
   async setDadosMeuPerfil(perfil) {
-    const res = await fetch(process.env.REACT_APP_API_URL+'/pessoas/'+this.state.userId, {
+    const res = await fetch(Api.url+'/pessoas/'+this.state.userId, {
       method: 'PATCH',
       credentials: 'include',
       headers: {
@@ -338,7 +347,7 @@ class UserProvider extends React.Component {
   enviaSubscription = async (subscription) => {
     console.log(subscription);
 
-    const res = await fetch(process.env.REACT_APP_API_URL+'/pessoas/'+this.state.userId+'/subscription', {
+    const res = await fetch(Api.url+'/pessoas/'+this.state.userId+'/subscription', {
       method: 'POST',
       credentials: 'include',
       headers: {

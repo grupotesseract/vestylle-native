@@ -170,14 +170,14 @@ class SliderCupom extends Component {
   render() {
 
     return ( <>
-    <LojaConsumer>
+    {/* <LojaConsumer>
         {({atualizaCupons, cupons}) => (
         <ListaCupons
           atualizaCupons={atualizaCupons}
           cupons={cupons}
         />
         )}
-    </LojaConsumer>
+    </LojaConsumer> */}
     </>
     );
   }

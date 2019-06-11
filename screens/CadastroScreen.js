@@ -4,6 +4,45 @@ import { FontAwesome } from '@expo/vector-icons'
 import Link from '../ui/Link'
 import RubikText from '../ui/RubikText';
 import { Facebook } from 'expo';
+import { UserConsumer } from '../UserContext';
+class FBButton extends React.Component {
+
+  render() {
+    return  <TouchableHighlight 
+      style={styles.botaoQuadrado}
+      onPress={this.logInFacebook}>
+        <FontAwesome
+          name="facebook"
+          size={15}
+          color="white">
+          <RubikText style={styles.fontBotao}> Login com FACEBOOK</RubikText>
+        </FontAwesome>
+    </TouchableHighlight>
+  }
+
+  logInFacebook = async () => {
+    try {
+      const {
+        type,
+        token,
+        expires,
+        permissions,
+        declinedPermissions,
+      } = await Facebook.logInWithReadPermissionsAsync('654012085033078', {
+        permissions: ['public_profile','email'],
+      });
+      if (type === 'success') {
+        this.props.setFacebookToken(token)
+        this.props.navigation.navigate('App');
+      } else {
+        // type === 'cancel'
+      }
+    } catch ({ message }) {
+      alert(`Facebook Login Error: ${message}`);
+    }
+  }
+   
+}
 
 export default class CadastroScreen extends React.Component {
 
@@ -21,16 +60,14 @@ export default class CadastroScreen extends React.Component {
         <View style={styles.rightAlign}>
           <RubikText style={{color:'#FFFFFF'}}>Faça seu cadastro e receba benefícios exclusivos</RubikText>
 
-          <TouchableHighlight 
-            style={styles.botaoQuadrado}
-            onPress={this.logInFacebook}>
-              <FontAwesome
-                name="facebook"
-                size={15}
-                color="white">
-                <RubikText style={styles.fontBotao}> Cadastrar com FACEBOOK</RubikText>
-              </FontAwesome>
-          </TouchableHighlight>
+          <UserConsumer>
+          {({ setFacebookToken }) => (
+            <FBButton
+              setFacebookToken={setFacebookToken}
+              navigation={this.props.navigation}
+            />
+          )}
+          </UserConsumer>
 
           <TouchableHighlight
             style={styles.botaoQuadrado}
@@ -42,15 +79,6 @@ export default class CadastroScreen extends React.Component {
                 <RubikText style={styles.fontBotao}> Cadastrar com CPF ou E-MAIL</RubikText>
               </FontAwesome>
           </TouchableHighlight>
-          <View style={[styles.fullCenter,{paddingRight:30}]}>
-            <RubikText style={styles.textoSmall}>Sobre o programa </RubikText>
-            <Link 
-              navigation={this.props.navigation}
-              title="Cliente Vestylle Megastore Jaú" 
-              to="Home"
-              fontSize="8"
-            />
-          </View>
         </View>
 
         <View style={styles.fullCenter}>
@@ -67,31 +95,6 @@ export default class CadastroScreen extends React.Component {
     );
   }
 
-  logInFacebook = async () => {
-    try {
-      const {
-        type,
-        token,
-        expires,
-        permissions,
-        declinedPermissions,
-      } = await Facebook.logInWithReadPermissionsAsync('654012085033078', {
-        permissions: ['public_profile'],
-      });
-      if (type === 'success') {
-        // Get the user's name using Facebook's Graph API
-        // const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
-        // console.log(await response.json());
-        console.log(token);
-        await AsyncStorage.setItem('userTokenFacebook', token);
-        this.props.navigation.navigate('App');
-      } else {
-        // type === 'cancel'
-      }
-    } catch ({ message }) {
-      alert(`Facebook Login Error: ${message}`);
-    }
-  }
 }
 
 const styles = StyleSheet.create({
