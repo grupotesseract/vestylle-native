@@ -6,6 +6,7 @@ import RodapeCompleto from '../components/RodapeCompleto'
 import SliderCupom from '../components/SliderCupom';
 import SliderOfertas from '../components/SliderOfertas';
 import RubikText from '../ui/RubikText';
+import LaughingSmiling from '../ui/LaughingSmiling';
 
 export default class HomeScreen extends React.Component {
 
@@ -17,12 +18,12 @@ export default class HomeScreen extends React.Component {
           <SliderCupom/>
           <View style={{alignItems: 'center', paddingTop: 4}}>
             <RubikText bold={true} style={{fontSize: 25}}>
-            preparamos
+            Preparamos
             </RubikText>
-            <RubikText bold={true} style={{fontSize: 26}}>
+            <LaughingSmiling style={{fontSize: 26, paddingBottom: 10}}>
             benefícios exclusivos
-            </RubikText>
-            <RubikText bold={true} style={{fontSize: 25}}>
+            </LaughingSmiling>
+            <RubikText bold={true} style={{fontSize: 25, marginTop: -6}}>
             para você
             </RubikText>
           </View>

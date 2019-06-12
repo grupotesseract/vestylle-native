@@ -7,6 +7,7 @@ import MiniRodape from '../components/MiniRodape';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { TextInputMask } from 'react-native-masked-text'
 import { UserConsumer } from '../UserContext';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 class Checkbox extends React.Component {
 
   render() { 
@@ -108,6 +109,7 @@ class FormMeuPerfil extends React.Component {
 
   render() {
     return <>
+        <RubikText bold={true} style={{color:'white', fontSize: 14, marginTop: 10, marginBottom: 10}} >Meu perfil         {this.state.loading ? (<FontAwesome name="spinner" color="white"/>) : ''}</RubikText>
           <InputValidacao 
             title="Nome" 
             value={this.state.nome}
@@ -259,7 +261,6 @@ export default class MeuPerfil extends React.Component {
         style={{width: '100%', height: '100%'}}>
         <ScrollView style={{ alignSelf: 'stretch'}}>
         <View style={{padding: 20}}>
-          <RubikText bold={true} style={{color:'white', fontSize: 14, marginTop: 10, marginBottom: 10}} >Meu perfil</RubikText>
           <UserConsumer>
           {({ getDadosMeuPerfil, setDadosMeuPerfil, setPerfil, receberNotificacoes }) => (
               <FormMeuPerfil

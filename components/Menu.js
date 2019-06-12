@@ -123,13 +123,12 @@ export default class Menu extends React.Component {
                   style={{padding: 10, justifyContent: 'center', width: 46 }}
                   color="white"
               />
-              <MaterialCommunityIcons
+              <TouchableHighlight
                   onPress={this._signOutAsync}
-                  name="power-standby"
-                  size={26}
-                  style={{padding: 10, justifyContent: 'center', width: 46 }}
-                  color="white"
-              />
+                  style={{padding: 10, justifyContent: 'center'}}
+              >
+                <RubikText style={{color: 'white'}}>Sair</RubikText>
+              </TouchableHighlight>
             </View>
         </View>
     );

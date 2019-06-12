@@ -1,49 +1,11 @@
 import React, { Component } from 'react';
-import { TouchableHighlight, View, Dimensions, Image, Animated, Easing } from 'react-native';
-import { MaterialCommunityIcons, MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons'
+import { TouchableHighlight, View, Dimensions, Animated, Easing } from 'react-native';
+import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 import RubikText from '../ui/RubikText';
 import SideSwipe from 'react-native-sideswipe';
 import { LojaConsumer } from '../LojaContext';
-
-class OfertaCard extends Component {
-
-  render() {
-    const { width } = Dimensions.get('window');
-    return (
-      <View style={{width, alignItems: 'center'}}>
-        <TouchableHighlight
-          onPress={() => console.log("clicou na img")}>
-          <Image
-            source={{ uri : "http:"+(this.props.urlFoto || "//via.placeholder.com/500x500")}}
-            resizeMode="cover"
-            style={{ width: width*0.85, height: width*0.9, borderWidth: 1, borderColor: 'white', borderRadius: 8 }}
-          />
-        </TouchableHighlight>
-        <View style={{ width: width*0.82, flexDirection: 'row', marginTop: 10 }}>
-          <View style={{alignItems: 'flex-start', flexGrow: 2, flexShrink:2}}>
-            <TouchableHighlight
-              onPress={() => console.log("clicou no link")}>
-              <RubikText bold={true} style={{color: '#585756', textDecorationLine: 'underline'}}>{this.props.titulo}</RubikText>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => console.log("clicou no valor")}>
-              <RubikText style={{color: '#585756' }}>{this.props.subtitulo}</RubikText>
-            </TouchableHighlight>
-          </View>
-          <View style={{flexGrow: 1, flexShrink:1, flexDirection:'row', alignItems: 'center'}}>
-            <TouchableHighlight>
-              <MaterialCommunityIcons name="share-variant" size={24} style={{color: '#585756' }}/>
-            </TouchableHighlight>
-            <TouchableHighlight>
-              <MaterialCommunityIcons name="heart-outline" size={30} style={{color: '#585756' }}/>
-            </TouchableHighlight>
-          </View>
-        </View>
-      </View>
-    )
-  }
-
-}
+import { UserConsumer } from '../UserContext';
+import Produto from './Produto';
 
 class ListaOfertas extends React.Component {
 
@@ -58,17 +20,27 @@ class ListaOfertas extends React.Component {
     this.RotateValueHolder = new Animated.Value(0);
   }
 
-  atualizaOfertas(props) {
-    const listaDesejosIds = props.listaDesejos ? props.listaDesejos.map((produto)=> produto.id) : []
-    this.props.getOfertasComLike(listaDesejosIds)
-    .then((ofertas)=>{
-      ofertas = ofertas.slice(0,10)
-      this.setState({ofertas})
-    })
-    .catch((e) => {
-      const error = "Erro ao carregar ofertas."
-      this.setState({error})
-    })
+  static getDerivedStateFromProps(props, state) {
+
+    if (!props.isLoadingUser && !state.ofertas && !props.ofertas) {
+      const listaDesejosIds = props.listaDesejos ? props.listaDesejos.map((produto)=> produto.id) : []
+      props.getOfertasComLike(listaDesejosIds, props.userToken)
+      .then(ofertas => {
+      console.log("ofertas",ofertas)
+        return {
+          ofertas: ofertas
+        }
+      })
+    }
+
+    if(props.ofertas !== state.ofertas) {
+      return {
+        ofertas: props.ofertas
+      }
+    }
+
+    // Return null to indicate no change to state.
+    return null;
   }
 
   componentDidMount() {
@@ -80,12 +52,7 @@ class ListaOfertas extends React.Component {
     this.setState({
       ofertas: this.props.ofertas.slice(0,10)
     })
-    this.atualizaOfertas(this.props)
     this.StartImageRotateFunction();
-  }
-  
-  componentWillReceiveProps(props) {
-    this.atualizaOfertas(props)
   }
 
   componentWillUnmount() {
@@ -151,7 +118,7 @@ class ListaOfertas extends React.Component {
       <View style={{backgroundColor: '#55bcba', height: width/1.4, marginTop: 50, width: '100%'}}></View>
       <SideSwipe
         index={this.state.currentIndex}
-        itemWidth={OfertaCard.WIDTH}
+        itemWidth={Produto.WIDTH}
         style={{ width , marginTop: -width/1.2}}
         data={this.state.ofertas}
         contentOffset={0}
@@ -164,10 +131,11 @@ class ListaOfertas extends React.Component {
         }
         renderItem={({ itemIndex, currentIndex, item, animatedValue }) => {
           return (
-          <OfertaCard
+          <Produto
             {...item}
             index={itemIndex}
             currentIndex={currentIndex}
+            navigation={this.props.navigation}
           />
           )
           }
@@ -196,14 +164,22 @@ class SliderOfertas extends Component {
 
   render() {
     return <View style={{marginTop:20}}>
-      {/* <LojaConsumer>
+      <UserConsumer>
+        {( {listaDesejos, userToken, isLoadingUser} ) => (
+      <LojaConsumer>
         {({getOfertasComLike, ofertas}) => (
         <ListaOfertas
           getOfertasComLike={getOfertasComLike}
           ofertas={ofertas}
+          listaDesejos={listaDesejos}
+          userToken={userToken}
+          isLoadingUser={isLoadingUser}
+          navigation={this.props.navigation}
         />
         )}
-    </LojaConsumer> */}
+      </LojaConsumer>
+        )}
+      </UserConsumer>
     </View>
   }
   

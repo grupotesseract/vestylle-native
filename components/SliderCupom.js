@@ -4,6 +4,7 @@ import { MaterialCommunityIcons, MaterialIcons, Ionicons, FontAwesome } from '@e
 import RubikText from '../ui/RubikText';
 import SideSwipe from 'react-native-sideswipe';
 import { LojaConsumer } from '../LojaContext';
+import { UserConsumer } from '../UserContext';
 
 class CupomCard extends Component {
 
@@ -53,16 +54,28 @@ class ListaCupons extends React.Component {
     this.RotateValueHolder = new Animated.Value(0);
   }
 
+  static getDerivedStateFromProps(props, state) {
+
+    if (!props.isLoadingUser && !state.cupons && !props.cupons) {
+      const token = props.userToken
+      props.atualizaCupons(token)
+    }
+
+    if(props.cupons !== state.cupons) {
+      return {
+        cupons: props.cupons
+      }
+    }
+
+    // Return null to indicate no change to state.
+    return null;
+  }
+
   componentDidMount() {
     const intervalSlide = setInterval( this.avancaSlide , 5000);
     this.setState({
       cupons: this.props.cupons,
       intervalSlide
-    })
-    this.props.atualizaCupons()
-    .then((cupons)=>{
-      cupons = cupons.slice(0,10)
-      this.setState({cupons})
     })
     this.StartImageRotateFunction();
   }
@@ -151,12 +164,14 @@ class ListaCupons extends React.Component {
       <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: -5}}>
         {this.state.cupons.map((item, key)=> {
           return <TouchableHighlight
-          style={{paddingRight: 2, paddingLeft: 2}}
+          style={{paddingRight: 2, paddingLeft: 2, paddingTop: 16, paddingBottom: 12}}
           key={key}
           onPress={() => this.setState({ currentIndex: key })}>
             <MaterialCommunityIcons
-              name={key == this.state.currentIndex ? "circle" : "circle-outline"}
-              size={12}
+              name="circle"
+              color={key == this.state.currentIndex ? "black" : "#aaaaaa"}
+              size={8}
+              style={{padding: 3}}
             />
           </TouchableHighlight>
         })}
@@ -170,14 +185,20 @@ class SliderCupom extends Component {
   render() {
 
     return ( <>
-    {/* <LojaConsumer>
-        {({atualizaCupons, cupons}) => (
-        <ListaCupons
-          atualizaCupons={atualizaCupons}
-          cupons={cupons}
-        />
+      <UserConsumer>
+        {({userToken, isLoadingUser}) => (
+        <LojaConsumer>
+          {({atualizaCupons, cupons}) => (
+          <ListaCupons
+            atualizaCupons={atualizaCupons}
+            cupons={cupons}
+            userToken={userToken}
+            isLoadingUser={isLoadingUser}
+          />
+          )}
+        </LojaConsumer>
         )}
-    </LojaConsumer> */}
+      </UserConsumer>
     </>
     );
   }
