@@ -27,6 +27,7 @@ class UserProvider extends React.Component {
     this.setFacebookToken = this.setFacebookToken.bind(this)
     this.getOfertas = this.getOfertas.bind(this)
     this.toggleDesejo = this.toggleDesejo.bind(this)
+    this.buscaCupom = this.buscaCupom.bind(this)
     this.receberNotificacoes = this.receberNotificacoes.bind(this)
   }
 
@@ -196,7 +197,33 @@ class UserProvider extends React.Component {
     return res;
   }
 
+  async buscaCupom(codigoCupom) {
+    if(!codigoCupom) {
+      const msgErro = { erro: "Sem código cupom" }
+      throw msgErro
+    }
 
+    const res = await fetch(Api.url+'/cupons/encrypt/'+codigoCupom,
+      {
+        credentials: 'include',
+        headers: {
+          'Authorization': 'Bearer '+this.state.userToken
+        }
+      }
+    )
+    .then(response => response.json())
+    .catch(erro => console.error('Erro no buscaCupom',erro))
+    if(!res) {
+      return
+    }
+    if(res.success) {
+      const cupom = res.data
+      return cupom
+    } else {
+      throw res.message
+    }
+
+  }
   async toggleDesejo(oferta_id) {
     if(!this.state.userId) {
       return
@@ -421,6 +448,7 @@ class UserProvider extends React.Component {
           getOfertas: this.getOfertas,
           toggleDesejo: this.toggleDesejo,
           receberNotificacoes: this.receberNotificacoes,
+          buscaCupom: this.buscaCupom,
           listaDesejos: this.state.ofertas 
         }}
       >

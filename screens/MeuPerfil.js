@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableHighlight, ScrollView, View, StyleSheet, ImageBackground, TextInput, AsyncStorage } from 'react-native';
+import { TouchableHighlight, ScrollView, View, ImageBackground, TextInput } from 'react-native';
 import ButtonBorder from '../ui/ButtonBorder';
 import RubikText from '../ui/RubikText';
 import Alert from '../ui/Alert';

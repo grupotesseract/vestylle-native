@@ -12,7 +12,7 @@ class SimpleMenu extends Component {
   render() {
     return <View style={this.style.container}>
       <TouchableHighlight
-        onPress = {() => this.goTo("qrcode")}
+        onPress = {() => this.goTo("AdicionarCupom")}
       >
         <MaterialCommunityIcons
           name="qrcode-scan"
