@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Button } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import Colors from '../constants/Colors'
 import RubikText from '../ui/RubikText';
 import Link from '../ui/Link';
@@ -26,12 +26,16 @@ class CupomContent extends React.Component {
           alignItems: 'center'
           }}>
           <View style={{
-            backgroundColor: '#e20f17',
             position: 'absolute',
             top: -25,
             padding: 10,
             paddingTop: 20
           }}>
+            <Image
+              source={require('../assets/bandeirola.png')}
+              resizeMode="contain"
+              style={{position:'absolute', width: 85,marginTop: -49, left: 0}}
+            />
             <RubikText bold={true} 
               style={{
                 fontSize:32,

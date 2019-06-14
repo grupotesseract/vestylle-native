@@ -149,8 +149,10 @@ class ListaOfertas extends React.Component {
           key={key}
           onPress={() => this.setState({ currentIndex: key })}>
             <MaterialCommunityIcons
-              name={key == this.state.currentIndex ? "circle" : "circle-outline"}
-              size={12}
+              name="circle"
+              color={key == this.state.currentIndex ? "black" : "#aaaaaa"}
+              size={8}
+              style={{padding: 3}}
             />
           </TouchableHighlight>
         })}
