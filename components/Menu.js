@@ -96,14 +96,14 @@ export default class Menu extends React.Component {
             <MenuButton 
                 navigation={this.props.navigation} 
                 label="Lista de Desejos"
-                page="AreaCliente"
+                page="ListaDesejos"
                 icon="heart"
                 font={MaterialCommunityIcons}
             />
             <MenuButton 
                 navigation={this.props.navigation} 
                 label="Produtos"
-                page="AreaCliente"
+                page="Produtos"
                 icon="md-shirt"
                 font={Ionicons}
             />
@@ -117,7 +117,7 @@ export default class Menu extends React.Component {
             <MenuButton 
                 navigation={this.props.navigation} 
                 label="Fale Conosco"
-                page="AreaCliente"
+                page="FaleConosco"
                 icon="whatsapp"
                 font={MaterialCommunityIcons}
                 noborder={true}

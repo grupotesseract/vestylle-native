@@ -16,6 +16,9 @@ import ListaDesejos from './screens/ListaDesejos';
 import { UserProvider } from './UserContext';
 import { LojaProvider } from './LojaContext';
 import Loja from './screens/Loja';
+import Produtos from './screens/Produtos';
+import Oferta from './screens/Oferta';
+import CupomDetalhe from './screens/CupomDetalhe';
 
 class LogoTitle extends React.Component {
   render() {
@@ -81,6 +84,9 @@ const AppNavigator = createStackNavigator(
     MeuPerfil: MeuPerfil,
     MeusPontos: MeusPontos,
     ListaDesejos: ListaDesejos,
+    Produtos: Produtos,
+    Oferta: Oferta,
+    Cupom: CupomDetalhe,
     Loja: Loja
   },
   {

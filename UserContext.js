@@ -1,6 +1,7 @@
 import React  from 'react';
 import Api from './constants/Api';
 import {AsyncStorage} from 'react-native';
+import { Permissions, Notifications } from 'expo';
 
 const UserContext = React.createContext();
 
@@ -12,23 +13,29 @@ class UserProvider extends React.Component {
     fbData: null,
     userId: null,
     perfil: null,
-    ofertas: []
+    ofertas: [],
+    cupons: [],
+    cuponsUtilizados: [],
+    isLoadingUser: true
   }
 
   constructor() {
     super()
+    this.atualizaCupons = this.atualizaCupons.bind(this)
+    this.atualizaCuponsUtilizados = this.atualizaCuponsUtilizados.bind(this)
+    this.buscaCupom = this.buscaCupom.bind(this)
+    this.getCupomById = this.getCupomById.bind(this)
+    this.getDadosMeuPerfil = this.getDadosMeuPerfil.bind(this)
+    this.getOfertas = this.getOfertas.bind(this)
     this.login = this.login.bind(this)
     this.logout = this.logout.bind(this)
-    this.setToken = this.setToken.bind(this)
-    this.setPerfil = this.setPerfil.bind(this)
-    this.signup = this.signup.bind(this)
-    this.getDadosMeuPerfil = this.getDadosMeuPerfil.bind(this)
+    this.receberNotificacoes = this.receberNotificacoes.bind(this)
     this.setDadosMeuPerfil = this.setDadosMeuPerfil.bind(this)
     this.setFacebookToken = this.setFacebookToken.bind(this)
-    this.getOfertas = this.getOfertas.bind(this)
+    this.setPerfil = this.setPerfil.bind(this)
+    this.setToken = this.setToken.bind(this)
+    this.signup = this.signup.bind(this)
     this.toggleDesejo = this.toggleDesejo.bind(this)
-    this.buscaCupom = this.buscaCupom.bind(this)
-    this.receberNotificacoes = this.receberNotificacoes.bind(this)
   }
 
   async loadFromLocalStorage() {
@@ -48,7 +55,13 @@ class UserProvider extends React.Component {
   }
 
   componentDidMount() {
-    this.loadFromLocalStorage();
+    this.atualizaInfosUser()
+  }
+
+  async atualizaInfosUser() {
+    await this.loadFromLocalStorage()
+    await this.atualizaCuponsUtilizados()
+    await this.setState({ isLoadingUser: false })
   }
 
   async signup(login, passwd) {
@@ -98,7 +111,7 @@ class UserProvider extends React.Component {
 
 
   logout() {
-    localStorage.clear();
+    AsyncStorage.clear();
     this.setState({
       isAuth: false,
       userToken: null,
@@ -174,7 +187,7 @@ class UserProvider extends React.Component {
     await this.setState({
       ofertas
     })
-    localStorage.setItem('ofertas', JSON.stringify(ofertas));
+    await AsyncStorage.setItem('ofertas', JSON.stringify(ofertas));
   }
 
   async getAPITokenFromFacebookData(fbData) {
@@ -196,6 +209,99 @@ class UserProvider extends React.Component {
     .catch(erro => console.error('Erro no login',erro))
     return res;
   }
+
+  async atualizaCupons() {
+    if(this.state.isLoadingUser) {
+      await this.atualizaInfosUser()
+    }
+    const userToken = this.state.userToken
+    let auth = null
+    if(userToken) {
+      auth = {
+        credentials: 'include',
+        headers: {
+          'Authorization': 'Bearer '+userToken,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }
+    }
+    await fetch(Api.url+'/cupons', auth)
+    .then(response => {
+      response.json()
+      .then(res => {
+        if(res && res.success) {
+          const cupons = res.data
+          console.log("cupons",cupons)
+          this.setState({
+            cupons
+          })
+        }
+      })
+    })
+    .catch(erro => console.error('Erro no atualizacupons',erro))
+  }
+
+  async atualizaCuponsUtilizados() {
+    if(!this.state.userId) {
+      return []
+    }
+
+    const res = await fetch(Api.url+'/pessoas/'+this.state.userId+'/cupons', {
+      credentials: 'include',
+      headers: {
+        'Authorization': 'Bearer '+this.state.userToken,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+      return response.json().then((jsonRes) => {
+        if(jsonRes.success) {
+          const cuponsUtilizados = jsonRes.data
+          const cuponsFormatados = cuponsUtilizados.map(cupom => {
+            let cupomFormatado = Object.assign({},cupom,{codigo_unico: cupom.codigo_unico});
+            return cupomFormatado
+          })
+          this.setState({cuponsUtilizados: cuponsFormatados})
+          return cuponsFormatados
+        } else {
+          throw jsonRes.message
+        }
+      })
+    })
+    .catch(error => console.error('Atualiza cupons utilizados error', error));
+    return res;
+  }
+
+  async getCupomById(cupomId) {
+    if(!cupomId) {
+      const msgErro = { erro: "Cupom não encontrado." }
+      throw msgErro
+    }
+
+    const res = await fetch(Api.url+'/cupons/'+cupomId,
+      {
+        credentials: 'include',
+        headers: {
+          'Authorization': 'Bearer '+this.state.userToken
+        }
+      }
+    )
+    .then(response => response.json())
+    .catch(erro => console.error('Erro no buscaCupom',erro))
+    if(!res) {
+      const msgErro = { erro: "Cupom não encontrado." }
+      throw msgErro
+    }
+    if(res.success) {
+      const cupom = res.data
+      return cupom
+    } else {
+      throw res.message
+    }
+  }
+
 
   async buscaCupom(codigoCupom) {
     if(!codigoCupom) {
@@ -265,7 +371,7 @@ class UserProvider extends React.Component {
       }
     )
     .then(response => response.json())
-    .catch(erro => console.error('Erro no getOfertas',erro))
+    .catch(erro => console.log('Erro no getOfertas',erro))
     if(!res) {
       return
     }
@@ -333,48 +439,33 @@ class UserProvider extends React.Component {
     return objRes
   }
 
-  receberNotificacoes() {
-    // Pega registro do service worker
-    if(!('serviceWorker' in navigator)) {
-      console.log('sw not supported');
-    } 
-    if(('serviceWorker' in navigator)) {
-      console.log('sw available (not ready)');
-      navigator.serviceWorker.ready
-      .then((serviceWorkerRegistration) => {
-        console.log('sw ready, registration:');
-        console.log(serviceWorkerRegistration)
+  async receberNotificacoes() {
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    );
+    let finalStatus = existingStatus;
 
-        console.log("REACT_APP_VAPID_PUBLIC_KEY", process.env.REACT_APP_VAPID_PUBLIC_KEY)
-        // Pede permissão para exibir notificações
-        // (ou avisa que bloqueou)
-        if( Notification.permission === 'denied' ) {
-          alert('Você proibiu as notificações, redefina as configurações para receber mensagens')
-        }
-        Notification.requestPermission((status) => {
-          console.log('Notification status', status)
-          if(status === 'granted') {
-            let swReg = serviceWorkerRegistration;
-
-            const vapidPublicKey = process.env.REACT_APP_VAPID_PUBLIC_KEY;
-            const convertedVapidKey = this.urlBase64ToUint8Array(vapidPublicKey);
-      
-            swReg.pushManager.subscribe({
-              userVisibleOnly: true,
-              applicationServerKey: convertedVapidKey
-            }).then((subscription) => {
-              this.enviaSubscription(subscription)
-              this.registerOnPush(swReg);
-            }).catch((e) => console.error(e));
-          }
-        });
-      })
-      .catch(err => console.log('Erro no register do sw:', err))
+    // only ask if permissions have not already been determined, because
+    // iOS won't necessarily prompt the user a second time.
+    if (existingStatus !== 'granted') {
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
     }
+
+    // Stop here if the user did not grant permissions
+    if (finalStatus !== 'granted') {
+      return;
+    }
+
+    // Get the token that uniquely identifies this device
+    let token = await Notifications.getExpoPushTokenAsync();
+    this.enviaExpoToken(token)
   }
 
-  enviaSubscription = async (subscription) => {
-    console.log(subscription);
+  enviaExpoToken = async (token) => {
+    console.log('userId:', this.state.userId, 'expo token:', token);
 
     const res = await fetch(Api.url+'/pessoas/'+this.state.userId+'/subscription', {
       method: 'POST',
@@ -384,17 +475,17 @@ class UserProvider extends React.Component {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({"subscription":subscription})
+      body: JSON.stringify({"token":token})
     })
     .then(response => response.json())
-    .catch(erro => console.error('Erro no enviaSubscription',erro))
+    .catch(erro => console.error('Erro no enviaExpoToken',erro))
     if(!res) {
       return
     }
     if(res.success) {
       console.log("sucesso no post subscription", res)
     } else {
-      throw res.message
+      console.log("erro no enviaExpoToken", res.message)
     }
   }
 
@@ -435,21 +526,27 @@ class UserProvider extends React.Component {
     return (
       <UserContext.Provider
         value={{ 
+          ativaCupom: this.ativaCupom,
+          atualizaCupons: this.atualizaCupons,
+          atualizaCuponsUtilizados: this.atualizaCuponsUtilizados,
+          buscaCupom: this.buscaCupom,
+          cupons: this.state.cupons,
+          getCupomById: this.getCupomById,
+          getDadosMeuPerfil: this.getDadosMeuPerfil,
+          getOfertas: this.getOfertas,
           isAuth: this.state.isAuth,
-          perfil: this.state.perfil,
+          isLoadingUser: this.state.isLoadingUser,
+          listaDesejos: this.state.ofertas, 
           login: this.login,
           logout: this.logout,
-          setToken: this.setToken,
-          setPerfil: this.setPerfil,
-          signup: this.signup,
-          getDadosMeuPerfil: this.getDadosMeuPerfil,
+          perfil: this.state.perfil,
+          receberNotificacoes: this.receberNotificacoes,
           setDadosMeuPerfil: this.setDadosMeuPerfil,
           setFacebookToken: this.setFacebookToken,
-          getOfertas: this.getOfertas,
+          setPerfil: this.setPerfil,
+          setToken: this.setToken,
+          signup: this.signup,
           toggleDesejo: this.toggleDesejo,
-          receberNotificacoes: this.receberNotificacoes,
-          buscaCupom: this.buscaCupom,
-          listaDesejos: this.state.ofertas 
         }}
       >
         {this.props.children}

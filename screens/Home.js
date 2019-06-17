@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, TouchableHighlight } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import BoasVindas from './BoasVindas'
 import SimpleMenu from '../components/SimpleMenu'
 import RodapeCompleto from '../components/RodapeCompleto'
@@ -7,6 +7,7 @@ import SliderCupom from '../components/SliderCupom';
 import SliderOfertas from '../components/SliderOfertas';
 import RubikText from '../ui/RubikText';
 import LaughingSmiling from '../ui/LaughingSmiling';
+import Link from '../ui/Link';
 
 export default class HomeScreen extends React.Component {
 
@@ -44,11 +45,13 @@ export default class HomeScreen extends React.Component {
           </View>
           <BoasVindas/>
           <SliderOfertas/>
-          <TouchableHighlight
+
+          <Link
+            to="Produtos"
             style={this.style.btnPreto}
-            onPress={() => console.log("clicou no btn")}>
+          >
             <RubikText style={{color: 'white'}}>TODOS OS PRODUTOS</RubikText>
-          </TouchableHighlight>
+          </Link>
           <RodapeCompleto/>
         </ScrollView>
        </View>

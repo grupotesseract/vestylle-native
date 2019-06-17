@@ -44,8 +44,6 @@ class ListaOfertas extends React.Component {
   }
 
   componentDidMount() {
-    const intervalSlide = setInterval( this.avancaSlide , 5000);
-    this.setState({ intervalSlide })
     if(!this.props.ofertas) {
       return
     }
@@ -116,32 +114,29 @@ class ListaOfertas extends React.Component {
     return ( <View style={{ alignItems: 'center'}}>
       <RubikText bold={true} style={{ fontSize: 16 }}>CONFIRA AS NOVIDADES</RubikText>
       <View style={{backgroundColor: '#55bcba', height: width/1.4, marginTop: 50, width: '100%'}}></View>
-      <SideSwipe
-        index={this.state.currentIndex}
-        itemWidth={Produto.WIDTH}
-        style={{ width , marginTop: -width/1.2}}
-        data={this.state.ofertas}
-        contentOffset={0}
-        useVelocityForIndex={false}
-        onIndexChange={index => {
-          this.setState(() => ({ currentIndex: index }))
-          clearInterval(this.state.intervalSlide);
-          this.setState({ intervalSlide: setInterval( this.avancaSlide , 5000) })
+        <SideSwipe
+          index={this.state.currentIndex}
+          itemWidth={Produto.WIDTH}
+          style={{ width , marginTop: -width/1.2}}
+          data={this.state.ofertas}
+          contentOffset={0}
+          useVelocityForIndex={true}
+          onIndexChange={index => {
+              this.setState(() => ({ currentIndex: index }))
+            }
           }
-        }
-        renderItem={({ itemIndex, currentIndex, item, animatedValue }) => {
-          return (
-          <Produto
-            {...item}
-            index={itemIndex}
-            currentIndex={currentIndex}
-            navigation={this.props.navigation}
-          />
-          )
+          renderItem={({ itemIndex, currentIndex, item, animatedValue }) => {
+            return (
+            <Produto
+              {...item}
+              index={itemIndex}
+              currentIndex={currentIndex}
+            />
+            )
+            }
           }
-        }
-      >
-      </SideSwipe>
+        >
+        </SideSwipe>
       <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 5}}>
         {this.state.ofertas.map((item, key)=> {
           return <TouchableHighlight

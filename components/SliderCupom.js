@@ -5,6 +5,7 @@ import RubikText from '../ui/RubikText';
 import SideSwipe from 'react-native-sideswipe';
 import { LojaConsumer } from '../LojaContext';
 import { UserConsumer } from '../UserContext';
+import Link from '../ui/Link';
 
 class CupomCard extends Component {
 
@@ -12,19 +13,23 @@ class CupomCard extends Component {
     const { width } = Dimensions.get('window');
     return (
       <View style={{width, alignItems: 'center'}}>
-        <TouchableHighlight
-          onPress={() => console.log("clicou no"+this.props.id)}>
+        <Link
+          to="Cupom"
+          options={{id: this.props.id}}
+        >
           <Image
             source={{ uri : "http:"+(this.props.foto_caminho || "//via.placeholder.com/500x500")}}
             resizeMode="cover"
             style={{ width: width*0.85, height: width*0.9 }}
           />
-        </TouchableHighlight>
-        <TouchableHighlight
+        </Link>
+        <Link
           style={this.style.btnAmareloCupom}
-          onPress={() => console.log("clicou no btn")}>
+          to="Cupom"
+          options={{id: this.props.id}}
+        >
           <RubikText bold={true}>ATIVAR CUPOM</RubikText>
-        </TouchableHighlight>
+        </Link>
       </View>
     )
   }

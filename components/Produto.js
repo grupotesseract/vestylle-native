@@ -12,9 +12,9 @@ class Produto extends Component {
     return (
       <View style={{width, alignItems: 'center'}}>
         <TouchableHighlight
-          onPress={() => this.props.navigation.navigate('Oferta/'+this.props.id)}>
+          onPress={() => this.props.navigation.navigate('Oferta', {id: this.props.id})}>
           <Image
-            source={{ uri : "http:"+(this.props.urlFoto || "//via.placeholder.com/500x500")}}
+            source={{ uri : "https:"+(this.props.urlFoto || "//via.placeholder.com/500x500")}}
             resizeMode="cover"
             style={{ width: width*0.85, height: width*0.9, borderWidth: 1, borderColor: 'white', borderRadius: 0 }}
           />
@@ -22,7 +22,7 @@ class Produto extends Component {
         <View style={{ width: width*0.82, flexDirection: 'row', marginTop: 10 }}>
         <TouchableHighlight
         style={{alignItems: 'flex-start', flexGrow: 2, flexShrink:2}}
-        onPress={() => this.props.navigation.navigate('Oferta/'+this.props.id)}>
+        onPress={() => this.props.navigation.navigate('Oferta', {id: this.props.id})}>
             <>
               <RubikText bold={true} style={{color: '#585756', textDecorationLine: 'underline'}}>{this.props.titulo.toUpperCase()}</RubikText>
               <RubikText style={{color: '#585756' }}>{this.props.subtitulo}</RubikText>

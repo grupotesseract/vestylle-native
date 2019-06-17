@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { TouchableHighlight } from 'react-native';
 import RubikText from '../ui/RubikText';
+import { withNavigation } from 'react-navigation';
 
 class Link extends Component {
 
@@ -10,7 +11,7 @@ class Link extends Component {
 
   render() {
     return <TouchableHighlight 
-      onPress={() => this.props.navigation.navigate(this.props.to)}
+      onPress={() => this.props.navigation.navigate(this.props.to, this.props.options)}
       style={this.props.style}>
       <>
         { this.props.title && (
@@ -34,4 +35,4 @@ class Link extends Component {
   }
 }
 
-export default Link;
+export default withNavigation(Link);

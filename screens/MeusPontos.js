@@ -14,17 +14,8 @@ export default class MeusPontos extends React.Component {
   }
 
   componentDidMount() {
-    var interval = setInterval(this.crescePonto, 9);
-    this.setState({interval})
   }
-  componentWillUnmount() {
-    clearInterval(this.state.interval)
-  }
-  
-  crescePonto = () => {
-    const aumenta = this.state.qtdPontos > 100 ? 10 : 1
-    this.setState({qtdPontos: this.state.qtdPontos+aumenta})
-  }
+ 
   render() {
     return (
       <View>
