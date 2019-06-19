@@ -16,9 +16,12 @@ class LojaProvider extends React.Component {
         this.atualizaCupons = this.atualizaCupons.bind(this)
         this.getOfertasComLike = this.getOfertasComLike.bind(this)
         this.getOfertaById = this.getOfertaById.bind(this)
-        this.faleConosco = this.faleConosco.bind(this)
         this.atualizaDadosLoja = this.atualizaDadosLoja.bind(this)
     }
+
+  componentDidMount() {
+    this.atualizaDadosLoja()
+  }
 
   async atualizaDadosLoja() {
     const res = await fetch(Api.url+'/lojas')
@@ -37,20 +40,27 @@ class LojaProvider extends React.Component {
     }
   }
 
-  async atualizaOfertas() {
-    const res = await fetch(Api.url+'/ofertas')
+  async atualizaOfertas(userToken) {
+    let auth = null
+    if(userToken) {
+      auth = {
+        credentials: 'include',
+        headers: {
+          'Authorization': 'Bearer '+userToken,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }
+    }
+    const res = await fetch(Api.url+'/ofertas', auth)
     .then(response => response.json())
-    .catch(erro => console.error('Erro no atualizaOfertas',erro))
+    .catch(erro => console.log('Erro no atualizaOfertas',erro))
     if(res && res.success) {
       const ofertas = res.data;
       this.setState({ofertas})
       return ofertas
-    } 
-    if(res && !res.success) {
+    } else {
       throw res.message
-    }
-    if(!res) {
-      return []
     }
   }
 
@@ -85,48 +95,33 @@ class LojaProvider extends React.Component {
     return oferta
   }
 
-  async atualizaCupons() {
-    const res = await fetch(Api.url+'/cupons')
-    .then(response => response.json())
-    .catch(erro => console.error('Erro no atualizacupons',erro))
-    if(res && res.success) {
-      const cupons = res.data;
-      this.setState({cupons})
-      return cupons
-    } 
-    if(res && !res.success) {
-      throw res.message
+  async atualizaCupons(userToken) {
+    let auth = null
+    if(userToken) {
+      auth = {
+        credentials: 'include',
+        headers: {
+          'Authorization': 'Bearer '+userToken,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }
     }
-    if(!res) {
-        return []
-    }
-  }
-
-  async faleConosco(pessoa_id, nome, contato, assunto, mensagem) {
-    const params = JSON.stringify({
-      pessoa_id,
-      nome,
-      assunto,
-      mensagem,
-      contato
-    })
-    const res = await fetch(Api.url+'/fale_conoscos', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: params
-    })
+    await fetch(Api.url+'/cupons', auth)
     .then(response => {
-      return response.json().then((jsonRes) => {
-        return jsonRes
+      response.json()
+      .then(res => {
+        if(res && res.success) {
+          const cupons = res.data
+          console.log(cupons)
+          this.setState({
+            cupons
+          })
+        }
       })
     })
-    .catch(error => console.error('Erro no fale conosco', error));
-    return res;
+    .catch(erro => console.log('Erro no atualizacupons',erro))
   }
-
 
   render() {
     return (
@@ -138,7 +133,6 @@ class LojaProvider extends React.Component {
           atualizaOfertas: this.atualizaOfertas,
           getOfertasComLike: this.getOfertasComLike,
           getOfertaById: this.getOfertaById,
-          faleConosco: this.faleConosco,
           atualizaDadosLoja: this.atualizaDadosLoja,
           dadosLoja: this.state.dadosLoja
         }}

@@ -98,15 +98,22 @@ class ListaCupons extends React.Component {
 
                 {Number(cupom.porcentagem_off) > 0 &&
                 <View style={{
-                    backgroundColor: '#e20f17',
                     position: 'absolute',
-                    top: -3,
-                    left: 45,
+                    top: -25,
                     padding: 10,
-                    paddingBottom: 0,
+                    paddingTop: 37,
+                    left: 45, 
                     zIndex: 3
-                }}
-                >
+                }}>
+                    <Image
+                    source={require('../assets/bandeirola.png')}
+                    resizeMode="contain"
+                    style={{
+                        position:'absolute', 
+                        width: 63,
+                        marginTop: -48
+                    }}
+                    />
                     <RubikText bold={true} 
                     style={{
                         fontSize:22,
@@ -129,14 +136,14 @@ class ListaCupons extends React.Component {
                         borderWidth: 1,
                         borderColor: '#868686',
                         borderStyle: 'solid',
-                        height: 220,
+                        height: 110,
                         justifyItems: 'center',
                         position: 'relative',
                         overflow: 'hidden',
                     }}>
                     <Image
                         resizeMode="cover"
-                        source={{uri: "https://" + (cupom.foto_caminho || ((cupom.oferta && cupom.oferta.urlFoto) && cupom.oferta.urlFoto))}}
+                        source={{uri: "https://" + ( (cupom.fotos_listagem && cupom.fotos_listagem.length > 0) && cupom.fotos_listagem[0].urlCloudinary || ((cupom.oferta && cupom.oferta.urlFoto) && cupom.oferta.urlFoto))}}
                         style={{
                             width:'100%',
                             position: 'absolute',
@@ -154,14 +161,18 @@ class ListaCupons extends React.Component {
                     {cupom.subtitulo}
                 </RubikText>
                 </View>
-                <RubikText style={{
-                    marginRight: 30, 
-                    marginLeft: 30, 
-                    padding: 5, 
-                    justifyContent: 'center'
-                }}>
-                    Válido até {this.datetime2DDMMAAAA(cupom.data_validade)}
-                </RubikText>
+                <View style={{
+                        marginRight: 30, 
+                        marginLeft: 30, 
+                        padding: 5, 
+                        alignItems: 'center', 
+                        textAlign: 'center',
+                        justifyContent: 'center'
+                    }}>
+                    <RubikText>
+                        Válido até {this.datetime2DDMMAAAA(cupom.data_validade)}
+                    </RubikText>
+                </View>
                 <Link
                     to="Cupom"
                     options={{id:cupom.id}}
@@ -203,7 +214,7 @@ class ListaCupons extends React.Component {
 
     style = {
         bordaCentro : {
-            borderBottom: 1, 
+            borderBottomWidth: 1, 
             borderStyle: 'solid',
             borderColor: '#868686',
             alignItems: 'center', 

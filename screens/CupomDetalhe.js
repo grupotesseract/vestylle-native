@@ -289,7 +289,6 @@ class DadosCupom extends React.Component {
 
             {Number(this.state.cupom.porcentagem_off) > 0 &&
             <View style={{
-                backgroundColor: '#e20f17',
                 position: 'absolute',
                 top: -3,
                 right: 45,
@@ -298,6 +297,15 @@ class DadosCupom extends React.Component {
                 zIndex: 3
             }}
             >
+                <Image
+                source={require('../assets/bandeirola.png')}
+                resizeMode="contain"
+                style={{
+                    position:'absolute', 
+                    width: 63,
+                    marginTop: -68
+                }}
+                />
                 <RubikText bold={true} 
                 style={{
                     fontSize:22,
@@ -313,14 +321,14 @@ class DadosCupom extends React.Component {
             </View>
             }
             
-        { this.state.cupom.fotos && this.state.cupom.fotos.length > 0 &&
+        { this.state.cupom.fotos_listagem && this.state.cupom.fotos_listagem.length > 0 &&
           <View style={{marginBottom: 50}}>
             <Swiper 
                 style={{backgroundColor: 'magenta', height: 300}}
                 dot={<View style={{backgroundColor:'#aaaaaa', width: 5, height: 5,borderRadius: 4, margin: 3,marginTop: 50, marginBottom: -70,  borderColor: '#aaaaaa', borderWidth:1}} />}
                 activeDot={<View style={{backgroundColor:'#444444', width: 6, height: 6,borderRadius: 4, margin: 3,marginTop: 50, marginBottom: -70,  borderColor: '#333333', borderWidth:1}} />}
             >
-              {this.state.cupom.fotos.map((foto, key) => {
+              {this.state.cupom.fotos_listagem.map((foto, key) => {
                     return <View 
                     key={key}
                     style={{
@@ -339,7 +347,7 @@ class DadosCupom extends React.Component {
             </Swiper>
           </View>
         }
-        { (!this.state.cupom.fotos || this.state.cupom.fotos.length === 0) &&
+        { (!this.state.cupom.fotos_listagem || this.state.cupom.fotos_listagem.length === 0) &&
             <Image 
                 resizeMode="cover"
                 source={{ uri : "https://via.placeholder.com/500x500?text=Cupom+Vestylle"}}

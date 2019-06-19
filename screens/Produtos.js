@@ -184,6 +184,7 @@ export default class Produtos extends React.Component {
             />
             <RubikText style={{textAlign: 'left', fontSize: 12,flexShrink: 1}}> Clique aqui para mostrar produtos adicionados a sua LISTA DE DESEJOS</RubikText>
           </Link>
+          {/*
           <TouchableHighlight
           style={{marginLeft: 20}}
             onPress={() => this.setVisualizacaoMiniatura()}
@@ -205,6 +206,7 @@ export default class Produtos extends React.Component {
               color={this.state.visualizacao !== 'thumb' ? '#585756' : '#bdbabc'}
             />
           </TouchableHighlight>
+          */}
         </View>
       </View>
       <View style={{paddingLeft: 20, paddingRight: 20}}>

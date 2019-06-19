@@ -39,7 +39,7 @@ class SimpleMenu extends Component {
         />
       </TouchableHighlight>
       <TouchableHighlight
-        onPress = {() => this.goTo("")}
+        onPress = {() => this.goTo("FaleConosco")}
       >
         <MaterialCommunityIcons
           name="whatsapp"

@@ -20,6 +20,7 @@ import Produtos from './screens/Produtos';
 import Oferta from './screens/Oferta';
 import CupomDetalhe from './screens/CupomDetalhe';
 import MeusCupons from './screens/MeusCupons';
+import FaleConosco from './screens/FaleConosco';
 
 class LogoTitle extends React.Component {
   render() {
@@ -89,6 +90,7 @@ const AppNavigator = createStackNavigator(
     Oferta: Oferta,
     Cupom: CupomDetalhe,
     MeusCupons: MeusCupons,
+    FaleConosco: FaleConosco,
     Loja: Loja
   },
   {

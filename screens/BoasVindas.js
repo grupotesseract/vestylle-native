@@ -56,7 +56,7 @@ class CupomContent extends React.Component {
           <RubikText bold={true} className="faca-seu-cadastro">DE BOAS-VINDAS!</RubikText>
           </View>
           <Link
-            to="/cadastro"
+            to="Cadastro"
             style={{
               borderWidth: 1,
               padding: 12

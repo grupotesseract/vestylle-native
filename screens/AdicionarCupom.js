@@ -8,6 +8,7 @@ import RodapeCompleto from '../components/RodapeCompleto'
 import { FontAwesome } from '@expo/vector-icons'
 import { UserConsumer } from '../UserContext';
 import { BarCodeScanner } from 'expo';
+import { withNavigation } from 'react-navigation';
 import * as Permissions from 'expo-permissions';
 
 class InputCupomQR extends React.Component {
@@ -89,9 +90,7 @@ class InputCupomQR extends React.Component {
         .then(cupom => {
           console.log(cupom)
           if(cupom && cupom.id) {
-            this.setState({
-              redirectTo: 'cupom/'+cupom.id
-            })
+            this.props.navigation.navigate("Cupom", {id: cupom.id})
           }
         })
         .catch((e) => {
@@ -211,7 +210,7 @@ class InputCupomQR extends React.Component {
   }
 }
 
-export default class AdicionarCupom extends React.Component {
+class AdicionarCupom extends React.Component {
 
   state = {
     codigoCupom: null
@@ -280,6 +279,7 @@ export default class AdicionarCupom extends React.Component {
           <InputCupomQR
             buscaCupom={buscaCupom}
             codigoCupom={this.state.codigoCupom}
+            navigation={this.props.navigation}
           />
         )}
       </UserConsumer>
@@ -289,3 +289,5 @@ export default class AdicionarCupom extends React.Component {
     )
   }
 }
+
+export default withNavigation(AdicionarCupom)

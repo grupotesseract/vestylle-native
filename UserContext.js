@@ -459,7 +459,7 @@ class UserProvider extends React.Component {
       body: JSON.stringify(perfil)
     })
     .then(response => response.json())
-    .catch(erro => console.error('Erro no setDados',erro))
+    .catch(erro => console.log('Erro no setDados',erro))
     if(res.errors) {
       throw res.errors
     }
