@@ -4,9 +4,9 @@ import RubikText from '../ui/RubikText';
 import RodapeCompleto from '../components/RodapeCompleto';
 import Breadcrumb from '../ui/Breadcrumb';
 import { LojaConsumer } from '../LojaContext';
-import SideSwipe from 'react-native-sideswipe';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import LaughingSmiling from '../ui/LaughingSmiling';
+import Swiper from 'react-native-swiper';
 
 class InfosLoja extends React.Component {
 
@@ -58,47 +58,25 @@ class InfosLoja extends React.Component {
     const dados = this.state.dadosLoja
 
       return <View style={{ alignItems: 'center'}}>
-      <SideSwipe
-        index={this.state.currentIndex}
-        itemWidth={width}
-        style={{ width }}
-        data={dados.fotos}
-        contentOffset={0}
-        useVelocityForIndex={false}
-        onIndexChange={index => {
-          this.setState(() => ({ currentIndex: index }))
-          clearInterval(this.state.intervalSlide);
-          this.setState({ intervalSlide: setInterval( this.avancaSlide , 5000) })
-          }
-        }
-        renderItem={({ itemIndex, currentIndex, item, animatedValue }) => {
-          return (
-          <View style={{width, alignItems: 'center'}}
+        <Swiper 
+          autoplay={true}
+            style={{ height: '100%', zIndex:4}}
+            dot={<View style={{backgroundColor:'#aaaaaa', width: 5, height: 5,borderRadius: 4, margin: 5,marginTop: 40, marginBottom: -20,  borderColor: '#aaaaaa', borderWidth:1}} />}
+            activeDot={<View style={{backgroundColor:'#555555', width: 6, height: 6,borderRadius: 4, margin: 5,marginTop: 40, marginBottom: -20,  borderColor: '#555555', borderWidth:1}} />}
+        >
+        { dados.fotos.map( (item,key) => 
+          <View 
+            style={{width, alignItems: 'center'}}
+            key={key}
           >
             <Image 
-              source={{uri: "http:"+item.urlCloudinary}}
+              source={{uri: "https:"+item.urlCloudinary}}
               resizeMode="cover"
               style={{ width: '94%', height: width*0.66}}
               />
           </View>
-          )
-          }
-        }
-      >
-      </SideSwipe>
-      <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 5, marginBottom: 20}}>
-        {dados.fotos.map((item, key)=> {
-          return <TouchableHighlight
-          style={{paddingRight: 2, paddingLeft: 2}}
-          key={key}
-          onPress={() => this.setState({ currentIndex: key })}>
-            <MaterialCommunityIcons
-              name={key == this.state.currentIndex ? "circle" : "circle-outline"}
-              size={12}
-            />
-          </TouchableHighlight>
-        })}
-      </View>
+        )}
+        </Swiper>
       <View style={{padding: 20, backgroundColor: '#ebebeb'}}>
         <RubikText bold={true} style={{fontSize:20}}>COMO CHEGAR</RubikText>
         <RubikText style={{fontSize: 16}}>

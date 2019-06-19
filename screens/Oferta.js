@@ -7,6 +7,7 @@ import { LojaConsumer } from '../LojaContext';
 import BoasVindas from './BoasVindas';
 import Link from '../ui/Link';
 import { UserConsumer } from '../UserContext';
+import Swiper from 'react-native-swiper';
 
 class ProdutoDetalhado extends React.Component {
 
@@ -91,25 +92,36 @@ class ProdutoDetalhado extends React.Component {
 
         { oferta.fotos && oferta.fotos.length > 0 &&
           <View style={{marginBottom: 50}}>
-            <Slider {...this.sliderSettings}>
+            <Swiper 
+                style={{backgroundColor: 'magenta', height: 300}}
+                dot={<View style={{backgroundColor:'#aaaaaa', width: 5, height: 5,borderRadius: 4, margin: 3,marginTop: 50, marginBottom: -70,  borderColor: '#aaaaaa', borderWidth:1}} />}
+                activeDot={<View style={{backgroundColor:'#555555', width: 6, height: 6,borderRadius: 4, margin: 3,marginTop: 50, marginBottom: -70,  borderColor: '#555555', borderWidth:1}} />}
+            >
               {oferta.fotos.map((foto, key) => {
-                console.log(foto)
+                    return <View 
+                    key={key}
+                    style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+
+                    <Image 
+                        resizeMode="cover"
+                        source={{ uri : "https:"+(foto.urlCloudinary || "//via.placeholder.com/500x500?Text=Oferta+Vestylle")}}
+                        style={{ backgroundColor: 'blue', width:'100%',flex: 1 }}
+                    />
+                    </View>
               })}
-                
-                {/* <div style={{ position: 'relative' }}>
-                <div style={{ display: 'flex' }}>
-                    <img 
-                      style={{
-                        objectFit:'cover', 
-                      }} 
-                      alt={oferta.titulo}
-                      className="img-slider"
-                      key={key}
-                      src={foto.urlCloudinary}/>
-                </div>
-                </div> */}
-            </Slider> 
+            </Swiper>
           </View>
+        }
+        { (!oferta.fotos || oferta.fotos.length === 0) &&
+            <Image 
+                resizeMode="cover"
+                source={{ uri : "https://via.placeholder.com/500x500?text=Oferta+Vestylle"}}
+                style={{ height: 300, width:'100%',flex: 1 }}
+            />
         }
 
         <View style={{

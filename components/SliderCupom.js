@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { TouchableHighlight, View, Dimensions, Image, Animated, Easing } from 'react-native';
-import { MaterialCommunityIcons, MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons'
+import { View, Dimensions, Image, Animated, Easing } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons'
 import RubikText from '../ui/RubikText';
-import SideSwipe from 'react-native-sideswipe';
 import { LojaConsumer } from '../LojaContext';
 import { UserConsumer } from '../UserContext';
 import Link from '../ui/Link';
+import Swiper from 'react-native-swiper';
 
 class CupomCard extends Component {
 
@@ -18,7 +18,7 @@ class CupomCard extends Component {
           options={{id: this.props.id}}
         >
           <Image
-            source={{ uri : "http:"+(this.props.foto_caminho || "//via.placeholder.com/500x500")}}
+            source={{ uri : "https:"+(this.props.foto_caminho || "//via.placeholder.com/500x500?text=Cupom+Vestylle")}}
             resizeMode="cover"
             style={{ width: width*0.85, height: width*0.9 }}
           />
@@ -77,10 +77,8 @@ class ListaCupons extends React.Component {
   }
 
   componentDidMount() {
-    const intervalSlide = setInterval( this.avancaSlide , 5000);
     this.setState({
       cupons: this.props.cupons,
-      intervalSlide
     })
     this.StartImageRotateFunction();
   }
@@ -89,12 +87,6 @@ class ListaCupons extends React.Component {
     clearInterval(this.state.intervalSlide);
   } 
 
-  avancaSlide = () => {
-    let nextIndex = this.state.currentIndex+1;
-    if(nextIndex >= this.state.cupons.length) nextIndex = 0;
-    this.setState(() => ({ currentIndex: nextIndex }))
-  }
-  
   StartImageRotateFunction() {
     this.RotateValueHolder.setValue(0);
     Animated.timing(this.RotateValueHolder, {
@@ -140,46 +132,22 @@ class ListaCupons extends React.Component {
         >Nenhum cupom encontrado.</RubikText>
     }
     return <>
-      <View style={{backgroundColor: '#55bcba', height: width/2, marginTop: width/2.9, width: '100%'}}></View>
-      <SideSwipe
-        index={this.state.currentIndex}
-        itemWidth={CupomCard.WIDTH}
-        style={{ width , marginTop: -width/1.3}}
-        data={this.state.cupons}
-        contentOffset={0}
-        useVelocityForIndex={false}
-        onIndexChange={index => {
-          this.setState(() => ({ currentIndex: index }))
-          clearInterval(this.state.intervalSlide);
-          this.setState({ intervalSlide: setInterval( this.avancaSlide , 5000) })
-          }
-        }
-        renderItem={({ itemIndex, currentIndex, item, animatedValue }) => {
-          return (
-          <CupomCard
-            {...item}
-            index={itemIndex}
-            currentIndex={currentIndex}
-          />
-          )
-          }
-        }
+      <View style={{backgroundColor: '#55bcba', height: width/2, marginTop: width/3, width: '100%', zIndex: 1}}></View>
+      <View style={{height: width, marginTop: 30-width*(5/6), width: '100%', zIndex: 2}}>
+      <Swiper 
+        autoplay={true}
+          style={{ height: '100%', zIndex:4}}
+          dot={<View style={{backgroundColor:'#aaaaaa', width: 7, height: 7,borderRadius: 4, margin: 5,marginTop: 40, marginBottom: -20,  borderColor: '#aaaaaa', borderWidth:1}} />}
+          activeDot={<View style={{backgroundColor:'#555555', width: 7, height: 7,borderRadius: 4, margin: 5,marginTop: 40, marginBottom: -20,  borderColor: '#555555', borderWidth:1}} />}
       >
-      </SideSwipe>
-      <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: -5}}>
-        {this.state.cupons.map((item, key)=> {
-          return <TouchableHighlight
-          style={{paddingRight: 2, paddingLeft: 2, paddingTop: 16, paddingBottom: 12}}
+      { this.state.cupons
+        .map( (item,key) => 
+        <CupomCard
           key={key}
-          onPress={() => this.setState({ currentIndex: key })}>
-            <MaterialCommunityIcons
-              name="circle"
-              color={key == this.state.currentIndex ? "black" : "#aaaaaa"}
-              size={8}
-              style={{padding: 3}}
-            />
-          </TouchableHighlight>
-        })}
+          {...item}
+        />
+      )}
+      </Swiper>
       </View>
     </>
   }
@@ -196,7 +164,7 @@ class SliderCupom extends Component {
           {({atualizaCupons, cupons}) => (
           <ListaCupons
             atualizaCupons={atualizaCupons}
-            cupons={cupons}
+            cupons={cupons && cupons.filter((item) => item.em_destaque === true)}
             userToken={userToken}
             isLoadingUser={isLoadingUser}
           />

@@ -95,7 +95,7 @@ class FormMeuPerfil extends React.Component {
           loading: false
         })
       })
-      .catch(erro => console.error('Erro no form de meu perfil',erro))
+      .catch(erro => console.log('Erro no form de meu perfil',erro))
     }
   }
 

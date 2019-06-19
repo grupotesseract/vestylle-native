@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import { TouchableHighlight, View, Dimensions, Animated, Easing } from 'react-native';
-import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
+import { View, Dimensions, Animated, Easing } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons'
 import RubikText from '../ui/RubikText';
-import SideSwipe from 'react-native-sideswipe';
 import { LojaConsumer } from '../LojaContext';
 import { UserConsumer } from '../UserContext';
 import Produto from './Produto';
+import Swiper from 'react-native-swiper';
 
 class ListaOfertas extends React.Component {
 
   state = {
     ofertas: null,
     currentIndex: 0,
-    error: null
+    error: null,
+    listaDesejosIds: []
   }
 
   constructor() {
@@ -22,13 +23,15 @@ class ListaOfertas extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
 
-    if (!props.isLoadingUser && !state.ofertas && !props.ofertas) {
+    if ((props.listaDesejos !== state.listaDesejosIds) || (!props.isLoadingUser && !state.ofertas && !props.ofertas)) {
+
       const listaDesejosIds = props.listaDesejos ? props.listaDesejos.map((produto)=> produto.id) : []
       props.getOfertasComLike(listaDesejosIds, props.userToken)
       .then(ofertas => {
       console.log("ofertas",ofertas)
         return {
-          ofertas: ofertas
+          ofertas: ofertas,
+          listaDesejosIds: props.listaDesejosIds
         }
       })
     }
@@ -114,43 +117,20 @@ class ListaOfertas extends React.Component {
     return ( <View style={{ alignItems: 'center'}}>
       <RubikText bold={true} style={{ fontSize: 16 }}>CONFIRA AS NOVIDADES</RubikText>
       <View style={{backgroundColor: '#55bcba', height: width/1.4, marginTop: 50, width: '100%'}}></View>
-        <SideSwipe
-          index={this.state.currentIndex}
-          itemWidth={Produto.WIDTH}
-          style={{ width , marginTop: -width/1.2}}
-          data={this.state.ofertas}
-          contentOffset={0}
-          useVelocityForIndex={true}
-          onIndexChange={index => {
-              this.setState(() => ({ currentIndex: index }))
-            }
-          }
-          renderItem={({ itemIndex, currentIndex, item, animatedValue }) => {
-            return (
-            <Produto
-              {...item}
-              index={itemIndex}
-              currentIndex={currentIndex}
-            />
-            )
-            }
-          }
+      <View style={{height: width+100, marginTop: -width*(5/6), width: '100%', zIndex: 2}}>
+        <Swiper 
+          autoplay={true}
+          style={{ height: '100%', zIndex:4}}
+          dot={<View style={{backgroundColor:'#aaaaaa', width: 7, height: 7,borderRadius: 4, margin: 5,marginTop: 30, marginBottom: -10,  borderColor: '#aaaaaa', borderWidth:1, zIndex:10}} />}
+          activeDot={<View style={{backgroundColor:'#555555', width: 7, height: 7,borderRadius: 4, margin: 5,marginTop: 30, marginBottom: -10,  borderColor: '#555555', borderWidth:1, zIndex:10}} />}
         >
-        </SideSwipe>
-      <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 5}}>
-        {this.state.ofertas.map((item, key)=> {
-          return <TouchableHighlight
-          style={{paddingRight: 2, paddingLeft: 2}}
-          key={key}
-          onPress={() => this.setState({ currentIndex: key })}>
-            <MaterialCommunityIcons
-              name="circle"
-              color={key == this.state.currentIndex ? "black" : "#aaaaaa"}
-              size={8}
-              style={{padding: 3}}
-            />
-          </TouchableHighlight>
-        })}
+        { this.state.ofertas.map( (item,key) => 
+          <Produto
+            key={key}
+            {...item}
+          />
+        )}
+        </Swiper>
       </View>
     </View>
     );

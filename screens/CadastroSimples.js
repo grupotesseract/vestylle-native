@@ -21,7 +21,7 @@ class FormCadastro extends React.Component {
 
   render() {
     return <View
-      style={{width: '80%'}}>
+      style={{width: '80%', paddingBottom: 60}}>
 
       <RubikText style={styles.label}>CPF ou E-mail</RubikText>
       <TextInput

@@ -14,7 +14,7 @@ class Produto extends Component {
         <TouchableHighlight
           onPress={() => this.props.navigation.navigate('Oferta', {id: this.props.id})}>
           <Image
-            source={{ uri : "https:"+(this.props.urlFoto || "//via.placeholder.com/500x500")}}
+            source={{ uri : "https:"+(this.props.urlFoto || "//via.placeholder.com/500x500?text=Oferta+Vestylle")}}
             resizeMode="cover"
             style={{ width: width*0.85, height: width*0.9, borderWidth: 1, borderColor: 'white', borderRadius: 0 }}
           />
@@ -36,7 +36,7 @@ class Produto extends Component {
           <UserConsumer>
             {({toggleDesejo}) => (
             <TouchableHighlight
-                onPress={ () => toggleDesejo(this.props.id)}
+                onPress={ () => toggleDesejo(this.props.id).catch(() => this.props.navigation.navigate("Cadastro"))}
             >
               <MaterialCommunityIcons name={this.props.liked ? "heart" : "heart-outline"} size={30} style={{color: '#585756' }}/>
             </TouchableHighlight>

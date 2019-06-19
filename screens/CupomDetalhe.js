@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, ScrollView, Image } from 'react-native';
+import { View, ScrollView, Image, TouchableHighlight } from 'react-native';
 import RubikText from '../ui/RubikText';
 import RodapeCompleto from '../components/RodapeCompleto';
 import Breadcrumb from '../ui/Breadcrumb';
 import Link from '../ui/Link';
 import { UserConsumer } from '../UserContext';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Swiper from 'react-native-swiper';
 
 class CodigoCupom extends React.Component {
 
@@ -155,7 +156,6 @@ class CodigoCupom extends React.Component {
               paddingRight: 30,
               paddingLeft: 30,
               alignSelf: 'center',
-              cursor: 'pointer'
         }
     }
 
@@ -294,7 +294,7 @@ class DadosCupom extends React.Component {
                 top: -3,
                 right: 45,
                 padding: 10,
-                paddingBottom: 0,
+                paddingBottom: 10,
                 zIndex: 3
             }}
             >
@@ -315,21 +315,36 @@ class DadosCupom extends React.Component {
             
         { this.state.cupom.fotos && this.state.cupom.fotos.length > 0 &&
           <View style={{marginBottom: 50}}>
+            <Swiper 
+                style={{backgroundColor: 'magenta', height: 300}}
+                dot={<View style={{backgroundColor:'#aaaaaa', width: 5, height: 5,borderRadius: 4, margin: 3,marginTop: 50, marginBottom: -70,  borderColor: '#aaaaaa', borderWidth:1}} />}
+                activeDot={<View style={{backgroundColor:'#444444', width: 6, height: 6,borderRadius: 4, margin: 3,marginTop: 50, marginBottom: -70,  borderColor: '#333333', borderWidth:1}} />}
+            >
               {this.state.cupom.fotos.map((foto, key) => {
-                console.log(foto)
-              })}
-                {/* <div style={{ position: 'relative'}}>
-                    <div style={{display:'flex'}}>
+                    return <View 
+                    key={key}
+                    style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
 
                     <Image 
-                      style={{
-                        objectFit:'cover', 
-                      }} 
-                      key={key}
-                      source={foto.urlCloudinary}/>
-                    </div>
-                </div> */}
+                        resizeMode="cover"
+                        source={{ uri : "https:"+(foto.urlCloudinary || "//via.placeholder.com/500x500?text=Vestylle")}}
+                        style={{ backgroundColor: 'blue', width:'100%',flex: 1 }}
+                    />
+                    </View>
+              })}
+            </Swiper>
           </View>
+        }
+        { (!this.state.cupom.fotos || this.state.cupom.fotos.length === 0) &&
+            <Image 
+                resizeMode="cover"
+                source={{ uri : "https://via.placeholder.com/500x500?text=Cupom+Vestylle"}}
+                style={{ height: 300, width:'100%',flex: 1 }}
+            />
         }
         </View>
 

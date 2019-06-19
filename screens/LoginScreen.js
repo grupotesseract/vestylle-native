@@ -3,6 +3,7 @@ import { Image, View, StyleSheet, ImageBackground, TextInput, AsyncStorage } fro
 import ButtonBorder from '../ui/ButtonBorder';
 import RubikText from '../ui/RubikText';
 import Alert from '../ui/Alert';
+import Link from '../ui/Link';
 import { UserConsumer } from '../UserContext';
 
 class FormLogin extends React.Component {
@@ -89,7 +90,7 @@ export default class LoginScreen extends React.Component {
         source={require('../assets/fundologin.jpg')}
         style={{width: '100%', minHeight: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
 
-        <View
+        <Link to="Cadastro"
           style={{width: '80%', flexGrow:1, marginBottom: 'auto', justifyContent: 'center'}}>
           <Image
             source={require('../assets/logobranco.png')}
@@ -98,7 +99,7 @@ export default class LoginScreen extends React.Component {
           />
           <RubikText style={styles.textoBranco}>Faça seu cadastro </RubikText>
           <RubikText style={styles.textoBranco}>e receba benefícios exclusivos</RubikText>
-        </View>
+        </Link>
 
         <UserConsumer>
         {({ login }) => (

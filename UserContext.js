@@ -21,9 +21,11 @@ class UserProvider extends React.Component {
 
   constructor() {
     super()
+    this.ativaCupom = this.ativaCupom.bind(this)
     this.atualizaCupons = this.atualizaCupons.bind(this)
     this.atualizaCuponsUtilizados = this.atualizaCuponsUtilizados.bind(this)
     this.buscaCupom = this.buscaCupom.bind(this)
+    this.faleConosco = this.faleConosco.bind(this)
     this.getCupomById = this.getCupomById.bind(this)
     this.getDadosMeuPerfil = this.getDadosMeuPerfil.bind(this)
     this.getOfertas = this.getOfertas.bind(this)
@@ -266,11 +268,14 @@ class UserProvider extends React.Component {
           this.setState({cuponsUtilizados: cuponsFormatados})
           return cuponsFormatados
         } else {
-          throw jsonRes.message
+          console.log(jsonRes.message)
         }
       })
     })
-    .catch(error => console.error('Atualiza cupons utilizados error', error));
+    .catch(error => {
+      console.log('Atualiza cupons utilizados error', error)
+      this.logout();
+    });
     return res;
   }
 
@@ -289,7 +294,10 @@ class UserProvider extends React.Component {
       }
     )
     .then(response => response.json())
-    .catch(erro => console.error('Erro no buscaCupom',erro))
+    .catch(erro => {
+      console.log('Erro no buscaCupom',erro)
+      throw erro
+    })
     if(!res) {
       const msgErro = { erro: "Cupom não encontrado." }
       throw msgErro
@@ -318,7 +326,7 @@ class UserProvider extends React.Component {
       }
     )
     .then(response => response.json())
-    .catch(erro => console.error('Erro no buscaCupom',erro))
+    .catch(erro => console.log('Erro no buscaCupom',erro))
     if(!res) {
       return
     }
@@ -329,6 +337,37 @@ class UserProvider extends React.Component {
       throw res.message
     }
 
+  }
+
+  async ativaCupom(idCupom) {
+    if(!this.state.userId || !idCupom) {
+      return {}
+    }
+    const params = JSON.stringify({
+      pessoa_id: this.state.userId
+    })
+    const res = await fetch(Api.url+'/cupons/'+idCupom+'/ativar', {
+      method: 'POST', 
+      credentials: 'include',
+      headers: {
+        'Authorization': 'Bearer '+this.state.userToken,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: params
+    })
+    .then(response => {
+      return response.json().then((jsonRes) => {
+        if(jsonRes.success) {
+          const cupomAtivo = jsonRes.data
+          return cupomAtivo
+        } else {
+          throw jsonRes.message
+        }
+      })
+    })
+    .catch(error => console.log('Ativa cupom error', error));
+    return res;
   }
   async toggleDesejo(oferta_id) {
     if(!this.state.userId) {
@@ -345,7 +384,7 @@ class UserProvider extends React.Component {
       body: JSON.stringify({"oferta_id":oferta_id})
     })
     .then(response => response.json())
-    .catch(erro => console.error('Erro no toggleDesejo',erro))
+    .catch(erro => console.log('Erro no toggleDesejo',erro))
     if(!res) {
       return
     }
@@ -395,7 +434,7 @@ class UserProvider extends React.Component {
       }
     )
     .then(response => response.json())
-    .catch(erro => console.error('Erro no getDadosMeuPerfil',erro))
+    .catch(erro => console.log('Erro no getDadosMeuPerfil',erro))
     if(!res) {
       return
     }
@@ -424,6 +463,42 @@ class UserProvider extends React.Component {
     if(res.errors) {
       throw res.errors
     }
+    return res;
+  }
+
+  async faleConosco(nome, contato, assunto, mensagem) {
+    const params = JSON.stringify({
+      nome,
+      assunto,
+      mensagem,
+      contato
+    })
+    const options = this.state.userToken ?
+      {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer '+this.state.userToken,
+          'Content-Type': 'application/json'
+        },
+        body: params
+      } :
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: params
+      }
+    const res = await fetch(Api.url+'/fale_conoscos', options)
+    .then(response => {
+      return response.json().then((jsonRes) => {
+        return jsonRes
+      })
+    })
+    .catch(error => console.error('Erro no fale conosco', error));
     return res;
   }
 
@@ -531,6 +606,8 @@ class UserProvider extends React.Component {
           atualizaCuponsUtilizados: this.atualizaCuponsUtilizados,
           buscaCupom: this.buscaCupom,
           cupons: this.state.cupons,
+          cuponsUtilizados: this.state.cuponsUtilizados,
+          faleConosco: this.faleConosco, 
           getCupomById: this.getCupomById,
           getDadosMeuPerfil: this.getDadosMeuPerfil,
           getOfertas: this.getOfertas,
