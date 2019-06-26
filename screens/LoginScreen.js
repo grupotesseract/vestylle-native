@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, View, StyleSheet, ImageBackground, TextInput, AsyncStorage } from 'react-native';
+import { Image, View, StyleSheet, ImageBackground, TextInput } from 'react-native';
 import ButtonBorder from '../ui/ButtonBorder';
 import RubikText from '../ui/RubikText';
 import Alert from '../ui/Alert';
@@ -33,6 +33,11 @@ class FormLogin extends React.Component {
             onChangeText={(password) => this.setState({password})}
             value={this.state.password}
           />
+          <Link
+            to="EsqueceuSenha"
+            style={{marginTop: 10, marginBottom: 12,  justifyContent: 'flex-start'}}>
+            <RubikText style={{color: '#feca03', fontSize: 14}}>Esqueceu sua senha?</RubikText>  
+          </Link>
           <ButtonBorder 
             title="LOGIN" 
             onPress={this._signInAsync} 

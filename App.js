@@ -21,6 +21,7 @@ import Oferta from './screens/Oferta';
 import CupomDetalhe from './screens/CupomDetalhe';
 import MeusCupons from './screens/MeusCupons';
 import FaleConosco from './screens/FaleConosco';
+import EsqueceuSenha from './screens/EsqueceuSenha';
 
 class LogoTitle extends React.Component {
   render() {
@@ -68,8 +69,9 @@ class AuthLoadingScreen extends React.Component {
 const AuthStack = createStackNavigator(
   { 
     Cadastro: CadastroScreen, 
-    Login: LoginScreen, 
     CadastroSimples: CadastroSimples, 
+    EsqueceuSenha: EsqueceuSenha,
+    Login: LoginScreen, 
   },
   {
     mode: 'modal',
@@ -80,18 +82,18 @@ const AuthStack = createStackNavigator(
 
 const AppNavigator = createStackNavigator(
   {
-    Home: HomeScreen,
-    AreaCliente: AreaCliente,
     AdicionarCupom: AdicionarCupom,
-    MeuPerfil: MeuPerfil,
-    MeusPontos: MeusPontos,
-    ListaDesejos: ListaDesejos,
-    Produtos: Produtos,
-    Oferta: Oferta,
+    AreaCliente: AreaCliente,
     Cupom: CupomDetalhe,
-    MeusCupons: MeusCupons,
     FaleConosco: FaleConosco,
-    Loja: Loja
+    Home: HomeScreen,
+    ListaDesejos: ListaDesejos,
+    Loja: Loja,
+    MeuPerfil: MeuPerfil,
+    MeusCupons: MeusCupons,
+    MeusPontos: MeusPontos,
+    Oferta: Oferta,
+    Produtos: Produtos,
   },
   {
     initialRouteName: "Home",

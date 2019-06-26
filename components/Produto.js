@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableHighlight, View, Dimensions, Image } from 'react-native';
+import { TouchableHighlight, View, Dimensions, Image, Share } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import RubikText from '../ui/RubikText';
 import { UserConsumer } from '../UserContext';
@@ -29,7 +29,7 @@ class Produto extends Component {
             </>
         </TouchableHighlight>
           <View style={{flexGrow: 1, flexShrink:1, flexDirection:'row', alignItems: 'center'}}>
-            <TouchableHighlight>
+            <TouchableHighlight onPress={this.onShare}>
               <MaterialCommunityIcons name="share-variant" size={24} style={{color: '#585756' }}/>
             </TouchableHighlight>
 
@@ -48,6 +48,28 @@ class Produto extends Component {
     )
   }
 
+  onShare = async () => {
+    const urlProduto = 'https://vestylle.grupotesseract.com.br/produto/'+this.props.id;
+    try {
+      const result = await Share.share({
+        url:urlProduto,
+        message:
+          'Produto em oferta! \n '+urlProduto,
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 }
 
 

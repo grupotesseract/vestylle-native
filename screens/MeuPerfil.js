@@ -143,7 +143,6 @@ class FormMeuPerfil extends React.Component {
           <ButtonBorder
             title="CONTINUAR"
             onPress={() => this.atualizarPerfil()}
-            style={{marginBottom: 40}}
             loading={this.state.loading}
           />
 
@@ -260,7 +259,7 @@ export default class MeuPerfil extends React.Component {
         source={require('../assets/fundologin.jpg')}
         style={{width: '100%', height: '100%'}}>
         <ScrollView style={{ alignSelf: 'stretch'}}>
-        <View style={{padding: 20}}>
+        <View style={{padding: 20, paddingBottom: 40}}>
           <UserConsumer>
           {({ getDadosMeuPerfil, setDadosMeuPerfil, setPerfil, receberNotificacoes }) => (
               <FormMeuPerfil

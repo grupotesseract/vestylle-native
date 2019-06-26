@@ -9,7 +9,6 @@ import { LojaConsumer } from '../LojaContext';
 import { UserConsumer } from '../UserContext';
 import BoasVindas from './BoasVindas'
 import Link from '../ui/Link';
-import { TouchableHighlight } from 'react-native';
 import ProdutoThumb from '../components/ProdutoThumb';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 

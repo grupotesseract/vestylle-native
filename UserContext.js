@@ -57,6 +57,7 @@ class UserProvider extends React.Component {
   }
 
   componentDidMount() {
+    this._notificationSubscription = Notifications.addListener(this._handleNotification);
     this.atualizaInfosUser()
   }
 
@@ -111,6 +112,21 @@ class UserProvider extends React.Component {
     return res;
   }
 
+  async recoverPassword(email) {
+    const res = await fetch(Api.url+'/password/reset', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({email: email})
+    })
+    .then(response => response.json())
+    .catch(erro => console.error('Erro no recoverPassword',erro))
+    if(res) {
+      return res;
+    }
+  }
 
   logout() {
     AsyncStorage.clear();
@@ -538,11 +554,15 @@ class UserProvider extends React.Component {
     let token = await Notifications.getExpoPushTokenAsync();
     this.enviaExpoToken(token)
   }
+  
+  _handleNotification = (notification) => {
+    console.log(JSON.stringify(notification))
+  };
 
   enviaExpoToken = async (token) => {
     console.log('userId:', this.state.userId, 'expo token:', token);
 
-    const res = await fetch(Api.url+'/pessoas/'+this.state.userId+'/subscription', {
+    const res = await fetch(Api.url+'/exponent/devices/subscribe', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -550,17 +570,17 @@ class UserProvider extends React.Component {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({"token":token})
+      body: JSON.stringify({"expo_token":token})
     })
     .then(response => response.json())
     .catch(erro => console.error('Erro no enviaExpoToken',erro))
     if(!res) {
       return
     }
-    if(res.success) {
+    if(res.status === 'succeeded') {
       console.log("sucesso no post subscription", res)
     } else {
-      console.log("erro no enviaExpoToken", res.message)
+      console.log("erro no enviaExpoToken", res)
     }
   }
 
@@ -623,7 +643,9 @@ class UserProvider extends React.Component {
           setPerfil: this.setPerfil,
           setToken: this.setToken,
           signup: this.signup,
-          toggleDesejo: this.toggleDesejo,
+          toggleDesejo: this.toggleDesejo, 
+          userToken: this.state.userToken,
+          recoverPassword: this.recoverPassword,
         }}
       >
         {this.props.children}
