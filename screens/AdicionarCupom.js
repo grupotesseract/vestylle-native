@@ -20,7 +20,8 @@ class InputCupomQR extends React.Component {
     loadingCupom: false,
     redirectTo: null,
     hasCameraPermission: null,
-    scanned: false
+    scanned: false,
+    ativaBuscaCupom: null
   }
 
 
@@ -65,10 +66,14 @@ class InputCupomQR extends React.Component {
   }
 
   handleChangeCumpom = (e) => {
-    console.log('changecupom', e)
-    let cupomValue = this.removeURI(e.target.value)
+    let cupomValue = this.removeURI(e)
     this.setState({cupom: cupomValue})
-    this.findCupom(cupomValue)
+    clearTimeout(this.state.ativaBuscaCupom)
+    this.setState({
+      ativaBuscaCupom: setTimeout(()=>{
+        this.findCupom(cupomValue)
+      } ,1500)
+    })
   }
 
   removeURI(cupomValue) {
@@ -184,7 +189,7 @@ class InputCupomQR extends React.Component {
           width:200
         }}
         value={this.state.cupom}
-        onChange={(e) => this.handleChangeCumpom(e)}
+        onChangeText={(e) => this.handleChangeCumpom(e)}
       />
       { this.state.loadingCupom && (
           <View style={{ alignItems: 'center', alignSelf: 'stretch', paddingBottom: 10}}>

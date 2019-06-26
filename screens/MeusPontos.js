@@ -6,30 +6,47 @@ import Link from '../ui/Link'
 import Breadcrumb from '../ui/Breadcrumb';
 import ProgressCircle from 'react-native-progress-circle'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import LaughingSmiling from '../ui/LaughingSmiling';
+import { UserConsumer } from '../UserContext';
 
-export default class MeusPontos extends React.Component {
+class DisplayPontos extends React.Component {
 
   state = {
-    qtdPontos: 1000
+    nome: '',
+    qtdPontos: 0,
+    data_vencimento: null
   }
 
   componentDidMount() {
+    this.setState({
+      qtdPontos: this.props.qtdPontos || 0,
+      data_vencimento: this.datetime2DDMMAAAA(this.props.data_vencimento),
+      nome: this.props.nome || '',
+    })
+    this.props.atualizaPerfil()
+    .then(() => {
+      this.setState({
+        qtdPontos: this.props.qtdPontos || 0,
+        data_vencimento: this.datetime2DDMMAAAA(this.props.data_vencimento),
+        nome: this.props.nome || '',
+      })
+    })
   }
- 
-  render() {
-    return (
-      <View>
-        <ScrollView style={{ alignSelf: 'stretch' }}>
-          <View style={{ backgroundColor: '#1d1e1b'}}>
-            <Breadcrumb>
-              <Link to="/meuspontos"><RubikText style={{color:'white'}}>Área do Cliente &gt;&nbsp;</RubikText></Link>
-              <RubikText bold={true} style={{color:'white'}}>Meus pontos</RubikText>
-            </Breadcrumb>
 
-            <View style={{ padding: 20, alignItems: 'center' }}>
-              <RubikText style={{color: 'white', fontSize: 20}}>Suas compras</RubikText>
-              <RubikText style={{color: 'white', fontSize: 20, marginBottom: 20}}>acumulam pontos</RubikText>
-            
+  datetime2DDMMAAAA = (datetime) => {
+    if(!datetime) return "";
+    const date = datetime.split(" ")[0].split("-");
+    const year = date[0]
+    const month = date[1]
+    const day = date[2]
+    return day+"/"+month+"/"+year
+  }
+
+  render() {
+    return( 
+    <View style={{alignSelf: 'stretch'}}>
+      <View style={{width:100, alignSelf: 'center', marginTop: 20}}>
+
               <ProgressCircle
                 percent={this.state.qtdPontos/10}
                 radius={50}
@@ -40,34 +57,81 @@ export default class MeusPontos extends React.Component {
               >
                 <RubikText style={{ fontSize: 18, color: 'white' }}>{this.state.qtdPontos}</RubikText>
               </ProgressCircle>
+      </View>
+      <View style={{alignItems: 'flex-start', alignSelf: 'stretch', textAlign: 'left', marginTop: 20}}>
+        { this.state.qtdPontos === 0 ? (<>
+          <RubikText style={this.style.fonteDestaque}>Você ainda não possui pontos.</RubikText>
+          <RubikText style={{color: 'white'}}>Para começar a acumular pontos, utilize seu CPF nas próximas compras na loja Vestylle Megastore Jaú. Seus pontos aparecerão aqui.</RubikText>
+        </>) :
+         (this.state.qtdPontos > 0 && this.state.qtdPontos < 1000) ? (<>
+          { this.state.nome !== '' ? (
+            <RubikText style={{color: 'white'}} bold={true}>{this.state.nome},</RubikText>
+          ) : <></>}
+          <RubikText style={this.style.fonteDestaque}>Você ainda não possui nenhum bônus promocional.</RubikText>
+          <RubikText style={{color: 'white'}}>Junte mais { 1000 - this.state.qtdPontos } pontos para garantir seu bônus</RubikText>
+        </>) :
+        this.state.qtdPontos >= 1000 ? (<>
+          <RubikText style={{color: 'white'}} bold={true}>Parabéns {this.state.nome},</RubikText>
+          <RubikText style={{color: 'white'}} bold={true}>você completou 1000 pontos.</RubikText>
+          <RubikText style={this.style.fonteDestaque}>E ganhou um bônus de R$60,00</RubikText>
+          <RubikText style={{color: 'white'}}>para gastar como quiser.</RubikText>
+          <View style={{flexDirection: 'row', alignSelf: 'center', margin: 10}}>
+            <View style={{backgroundColor: "#55bcba", width: 40}}>
+              <RubikText bold={true} style={{width:100 ,fontSize: 10, color: "white", transform: [{rotate: '-90deg'}, {translateX: -14}, {translateY: -29}]}}>MIL PONTOS</RubikText>
+            </View>
+            <View style={{backgroundColor: "white", padding: 5}}>
+              <RubikText bold ={true} style={{fontSize: 36 ,borderWidth: 1, borderColor:"#55bcba" ,padding: 10, paddingTop: 15}}>R$ 60,00</RubikText>
+            </View>
+          </View>
 
-              <View style={{alignItems: 'flex-start', marginTop: 20}}>
-                { this.state.qtdPontos === 0 && (<>
-                  <RubikText style={this.style.fonteDestaque}>Você ainda não possui pontos.</RubikText>
-                  <RubikText style={{color: 'white'}}>Para começar a acumular pontos, utilize seu CPF nas próximas compras na loja Vestylle Megastore Jaú. Seus pontos aparecerão aqui.</RubikText>
-                </>)}
-                { this.state.qtdPontos > 0 && this.state.qtdPontos < 1000 && (<>
-                  <RubikText style={{color: 'white'}} bold={true}>Ciclana,</RubikText>
-                  <RubikText style={this.style.fonteDestaque}>Você ainda não possui nenhum bônus promocional.</RubikText>
-                  <RubikText style={{color: 'white'}}>Junte mais { 1000 - this.state.qtdPontos } pontos para garantir seu bônus</RubikText>
-                </>)}
-                { this.state.qtdPontos >= 1000 && (<>
-                  <RubikText style={{color: 'white'}} bold={true}>Parabéns Ciclana,</RubikText>
-                  <RubikText style={{color: 'white'}} bold={true}>você completou 1000 pontos.</RubikText>
-                  <RubikText style={this.style.fonteDestaque}>E ganhou um bônus de R$60,00</RubikText>
-                  <RubikText style={{color: 'white'}}>para gastar como quiser.</RubikText>
-                  <View style={{flexDirection: 'row', alignSelf: 'center', margin: 10}}>
-                    <View style={{backgroundColor: "#55bcba", width: 40}}>
-                      <RubikText bold={true} style={{width:100 ,fontSize: 10, color: "white", transform: [{rotate:'-90deg'},{translateY:-29},{translateX:-14}]}}>MIL PONTOS</RubikText>
-                    </View>
-                    <View style={{backgroundColor: "white", padding: 5}}>
-                      <RubikText bold ={true} style={{fontSize: 36 ,borderWidth: 1, borderColor:"#55bcba" ,padding: 10, paddingTop: 15}}>R$ 60,00</RubikText>
-                    </View>
-                  </View>
+          <RubikText style={{color: 'white'}}>Junte mais {1000 - this.state.qtdPontos%1000 } pontos para ganhar outro bônus</RubikText>
+          {this.state.data_vencimento ? (
+            <RubikText style={{color: 'white', fontSize: 12}}>Bônus válido até {this.state.data_vencimento}</RubikText>
+          ) : <></>}
+        </>) : <></>}
+      </View>
+    </View>
+    )
+  }
+  style = {
+    fonteDestaque: {
+      fontWeight: 'bold',
+      color: '#58bcba'
+    }
+  }
+}
+export default class MeusPontos extends React.Component {
 
-                  <RubikText style={{color: 'white'}}>Junte mais {1000 - this.state.qtdPontos%1000 } pontos para ganhar outro bônus</RubikText>
-                </>)}
-              </View>
+  componentDidMount() {
+  }
+ 
+  render() {
+    return (
+      <View>
+        <ScrollView style={{ alignSelf: 'stretch' }}>
+          <View style={{ backgroundColor: '#1d1e1b'}}>
+            <Breadcrumb>
+              <Link to="AreaCliente"><RubikText style={{color:'white'}}>Área do Cliente &gt;&nbsp;</RubikText></Link>
+              <RubikText bold={true} style={{color:'white'}}>Meus pontos</RubikText>
+            </Breadcrumb>
+
+            <View style={{ padding: 20, alignItems: 'center' }}>
+              <LaughingSmiling style={{color: 'white', fontSize: 26}}>Suas compras</LaughingSmiling>
+              <LaughingSmiling style={{color: 'white', fontSize: 26, marginBottom: 10}}>acumulam pontos</LaughingSmiling>
+              
+              <UserConsumer>
+              {({ perfil, getDadosMeuPerfil }) => {
+                if(!perfil) {
+                  return <></>
+                }
+                return <DisplayPontos 
+                  qtdPontos={perfil.saldo_pontos}
+                  data_vencimento={perfil.data_vencimento_pontos}
+                  nome={perfil.nomeSimples || perfil.nome}
+                  atualizaPerfil={getDadosMeuPerfil}
+                />
+              }}
+              </UserConsumer>
             </View>
           </View>
           <View style={{paddingTop: 20, paddingBottom: 20}}>
