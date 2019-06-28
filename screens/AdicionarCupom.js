@@ -52,11 +52,6 @@ class InputCupomQR extends React.Component {
   }
 
   componentDidUpdate() {
-    /*
-    this.setState({
-      atualizaValorCupom: this.atualizaValorCupom
-    })
-    */
     const codigoCupom = this.props.codigoCupom
     if(codigoCupom && !this.state.cupom)
     if(codigoCupom){
