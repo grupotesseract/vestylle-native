@@ -87,7 +87,7 @@ export default class CadastroScreen extends React.Component {
             navigation={this.props.navigation}
             title="ACESSE SUA CONTA" 
             to="Login"
-            fontSize="8"
+            fontSize="14"
           />
         </View>
 
@@ -122,10 +122,10 @@ const styles = StyleSheet.create({
   },
   fullCenter: {
     alignSelf: 'stretch',
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 25,
+    paddingBottom: 35,
     marginTop: 10
   }
 })
