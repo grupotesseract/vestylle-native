@@ -1,13 +1,16 @@
 import React from 'react';
-import { View, Image, ScrollView, TouchableHighlight } from 'react-native';
+import { View, Image, ScrollView } from 'react-native';
 import RubikText from '../ui/RubikText';
 import Link from '../ui/Link'
 import Breadcrumb from '../ui/Breadcrumb'
 import MiniRodape from '../components/MiniRodape'
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 import { UserConsumer } from '../UserContext';
+import { NavigationEvents } from 'react-navigation';
+import { withNavigation } from 'react-navigation';
 
-export default class AreaCliente extends React.Component {
+
+class AreaCliente extends React.Component {
   
   componentDidMount() {
     this.state = {
@@ -18,6 +21,17 @@ export default class AreaCliente extends React.Component {
   render() {
     return <ScrollView style={{backgroundColor: '#1d1e1b'}}>
 
+        <UserConsumer>
+        {({perfil}) => 
+        <NavigationEvents
+          onWillFocus={payload => {
+            if(!perfil) {
+              this.props.navigation.navigate("Cadastro")
+            }
+          }}
+        />
+        }
+        </UserConsumer>
         <Breadcrumb><RubikText bold={true} style={{color:'white'}}>Área do Cliente</RubikText></Breadcrumb>
 
         <View style={{flexDirection:'row', textAlign: 'center'}}>
@@ -135,3 +149,6 @@ export default class AreaCliente extends React.Component {
   }
 
 }
+
+
+export default withNavigation(AreaCliente);

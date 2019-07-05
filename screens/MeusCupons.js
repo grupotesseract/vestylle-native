@@ -5,6 +5,8 @@ import RubikText from '../ui/RubikText';
 import Link from '../ui/Link';
 import RodapeCompleto from '../components/RodapeCompleto';
 import { UserConsumer } from '../UserContext';
+import { NavigationEvents } from 'react-navigation';
+import { withNavigation } from 'react-navigation';
 
 class ListaCupons extends React.Component {
     state = {
@@ -260,7 +262,7 @@ class ListaCupons extends React.Component {
   }
 }
 
-export default class MeusCupons extends React.Component {
+class MeusCupons extends React.Component {
 
 
   state = {
@@ -271,6 +273,17 @@ export default class MeusCupons extends React.Component {
 
   render() {
     return (<> 
+        <UserConsumer>
+        {({perfil}) => 
+        <NavigationEvents
+          onWillFocus={payload => {
+            if(!perfil) {
+              this.props.navigation.navigate("Cadastro")
+            }
+          }}
+        />
+        }
+        </UserConsumer>
         <Link 
             to="AdicionarCupom"
             style={{
@@ -389,3 +402,5 @@ export default class MeusCupons extends React.Component {
 
 
 }
+
+export default withNavigation(MeusCupons)

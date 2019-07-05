@@ -8,6 +8,8 @@ import ProgressCircle from 'react-native-progress-circle'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import LaughingSmiling from '../ui/LaughingSmiling';
 import { UserConsumer } from '../UserContext';
+import { NavigationEvents } from 'react-navigation';
+import { withNavigation } from 'react-navigation';
 
 class DisplayPontos extends React.Component {
 
@@ -100,7 +102,7 @@ class DisplayPontos extends React.Component {
     }
   }
 }
-export default class MeusPontos extends React.Component {
+class MeusPontos extends React.Component {
 
   componentDidMount() {
   }
@@ -108,6 +110,17 @@ export default class MeusPontos extends React.Component {
   render() {
     return (
       <View>
+        <UserConsumer>
+        {({perfil}) => 
+        <NavigationEvents
+          onWillFocus={payload => {
+            if(!perfil) {
+              this.props.navigation.navigate("Cadastro")
+            }
+          }}
+        />
+        }
+        </UserConsumer>
         <ScrollView style={{ alignSelf: 'stretch' }}>
           <View style={{ backgroundColor: '#1d1e1b'}}>
             <Breadcrumb>
@@ -218,3 +231,4 @@ export default class MeusPontos extends React.Component {
   }
 
 }
+export default withNavigation(MeusPontos)

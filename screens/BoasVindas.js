@@ -4,6 +4,7 @@ import Colors from '../constants/Colors'
 import RubikText from '../ui/RubikText';
 import Link from '../ui/Link';
 import { withNavigation } from 'react-navigation';
+import { UserConsumer } from '../UserContext';
 
 class CupomContent extends React.Component {
 
@@ -92,7 +93,14 @@ class BoasVindas extends React.Component {
   render() {
     return (
       <View>
-        <CupomContent isAuth={false}/>
+        <UserConsumer>
+        {({perfil}) => {
+          if(!perfil) {
+            return <CupomContent isAuth={false}/>
+          }
+        }
+        }
+        </UserConsumer>
       </View>
     );
   }

@@ -161,16 +161,16 @@ export default class Produtos extends React.Component {
 
         <View 
           style={{ 
+           borderTopWidth: 2, 
+            borderBottomWidth: 2, 
+            borderColor: 'black', 
+            borderStyle: 'solid', 
             marginTop: 5,
             marginBottom: 5,
             flexDirection: 'row'
           }}>
           <Link to="ListaDesejos"
           style={{
-            borderTopWidth: 2, 
-            borderBottomWidth: 2, 
-            borderColor: 'black', 
-            borderStyle: 'solid', 
             paddingTop: 0, 
             paddingBottom:0,
             paddingRight: 2,
@@ -183,29 +183,7 @@ export default class Produtos extends React.Component {
             />
             <RubikText style={{textAlign: 'left', fontSize: 12,flexShrink: 1}}> Clique aqui para mostrar produtos adicionados a sua LISTA DE DESEJOS</RubikText>
           </Link>
-          {/*
-          <TouchableHighlight
-          style={{marginLeft: 20}}
-            onPress={() => this.setVisualizacaoMiniatura()}
-          >
-            <FontAwesome
-              name="th"
-              size={30}
-              style={{padding: 2,margin: 2}}
-              color={this.state.visualizacao === 'thumb' ? '#585756' : '#bdbabc'}
-            />
-          </TouchableHighlight>
-          <TouchableHighlight
-            onPress={() => this.setVisualizacaoGrande()}
-          >
-            <FontAwesome
-              name="square"
-              size={30}
-              style={{padding: 2,margin: 2}}
-              color={this.state.visualizacao !== 'thumb' ? '#585756' : '#bdbabc'}
-            />
-          </TouchableHighlight>
-          */}
+         
         </View>
       </View>
       <View style={{paddingLeft: 20, paddingRight: 20}}>
