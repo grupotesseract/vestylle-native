@@ -21,6 +21,7 @@ class LojaProvider extends React.Component {
 
   componentDidMount() {
     this.atualizaDadosLoja()
+    .catch((msg) => console.log(msg))
   }
 
   async atualizaDadosLoja() {
