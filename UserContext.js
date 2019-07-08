@@ -48,7 +48,6 @@ class UserProvider extends React.Component {
         this.setState({userToken, userId, isAuth: true})
         if(!this.state.perfil) {
           const perfil = JSON.parse(await AsyncStorage.getItem('perfil'))
-          console.log("perfil carregado do localStorage", perfil)
           const ofertas = JSON.parse(await AsyncStorage.getItem('ofertas'))
           this.setState({perfil, ofertas})
         }
@@ -82,11 +81,12 @@ class UserProvider extends React.Component {
         if(jsonRes.success) {
           this.setToken(jsonRes.data.token.token)
           this.setPerfil(jsonRes.data.pessoa)
+          this.receberNotificacoes()
         }
         return jsonRes
       })
     })
-    .catch(error => console.error('Signup error', error));
+    .catch(error => console.log('Signup error', error));
     return res;
   }
 
@@ -104,11 +104,12 @@ class UserProvider extends React.Component {
         if(jsonRes.success) {
           this.setToken(jsonRes.data.token.token)
           this.setPerfil(jsonRes.data.pessoa)
+          this.receberNotificacoes()
         }
         return jsonRes
       })
     })
-    .catch(erro => console.error('Erro no login',erro))
+    .catch(erro => console.log('Erro no login',erro))
     return res;
   }
 
@@ -122,7 +123,7 @@ class UserProvider extends React.Component {
       body: JSON.stringify({email: email})
     })
     .then(response => response.json())
-    .catch(erro => console.error('Erro no recoverPassword',erro))
+    .catch(erro => console.log('Erro no recoverPassword',erro))
     if(res) {
       return res;
     }
@@ -145,7 +146,6 @@ class UserProvider extends React.Component {
       isAuth: true,
       userToken
     })
-    console.log("setUserToken",userToken);
     await AsyncStorage.setItem('userToken', userToken.toString());
     await AsyncStorage.setItem('isAuth', "true");
   }
@@ -195,13 +195,11 @@ class UserProvider extends React.Component {
       userId: perfil.id,
       perfil: perfilCompleto
     })
-    console.log("perfil",perfilCompleto);
     await AsyncStorage.setItem('userId', perfil.id.toString());
     await AsyncStorage.setItem('perfil', JSON.stringify(perfil));
   }
 
   async setOfertas(ofertas) {
-    console.log("lista de desejo atualizada", ofertas)
     await this.setState({
       ofertas
     })
@@ -209,7 +207,6 @@ class UserProvider extends React.Component {
   }
 
   async getAPITokenFromFacebookData(fbData) {
-    console.log(fbData)
     const bodyRequest = {
       email: fbData.email,
       social_token: fbData.accessToken,
@@ -250,7 +247,6 @@ class UserProvider extends React.Component {
       .then(res => {
         if(res && res.success) {
           const cupons = res.data
-          console.log("cupons",cupons)
           this.setState({
             cupons
           })
@@ -432,7 +428,6 @@ class UserProvider extends React.Component {
     }
     if(res.success) {
       const ofertas = res.data.ofertas
-      console.log("lista de desejos atualizadas", ofertas)
       await this.setOfertas(ofertas)
       return ofertas
     } else {
@@ -599,22 +594,6 @@ class UserProvider extends React.Component {
         outputArray[i] = rawData.charCodeAt(i);
     }
     return outputArray;
-  }
-
-  registerOnPush = (swReg) => {
-    swReg.active.addEventListener("push", (event) => {
-      console.log("push received");
-      let title = (event.data && event.data.text()) || "Chegou uma mensagem!";
-      let body = "Recebemos uma mensagem por push :)";
-      let tag = "push-demo-tag";
-      let icon = '/assets/icon.png';
-
-      event.waitUntil(
-        swReg.showNotification(title, { body, icon, tag })
-      )
-    });
-
-    console.log(swReg)
   }
 
   render() {

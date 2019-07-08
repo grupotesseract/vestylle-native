@@ -60,7 +60,8 @@ class LojaProvider extends React.Component {
       const ofertas = res.data;
       this.setState({ofertas})
       return ofertas
-    } else {
+    } 
+    if(res) {
       throw res.message
     }
   }
@@ -114,7 +115,6 @@ class LojaProvider extends React.Component {
       .then(res => {
         if(res && res.success) {
           const cupons = res.data
-          console.log(cupons)
           this.setState({
             cupons
           })
