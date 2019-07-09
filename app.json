@@ -24,7 +24,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.tesseract.vestylle"
+      "bundleIdentifier": "com.tesseract.vestylle",
+      "buildNumber": "2.0"
     },
     "android": {
       "versionCode": 2,
