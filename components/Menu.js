@@ -89,7 +89,7 @@ export default class Menu extends React.Component {
             <MenuButton 
                 navigation={this.props.navigation} 
                 label="Adicionar Cupom"
-                page="AreaCliente"
+                page="AdicionarCupom"
                 icon="qrcode-scan"
                 font={MaterialCommunityIcons}
             />

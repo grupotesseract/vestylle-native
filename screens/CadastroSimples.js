@@ -132,7 +132,7 @@ export default class CadastroSimples extends React.Component {
         source={require('../assets/fundologin.jpg')}
         style={{width: '100%', minHeight: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
 
-        <View
+        <Link to="Cadastro"
           style={{width: '80%', flexGrow:1, marginBottom: 'auto', justifyContent: 'center'}}>
           <Image
             source={require('../assets/logobranco.png')}
@@ -141,7 +141,7 @@ export default class CadastroSimples extends React.Component {
           />
           <RubikText style={styles.textoBranco}>Faça seu cadastro </RubikText>
           <RubikText style={styles.textoBranco}>e receba benefícios exclusivos</RubikText>
-        </View>
+        </Link>
 
         <UserConsumer>
         {({ signup }) => (
