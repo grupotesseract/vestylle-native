@@ -31,6 +31,10 @@
       "versionCode": 2,
       "package": "com.tesseract.vestylle",
       "googleServicesFile": "./google-services.json"
+    },
+    "facebookAppId": "654012085033078",
+    "notification": {
+      "icon": "./assets/icontransparent.png"
     }
   }
 }
