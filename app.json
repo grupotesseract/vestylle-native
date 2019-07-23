@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "1.0.1",
+    "version": "1.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -25,10 +25,10 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.tesseract.vestylle",
-      "buildNumber": "2.0"
+      "buildNumber": "3.0"
     },
     "android": {
-      "versionCode": 2,
+      "versionCode": 3,
       "package": "com.tesseract.vestylle",
       "googleServicesFile": "./google-services.json"
     },
