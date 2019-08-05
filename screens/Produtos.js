@@ -5,7 +5,6 @@ import RodapeCompleto from '../components/RodapeCompleto';
 import Breadcrumb from '../ui/Breadcrumb';
 import LaughingSmiling from '../ui/LaughingSmiling';
 import Produto from '../components/Produto';
-import { LojaConsumer } from '../LojaContext';
 import { UserConsumer } from '../UserContext';
 import BoasVindas from './BoasVindas'
 import Link from '../ui/Link';
@@ -26,19 +25,10 @@ class ListaProdutos extends React.Component {
     this.atualizaOfertas = this.atualizaOfertas.bind(this)
   }
 
-  atualizaOfertas(listaNova) {
-    if(!listaNova) {
-      listaNova = this.state.listaDesejos
-    }
-    if(!this.props.getOfertasComLike) {
-      return null
-    }
-
-    let listaDesejos = []
-    if(listaNova) {
-      listaDesejos = listaNova.map((oferta) => oferta.id);
-    }
-    this.props.getOfertasComLike(listaDesejos, this.props.userToken)
+  atualizaOfertas() {
+    this.props.atualizaListaDesejos();
+    this.props.atualizaOfertas();
+    this.props.getOfertasComLike()
     .then((ofertas) => {
       this.setState({ofertas})
     })
@@ -54,7 +44,7 @@ class ListaProdutos extends React.Component {
   static getDerivedStateFromProps(props, state) {
     if (props.listaDesejos !== state.listaDesejos) {
       if(state.atualizaOfertas) {
-        state.atualizaOfertas(props.listaDesejos)
+        state.atualizaOfertas()
       }
       return {
         listaDesejos: props.listaDesejos,
@@ -126,9 +116,9 @@ class ListaProdutos extends React.Component {
           <Produto
             key={key}
             id={oferta.id}
-            img={oferta.urlFoto}
+            urlFoto={oferta.urlFoto}
             liked={oferta.liked}
-            titulo={oferta.descricao_oferta}
+            titulo={oferta.titulo}
             subtitulo={oferta.subtitulo}
             porcentagem_off={oferta.porcentagem_off}
           />
@@ -192,17 +182,14 @@ export default class Produtos extends React.Component {
 
       <View>
         <UserConsumer>
-        {({listaDesejos, userToken}) => (
-          <LojaConsumer>
-          {({getOfertasComLike}) => (
-            <ListaProdutos
-              getOfertasComLike={getOfertasComLike}
-              listaDesejos={listaDesejos}
-              userToken={userToken}
-              visualizacao={this.state.visualizacao}
-            />
-          )}
-          </LojaConsumer>
+        {({listaDesejos, getOfertasComLike, atualizaOfertas, atualizaListaDesejos}) => (
+          <ListaProdutos
+            atualizaOfertas={atualizaOfertas}
+            atualizaListaDesejos={atualizaListaDesejos}
+            getOfertasComLike={getOfertasComLike}
+            listaDesejos={listaDesejos}
+            visualizacao={this.state.visualizacao}
+          />
         )}
         </UserConsumer>
       </View>

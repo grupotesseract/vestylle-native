@@ -2,6 +2,7 @@ import React from 'react';
 import { TouchableHighlight, AsyncStorage, View } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons'
 import RubikText from '../ui/RubikText'
+import { UserConsumer } from '../UserContext';
 
 class MenuButton extends React.Component {
   render() {
@@ -130,19 +131,25 @@ export default class Menu extends React.Component {
                   style={{padding: 10, justifyContent: 'center', width: 46 }}
                   color="white"
               />
-              <TouchableHighlight
-                  onPress={this._signOutAsync}
-                  style={{padding: 10, justifyContent: 'center'}}
-              >
-                <RubikText style={{color: 'white'}}>Sair</RubikText>
-              </TouchableHighlight>
+              <UserConsumer>
+              {({ isAuth, logout }) => {
+                if(isAuth) {
+                  return <TouchableHighlight
+                    onPress={() => {
+                      logout()
+                      this.props.navigation.navigate('Home');
+                    }}
+                    style={{padding: 10, justifyContent: 'center'}}
+                    >
+                    <RubikText style={{color: 'white'}}>Sair</RubikText>
+                  </TouchableHighlight>
+                } else {
+                  return <></>
+                }
+              }}
+              </UserConsumer>
             </View>
         </View>
     );
   }
-
-  _signOutAsync = async () => {
-    await AsyncStorage.clear();
-    this.props.navigation.navigate('Auth');
-  };
 }

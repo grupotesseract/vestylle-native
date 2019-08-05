@@ -16,6 +16,7 @@ import ListaDesejos from './screens/ListaDesejos';
 import { UserProvider } from './UserContext';
 import { LojaProvider } from './LojaContext';
 import Loja from './screens/Loja';
+import Link from './ui/Link';
 import Produtos from './screens/Produtos';
 import Oferta from './screens/Oferta';
 import CupomDetalhe from './screens/CupomDetalhe';
@@ -27,11 +28,13 @@ class LogoTitle extends React.Component {
   render() {
     return (
         <View style={{ flex: 1, alignItems: 'center', paddingBottom: 10 }}>
+          <Link to="Home">
           <Image
             source={require('./assets/logofull.png')}
             resizeMode="contain"
             style={{ height: 45, marginBottom: 5, marginTop: 2 }}
           />
+          </Link>
         </View>
     );
   }

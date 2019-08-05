@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, Dimensions, Image, Animated, Easing } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'
 import RubikText from '../ui/RubikText';
-import { LojaConsumer } from '../LojaContext';
 import { UserConsumer } from '../UserContext';
 import Link from '../ui/Link';
 import Swiper from 'react-native-swiper';
@@ -62,8 +61,7 @@ class ListaCupons extends React.Component {
   static getDerivedStateFromProps(props, state) {
 
     if (!props.isLoadingUser && !state.cupons && !props.cupons) {
-      const token = props.userToken
-      props.atualizaCupons(token)
+      props.atualizaCupons()
     }
 
     if(props.cupons !== state.cupons) {
@@ -159,17 +157,12 @@ class SliderCupom extends Component {
 
     return ( <>
       <UserConsumer>
-        {({userToken, isLoadingUser}) => (
-        <LojaConsumer>
-          {({atualizaCupons, cupons}) => (
+        {({isLoadingUser, atualizaCupons, cupons}) => (
           <ListaCupons
             atualizaCupons={atualizaCupons}
             cupons={cupons && cupons.filter((item) => item.em_destaque === true)}
-            userToken={userToken}
             isLoadingUser={isLoadingUser}
           />
-          )}
-        </LojaConsumer>
         )}
       </UserConsumer>
     </>

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, Dimensions, Animated, Easing } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'
 import RubikText from '../ui/RubikText';
-import { LojaConsumer } from '../LojaContext';
 import { UserConsumer } from '../UserContext';
 import Produto from './Produto';
 import Swiper from 'react-native-swiper';
@@ -25,10 +24,8 @@ class ListaOfertas extends React.Component {
 
     if ((props.listaDesejos !== state.listaDesejosIds) || (!props.isLoadingUser && !state.ofertas && !props.ofertas)) {
 
-      const listaDesejosIds = props.listaDesejos ? props.listaDesejos.map((produto)=> produto.id) : []
-      props.getOfertasComLike(listaDesejosIds, props.userToken)
+      props.getOfertasComLike()
       .then(ofertas => {
-      console.log("ofertas",ofertas)
         return {
           ofertas: ofertas,
           listaDesejosIds: props.listaDesejosIds
@@ -47,6 +44,8 @@ class ListaOfertas extends React.Component {
   }
 
   componentDidMount() {
+    this.props.atualizaOfertas()
+    this.props.atualizaListaDesejos()
     if(!this.props.ofertas) {
       return
     }
@@ -142,19 +141,16 @@ class SliderOfertas extends Component {
   render() {
     return <View style={{marginTop:20}}>
       <UserConsumer>
-        {( {listaDesejos, userToken, isLoadingUser} ) => (
-      <LojaConsumer>
-        {({getOfertasComLike, ofertas}) => (
+      {( {getOfertasComLike, atualizaListaDesejos, ofertas, listaDesejos, isLoadingUser, atualizaOfertas} ) => (
         <ListaOfertas
+          atualizaOfertas={atualizaOfertas}
+          atualizaListaDesejos={atualizaListaDesejos}
           getOfertasComLike={getOfertasComLike}
           ofertas={ofertas}
           listaDesejos={listaDesejos}
-          userToken={userToken}
           isLoadingUser={isLoadingUser}
           navigation={this.props.navigation}
         />
-        )}
-      </LojaConsumer>
         )}
       </UserConsumer>
     </View>

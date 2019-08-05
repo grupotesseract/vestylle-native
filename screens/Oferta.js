@@ -3,7 +3,6 @@ import { View, ScrollView, Image } from 'react-native';
 import RubikText from '../ui/RubikText';
 import RodapeCompleto from '../components/RodapeCompleto';
 import Breadcrumb from '../ui/Breadcrumb';
-import { LojaConsumer } from '../LojaContext';
 import BoasVindas from './BoasVindas';
 import Link from '../ui/Link';
 import { UserConsumer } from '../UserContext';
@@ -203,16 +202,12 @@ export default class Oferta extends React.Component {
 
       <View>
         <UserConsumer>
-          {({userToken}) => (
-          <LojaConsumer>
-            {({getOfertaById}) => (
-              <ProdutoDetalhado
-                getOfertaById={getOfertaById}
-                produtoId={this.state.produtoId}
-                userToken={userToken}
-              />
-            )}
-          </LojaConsumer>
+          {({userToken, getOfertaById}) => (
+            <ProdutoDetalhado
+              getOfertaById={getOfertaById}
+              produtoId={this.state.produtoId}
+              userToken={userToken}
+            />
           )}
         </UserConsumer>
       </View>

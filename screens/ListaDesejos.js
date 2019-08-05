@@ -17,8 +17,8 @@ class ListagemDesejos extends React.Component {
   }
 
   componentDidMount() {
-    if(this.props.getOfertas) {
-      this.props.getOfertas()
+    if(this.props.atualizaListaDesejos) {
+      this.props.atualizaListaDesejos()
       .then((listaDesejos) => {
       this.setState({listaDesejos})
       })
@@ -201,9 +201,9 @@ export default class ListaDesejos extends React.Component {
 
   
       <UserConsumer>
-      {({ getOfertas, listaDesejos, isAuth }) => (<>
+      {({ atualizaListaDesejos, listaDesejos, isAuth }) => (<>
           <ListagemDesejos
-            getOfertas={getOfertas}
+            atualizaListaDesejos={atualizaListaDesejos}
             listaDesejos={listaDesejos}
             isAuth={isAuth}
           />

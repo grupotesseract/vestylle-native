@@ -19,29 +19,29 @@ class Produto extends Component {
             style={{ width: width*0.85, height: width*0.9, borderWidth: 1, borderColor: 'white', borderRadius: 0 }}
           />
         </TouchableHighlight>
-        <View style={{ width: width*0.82, flexDirection: 'row', marginTop: 10 }}>
-        <TouchableHighlight
-        style={{alignItems: 'flex-start', flexGrow: 2, flexShrink:2}}
-        onPress={() => this.props.navigation.navigate('Oferta', {id: this.props.id})}>
-            <>
-              <RubikText bold={true} style={{color: '#585756', textDecorationLine: 'underline'}}>{this.props.titulo.toUpperCase()}</RubikText>
-              <RubikText style={{color: '#585756' }}>{this.props.subtitulo}</RubikText>
-            </>
-        </TouchableHighlight>
-          <View style={{flexGrow: 1, flexShrink:1, flexDirection:'row', alignItems: 'center'}}>
+        <View style={{ width: width*0.85, flexDirection: 'row', marginTop: 10, }}>
+          <TouchableHighlight
+          style={{alignItems: 'flex-start', flexGrow: 2, flexShrink:2}}
+          onPress={() => this.props.navigation.navigate('Oferta', {id: this.props.id})}>
+              <>
+                <RubikText bold={true} style={{color: '#585756', textDecorationLine: 'underline'}}>{this.props.titulo.toUpperCase()}</RubikText>
+                <RubikText style={{color: '#585756' }}>{this.props.subtitulo}</RubikText>
+              </>
+          </TouchableHighlight>
+          <View style={{flexGrow: 1, flexShrink:1, flexDirection:'row', alignItems: 'center', justifyContent: 'flex-end'}}>
             <TouchableHighlight onPress={this.onShare}>
               <MaterialCommunityIcons name="share-variant" size={24} style={{color: '#585756' }}/>
             </TouchableHighlight>
 
-          <UserConsumer>
-            {({toggleDesejo}) => (
-            <TouchableHighlight
-                onPress={ () => toggleDesejo(this.props.id).catch(() => this.props.navigation.navigate("Cadastro"))}
-            >
-              <MaterialCommunityIcons name={this.props.liked ? "heart" : "heart-outline"} size={30} style={{color: '#585756' }}/>
-            </TouchableHighlight>
-            )}
-          </UserConsumer>
+            <UserConsumer>
+              {({toggleDesejo}) => (
+              <TouchableHighlight
+                  onPress={ () => toggleDesejo(this.props.id).catch(() => this.props.navigation.navigate("Cadastro"))}
+              >
+                <MaterialCommunityIcons name={this.props.liked ? "heart" : "heart-outline"} size={30} style={{color: '#585756' }}/>
+              </TouchableHighlight>
+              )}
+            </UserConsumer>
           </View>
         </View>
       </View>
