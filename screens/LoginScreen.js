@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, View, StyleSheet, ImageBackground, TextInput } from 'react-native';
+import { Image, View, StyleSheet, ImageBackground, TextInput, KeyboardAvoidingView} from 'react-native';
 import ButtonBorder from '../ui/ButtonBorder';
 import RubikText from '../ui/RubikText';
 import Alert from '../ui/Alert';
@@ -17,8 +17,9 @@ class FormLogin extends React.Component {
 
   render() {
     return  <>
-        <View
-          style={{width: '80%', paddingBottom: 120}}>
+        <KeyboardAvoidingView 
+          behavior="padding"
+          style={{width: '80%', paddingBottom: 30}}>
 
           <RubikText style={styles.label}>CPF ou E-mail</RubikText>
           <TextInput
@@ -43,7 +44,7 @@ class FormLogin extends React.Component {
             onPress={this._signInAsync} 
             loading={this.state.loading}
           />
-        </View>
+        </KeyboardAvoidingView>
         { this.state.erroLogin && (
           <Alert
             title = "Erro"
@@ -93,10 +94,10 @@ export default class LoginScreen extends React.Component {
     return (
       <ImageBackground
         source={require('../assets/fundologin.jpg')}
-        style={{width: '100%', minHeight: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
+        style={{width: '100%', minHeight: '100%', justifyContent: 'space-evenly', alignItems: 'center'}}>
 
         <Link to="Cadastro"
-          style={{width: '80%', flexGrow:1, marginBottom: 'auto', justifyContent: 'center'}}>
+          style={{ width: '80%', justifyContent: 'center'}}>
           <Image
             source={require('../assets/logobranco.png')}
             resizeMode="contain"

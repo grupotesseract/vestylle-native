@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, View, StyleSheet, ImageBackground, TextInput, AsyncStorage } from 'react-native';
+import { Image, View, StyleSheet,KeyboardAvoidingView, ImageBackground, TextInput, AsyncStorage } from 'react-native';
 import ButtonBorder from '../ui/ButtonBorder';
 import Link from '../ui/Link'
 import RubikText from '../ui/RubikText';
@@ -20,8 +20,9 @@ class FormCadastro extends React.Component {
   }
 
   render() {
-    return <View
-      style={{width: '80%', paddingBottom: 60}}>
+    return <KeyboardAvoidingView
+        behavior="padding"
+        style={{width: '80%', paddingBottom: 30}}>
 
       <RubikText style={styles.label}>CPF ou E-mail</RubikText>
       <TextInput
@@ -70,7 +71,7 @@ class FormCadastro extends React.Component {
           />
         )}
         
-    </View>
+    </KeyboardAvoidingView>
   }
 
   cadastrarNovoUsuario = async () => {
@@ -130,10 +131,10 @@ export default class CadastroSimples extends React.Component {
     return (
       <ImageBackground
         source={require('../assets/fundologin.jpg')}
-        style={{width: '100%', minHeight: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
+        style={{width: '100%', minHeight: '100%', justifyContent: 'space-evenly', alignItems: 'center'}}>
 
         <Link to="Cadastro"
-          style={{width: '80%', flexGrow:1, marginBottom: 'auto', justifyContent: 'center'}}>
+          style={{width: '80%', justifyContent: 'center'}}>
           <Image
             source={require('../assets/logobranco.png')}
             resizeMode="contain"
