@@ -11,7 +11,8 @@ import MeusPontos from "./screens/MeusPontos"
 import AdicionarCupom from "./screens/AdicionarCupom"
 import CadastroScreen from './screens/CadastroScreen';
 import CadastroSimples from './screens/CadastroSimples';
-import { Font, AppLoading } from 'expo';
+import { AppLoading } from 'expo';
+import * as Font from 'expo-font';
 import ListaDesejos from './screens/ListaDesejos';
 import { UserProvider } from './UserContext';
 import { LojaProvider } from './LojaContext';

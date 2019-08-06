@@ -1,13 +1,13 @@
 import React from 'react';
-import { ScrollView, View, Image, TextInput, TouchableHighlight } from 'react-native';
+import { ScrollView, View, Image, TextInput, TouchableHighlight, Dimensions } from 'react-native';
 import RubikText from '../ui/RubikText';
 import Link from '../ui/Link'
-import Breadcrumb from '../ui/Breadcrumb'
+import Breadcrumb from '../ui/Breadcrumb';
 import Alert from '../ui/Alert';
-import RodapeCompleto from '../components/RodapeCompleto'
+import RodapeCompleto from '../components/RodapeCompleto';
 import { FontAwesome } from '@expo/vector-icons'
 import { UserConsumer } from '../UserContext';
-import { BarCodeScanner } from 'expo';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 import { withNavigation } from 'react-navigation';
 import * as Permissions from 'expo-permissions';
 
@@ -26,8 +26,9 @@ class InputCupomQR extends React.Component {
 
 
   async componentDidMount() {
-    //const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    //this.setState({ hasCameraPermission: status === 'granted' });
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    this.setState({ hasCameraPermission: status === 'granted' });
+    console.log("status :", status)
   }
 
   handleScan = ({ type, data}) => {
@@ -44,6 +45,7 @@ class InputCupomQR extends React.Component {
   }
 
   changeStatus = (status) => {
+    console.log("status chegned:", status)
     const scanned = status === 'display'
     this.setState({
       status,
@@ -111,24 +113,25 @@ class InputCupomQR extends React.Component {
   }
 
   render() {
-    return <View>
+    var {height, width} = Dimensions.get('window');
+    return <>
 
       {this.state.status === 'read' && (
-        <View style={{zIndex:9, position: 'absolute', backgroundColor: 'black', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
-          {/* <TouchableHighlight 
-            onClick={() => this.changeStatus('display')}
-            style={{zIndex: 9, alignSelf: 'flex-start', position: 'absolute', top: 0, left: 20}}
+        <View style={{zIndex:9, position: 'absolute', backgroundColor: 'black', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'flex-start', alignItems: 'flex-start', height: height}}>
+          <BarCodeScanner
+            onBarCodeScanned={this.state.scanned ? undefined : this.handleScan}
+            style={{position: 'absolute', alignSelf: 'flex-start', top: 0, left: 0, right: 0, bottom: 0}}
+          />
+          <TouchableHighlight 
+            onPress={() => this.changeStatus('display')}
+            style={{ zIndex: 10, alignSelf: 'flex-start', position: 'absolute', top: 0, left: 10, padding: 10}}
           >
             <FontAwesome
               name="arrow-left"
               size={36}
               color='white'
               />
-          </TouchableHighlight> */}
-          <BarCodeScanner
-            onBarCodeScanned={this.state.scanned ? undefined : this.handleScan}
-            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}}
-          />
+          </TouchableHighlight>
         </View>
       )}
 
@@ -144,10 +147,17 @@ class InputCupomQR extends React.Component {
         }}
         onPress={() => this.changeStatus('read')}
       >
+        <View style={{flexDirection: 'row'}}>
+        <FontAwesome 
+          name="camera" 
+          color="black" 
+          size={20} 
+          style={{marginRight: 0, paddingRight: 10}}
+        />
         <RubikText style={{fontSize: 20}}>
-          <FontAwesome name="camera" color="black" size={20} style={{marginRight: 5, paddingRight: 10}}/>
           LER QR CODE
         </RubikText>
+        </View>
       </TouchableHighlight>
 
       <RubikText
@@ -200,7 +210,7 @@ class InputCupomQR extends React.Component {
           dismissAlert = {this.dismissAlertErro}
         />
       )}
-    </View>
+    </>
   }
 
   dismissAlertErro = () => {

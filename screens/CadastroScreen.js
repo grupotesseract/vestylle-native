@@ -3,7 +3,7 @@ import { View, StyleSheet, AsyncStorage, Image, ImageBackground, TouchableHighli
 import { FontAwesome } from '@expo/vector-icons'
 import Link from '../ui/Link'
 import RubikText from '../ui/RubikText';
-import { Facebook } from 'expo';
+import * as Facebook from 'expo-facebook';
 import { UserConsumer } from '../UserContext';
 class FBButton extends React.Component {
 
