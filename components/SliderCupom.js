@@ -60,8 +60,13 @@ class ListaCupons extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
 
-    if (!props.isLoadingUser && !state.cupons && !props.cupons) {
+    if ((props.cupons !== state.cupons) || (!props.isLoadingUser && !state.cupons && !props.cupons)) {
       props.atualizaCupons()
+      .then( cupons => {
+        return {
+          cupons: cupons
+        }
+      })
     }
 
     if(props.cupons !== state.cupons) {
@@ -75,6 +80,7 @@ class ListaCupons extends React.Component {
   }
 
   componentDidMount() {
+    this.props.atualizaCupons()
     this.setState({
       cupons: this.props.cupons,
     })

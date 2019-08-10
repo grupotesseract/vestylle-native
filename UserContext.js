@@ -1,7 +1,8 @@
 import React  from 'react';
 import Api from './constants/Api';
 import {AsyncStorage} from 'react-native';
-import { Permissions, Notifications } from 'expo';
+import { Notifications } from 'expo';
+import * as Permissions from 'expo-permissions';
 
 const UserContext = React.createContext();
 
@@ -54,7 +55,8 @@ class UserProvider extends React.Component {
         if(!this.state.perfil) {
           const perfil = JSON.parse(await AsyncStorage.getItem('perfil'))
           const ofertas = JSON.parse(await AsyncStorage.getItem('ofertas'))
-          this.setState({perfil, ofertas})
+          const cupons = JSON.parse(await AsyncStorage.getItem('cupons'))
+          this.setState({perfil, ofertas, cupons})
         }
       }
     }
@@ -209,6 +211,13 @@ class UserProvider extends React.Component {
     await AsyncStorage.setItem('perfil', JSON.stringify(perfil));
   }
 
+  async setCupons(cupons) {
+    await this.setState({
+      cupons
+    })
+    await AsyncStorage.setItem('cupons', JSON.stringify(cupons));
+  }
+
   async setOfertas(ofertas) {
     await this.setState({
       ofertas
@@ -308,9 +317,6 @@ class UserProvider extends React.Component {
 
 
   async atualizaCupons() {
-    if(this.state.isLoadingUser) {
-      await this.atualizaInfosUser()
-    }
     const userToken = this.state.userToken
     let auth = null
     if(userToken) {
@@ -329,13 +335,11 @@ class UserProvider extends React.Component {
       .then(res => {
         if(res && res.success) {
           const cupons = res.data
-          this.setState({
-            cupons
-          })
+          this.setCupons(cupons)
         }
       })
     })
-    .catch(erro => console.error('Erro no atualizacupons',erro))
+    .catch(erro => console.log('Erro no atualizacupons',erro))
   }
 
   async atualizaCuponsUtilizados() {
@@ -626,12 +630,13 @@ class UserProvider extends React.Component {
 
     // Stop here if the user did not grant permissions
     if (finalStatus !== 'granted') {
+      console.log("notification permission not granted")
       return;
     }
 
     // Get the token that uniquely identifies this device
     let token = await Notifications.getExpoPushTokenAsync();
-    this.enviaExpoToken(token)
+    return this.enviaExpoToken(token)
   }
   
   _handleNotification = (notification) => {
@@ -657,7 +662,7 @@ class UserProvider extends React.Component {
       return
     }
     if(res.status === 'succeeded') {
-      console.log("sucesso no post subscription", res)
+      return Promise.resolve(res)
     } else {
       console.log("erro no enviaExpoToken", res)
     }

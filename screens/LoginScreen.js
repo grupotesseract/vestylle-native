@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, View, StyleSheet, ImageBackground, TextInput, KeyboardAvoidingView} from 'react-native';
+import { Image, StyleSheet, ImageBackground, TextInput, KeyboardAvoidingView} from 'react-native';
 import ButtonBorder from '../ui/ButtonBorder';
 import RubikText from '../ui/RubikText';
 import Alert from '../ui/Alert';

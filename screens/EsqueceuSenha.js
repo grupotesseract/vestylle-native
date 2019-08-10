@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, View, ImageBackground, TextInput } from 'react-native';
+import { Image, ImageBackground, TextInput, KeyboardAvoidingView } from 'react-native';
 import ButtonBorder from '../ui/ButtonBorder';
 import RubikText from '../ui/RubikText';
 import Alert from '../ui/Alert';
@@ -20,25 +20,22 @@ class EsqueceuSenha extends React.Component {
     return (
       <ImageBackground
         source={require('../assets/fundologin.jpg')}
-        style={{width: '100%', minHeight: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
+        style={{width: '100%', minHeight: '100%', justifyContent: 'space-evenly', alignItems: 'center'}}>
 
-        <View
-          style={{width: '80%', flexGrow:4, marginBottom: 'auto', justifyContent: 'center'}}>
-          <Link 
-            to="Login"
-            style={{flexDirection: 'column'}}>
-            <Image
-              resizeMode="contain"
-              source={require('../assets/logobranco.png')}
-              style={{ width:'80%', height:60 }}
-            />
-            <RubikText style={styles.textoBranco}>Faça seu cadastro </RubikText>
-            <RubikText style={styles.textoBranco}>e receba benefícios exclusivos</RubikText>
-          </Link>
-        </View>
+        <Link to="Cadastro"
+          style={{ width: '80%', justifyContent: 'center'}}>
+          <Image
+            source={require('../assets/logobranco.png')}
+            resizeMode="contain"
+            style={{ width:'80%', height:60 }}
+          />
+          <RubikText style={styles.textoBranco}>Faça seu cadastro </RubikText>
+          <RubikText style={styles.textoBranco}>e receba benefícios exclusivos</RubikText>
+        </Link>
 
-        <View
-          style={{width: '80%', justifySelf: 'center', flexGrow: 3}}>
+        <KeyboardAvoidingView
+          behavior="padding"
+          style={{width: '80%', justifySelf: 'center'}}>
 
           <RubikText style={styles.label}>Digite seu E-mail</RubikText>
           <TextInput
@@ -55,7 +52,7 @@ class EsqueceuSenha extends React.Component {
           />
           )}
           </UserConsumer>
-        </View>
+        </KeyboardAvoidingView>
         { this.state.emailEnviado && (
           <Alert
             title = "Veja seu email!"

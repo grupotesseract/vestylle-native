@@ -45,6 +45,7 @@ class DisplayPontos extends React.Component {
   }
 
   render() {
+    const qtdBonus = Math.floor(this.state.qtdPontos/1000)
     return( 
     <View style={{alignSelf: 'stretch'}}>
       <View style={{width:100, alignSelf: 'center', marginTop: 20}}>
@@ -74,25 +75,16 @@ class DisplayPontos extends React.Component {
         </>) :
         this.state.qtdPontos >= 1000 ? (<>
           <RubikText style={{color: 'white'}} bold={true}>Parabéns {this.state.nome},</RubikText>
-          <RubikText style={{color: 'white'}} bold={true}>você completou 1000 pontos.</RubikText>
-          <RubikText style={this.style.fonteDestaque}>E ganhou { Math.floor(this.state.qtdPontos/1000) } bônus de R$60,00</RubikText>
+          <RubikText style={{color: 'white'}} bold={true}>você completou { 1000 * qtdBonus } pontos.</RubikText>
+          <RubikText style={this.style.fonteDestaque}>E ganhou { qtdBonus } bônus de R$60,00</RubikText>
           <RubikText style={{color: 'white'}}>para gastar como quiser.</RubikText>
           <View style={{flexDirection: 'row', alignSelf: 'center', margin: 10}}>
-            <View style={{backgroundColor: "#55bcba", width: 40}}>
-              <RubikText bold={true} style={{width:100 ,fontSize: 10, color: "white", transform: [{rotate: '-90deg'}, {translateX: -14}, {translateY: -29}]}}>MIL PONTOS</RubikText>
+            <View style={{backgroundColor: "#55bcba", width: 20}}>
             </View>
             <View style={{backgroundColor: "white", padding: 5}}>
-              <RubikText bold ={true} style={{fontSize: 36 ,borderWidth: 1, borderColor:"#55bcba" ,padding: 10, paddingTop: 15}}>R$ 60,00</RubikText>
+              <RubikText bold ={true} style={{fontSize: 36 ,borderWidth: 1, borderColor:"#55bcba" ,padding: 10, paddingTop: 15}}>R$ { 60 * qtdBonus },00</RubikText>
             </View>
           </View>
-          { Math.floor(this.state.qtdPontos/1000) > 1 && (
-              <RubikText 
-                bold={true}
-                style={{fontSize: 36, color: 'white', alignSelf: 'center'}}
-                >
-                x{ Math.floor(this.state.qtdPontos/1000) }
-                </RubikText>
-          )}
 
           <RubikText style={{color: 'white'}}>Junte mais {1000 - this.state.qtdPontos%1000 } pontos para ganhar outro bônus</RubikText>
           {this.state.data_vencimento ? (

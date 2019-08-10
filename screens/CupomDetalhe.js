@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, Image, TouchableHighlight } from 'react-native';
+import { View, ScrollView, Image, TouchableHighlight, Dimensions } from 'react-native';
 import RubikText from '../ui/RubikText';
 import RodapeCompleto from '../components/RodapeCompleto';
 import Breadcrumb from '../ui/Breadcrumb';
@@ -253,6 +253,7 @@ class DadosCupom extends React.Component {
                 </RubikText>
             }
         }
+        const { width } = Dimensions.get('window')
         return <>
         <View style={{alignItems: 'center', marginTop: 30, marginBottom: 20}}>
           <View style={{alignItems: 'center'}} >
@@ -325,7 +326,7 @@ class DadosCupom extends React.Component {
         { this.state.cupom.fotos_listagem && this.state.cupom.fotos_listagem.length > 0 &&
           <View style={{marginBottom: 50}}>
             <Swiper 
-                style={{backgroundColor: 'magenta', height: 300}}
+                style={{backgroundColor: 'magenta', height: width/2}}
                 dot={<View style={{backgroundColor:'#aaaaaa', width: 5, height: 5,borderRadius: 4, margin: 3,marginTop: 50, marginBottom: -70,  borderColor: '#aaaaaa', borderWidth:1}} />}
                 activeDot={<View style={{backgroundColor:'#444444', width: 6, height: 6,borderRadius: 4, margin: 3,marginTop: 50, marginBottom: -70,  borderColor: '#333333', borderWidth:1}} />}
             >

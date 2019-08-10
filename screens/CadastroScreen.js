@@ -60,8 +60,22 @@ export default class CadastroScreen extends React.Component {
           style={{ width:'80%' }}
         />
         </Link>
+
         <View style={styles.rightAlign}>
-          <RubikText style={{color:'#FFFFFF'}}>Faça seu cadastro e receba benefícios exclusivos</RubikText>
+          <RubikText style={{color:'#FFFFFF'}}>Entre ou faça seu cadastro e receba benefícios exclusivos</RubikText>
+
+          <TouchableHighlight
+            style={styles.botaoQuadrado}
+            onPress={() => this.props.navigation.navigate("Login")}>
+              <FontAwesome
+                name="sign-in"
+                size={15}
+                color="white"
+                style={{marginRight: 5}}
+                >
+                <RubikText style={styles.fontBotao}> Acesse sua conta</RubikText>
+              </FontAwesome>
+          </TouchableHighlight>
 
           <UserConsumer>
           {({ setFacebookToken }) => (
@@ -84,7 +98,7 @@ export default class CadastroScreen extends React.Component {
           </TouchableHighlight>
         </View>
 
-        <View style={styles.fullCenter}>
+        {/* <View style={styles.fullCenter}>
           <RubikText style={styles.textoSmall}>JÁ POSSUI CADASTRO? </RubikText>
           <Link
             navigation={this.props.navigation}
@@ -92,7 +106,7 @@ export default class CadastroScreen extends React.Component {
             to="Login"
             fontSize="14"
           />
-        </View>
+        </View> */}
 
       </ImageBackground>
     );
