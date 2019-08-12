@@ -185,7 +185,10 @@ class FormMeuPerfil extends React.Component {
       )
     })
     .catch( err => {
-      console.log(err)
+      AlertNative.alert(
+        'Dispositivo cadastrado',
+        'Este dispositivo está habilitado a receber notificações, assim que o aplicativo estiver em produção.'
+      )
     });
   }
 

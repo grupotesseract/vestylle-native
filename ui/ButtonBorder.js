@@ -4,9 +4,26 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 class ButtonBorder extends Component {
 
+  state = {
+    disabled: false
+  }
+
+
+  componentDidMount() {
+    this.setState({disabled: this.props.disabled})
+  }
+
+  componentWillReceiveProps(props) {
+    let disabled = props.disabled;
+    if(props.loading) {
+      disabled = true
+    }
+    this.setState({disabled})
+  }
+
   render() {
     return <TouchableHighlight 
-      onPress={this.props.onPress}
+      onPress={this.state.disabled ? null : this.props.onPress}
       style={this.style.btnBorda}>
       <View style={this.props.style || {}}>
       <Text style={this.style.txtBtnBorda}>

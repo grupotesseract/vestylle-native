@@ -12,6 +12,7 @@ class FormCadastro extends React.Component {
     cadastroConcluido: false,
     erroCadastro: false,
     passwordMismatch: false,
+    formValido: false,
     msgErro: '',
     login: '',
     password: '',
@@ -51,6 +52,8 @@ class FormCadastro extends React.Component {
       <ButtonBorder 
         title="CADASTRAR" 
         onPress={this.cadastrarNovoUsuario} 
+        loading={this.state.loading}
+        disabled={!this.state.formValido}
       />
         { this.state.cadastroConcluido && (
           <Alert
@@ -75,13 +78,15 @@ class FormCadastro extends React.Component {
   }
 
   cadastrarNovoUsuario = async () => {
+    if(!this.state.formValido) return;
     const self = this;
     this.setState({loading:true})
     await this.props.signup(this.state.login, this.state.password)
     .then(jsonRes => {
       if(jsonRes.success) {
         self.setState({
-          cadastroConcluido: true
+          cadastroConcluido: true,
+          loading: false
         })
         return
       }
@@ -95,11 +100,11 @@ class FormCadastro extends React.Component {
       }
       self.setState({
         erroCadastro: true,
-        msgErro
+        msgErro,
+        loading: false
       })
     })
     .catch(error => console.error('Deu ruim memo:', error));
-    this.setState({loading:false})
   };
 
   dismissAlertErro = () => {
@@ -115,12 +120,18 @@ class FormCadastro extends React.Component {
   blurPasswordConfirm = () => {
     if(this.state.password != this.state.passwordConfirm) {
       this.setState({
-        passwordMismatch: true
+        passwordMismatch: true,
+        formValido: false
       })
     } else {
       this.setState({
-        passwordMismatch: false
+        passwordMismatch: false,
       })
+      if(this.state.password && this.state.passwordConfirm) {
+        this.setState({
+          formValido: true
+        })
+      }
     }
   }
 }
