@@ -12,7 +12,6 @@ class ListaOfertas extends React.Component {
     ofertas: null,
     currentIndex: 0,
     error: null,
-    listaDesejosIds: []
   }
 
   constructor() {
@@ -22,20 +21,10 @@ class ListaOfertas extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
 
-    if ((props.listaDesejos !== state.listaDesejosIds) || (!props.isLoadingUser && !state.ofertas && !props.ofertas)) {
-
-      props.getOfertasComLike()
-      .then(ofertas => {
-        return {
-          ofertas: ofertas,
-          listaDesejosIds: props.listaDesejosIds
-        }
-      })
-    }
-
-    if(props.ofertas !== state.ofertas) {
+    if(!props.ofertasComLike.equals(state.ofertas)) {
+      console.log("ofertas recebidas", props.ofertasComLike)
       return {
-        ofertas: props.ofertas
+        ofertas: props.ofertasComLike
       }
     }
 
@@ -44,13 +33,10 @@ class ListaOfertas extends React.Component {
   }
 
   componentDidMount() {
-    this.props.atualizaOfertas()
     this.props.atualizaListaDesejos()
-    if(!this.props.ofertas) {
-      return
-    }
+    this.props.atualizaOfertas()
     this.setState({
-      ofertas: this.props.ofertas.slice(0,10)
+      ofertas: this.props.ofertasComLike
     })
     this.StartImageRotateFunction();
   }
@@ -141,13 +127,11 @@ class SliderOfertas extends Component {
   render() {
     return <View style={{marginTop:20}}>
       <UserConsumer>
-      {( {getOfertasComLike, atualizaListaDesejos, ofertas, listaDesejos, isLoadingUser, atualizaOfertas} ) => (
+      {( {ofertasComLike, atualizaListaDesejos, isLoadingUser, atualizaOfertas} ) => (
         <ListaOfertas
           atualizaOfertas={atualizaOfertas}
           atualizaListaDesejos={atualizaListaDesejos}
-          getOfertasComLike={getOfertasComLike}
-          ofertas={ofertas}
-          listaDesejos={listaDesejos}
+          ofertasComLike={ofertasComLike}
           isLoadingUser={isLoadingUser}
           navigation={this.props.navigation}
         />

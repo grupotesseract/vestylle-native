@@ -183,6 +183,9 @@ class FormMeuPerfil extends React.Component {
         'Dispositivo cadastrado',
         'Este dispositivo agora está habilitado a receber notificações.'
       )
+    })
+    .catch( err => {
+      console.log(err)
     });
   }
 

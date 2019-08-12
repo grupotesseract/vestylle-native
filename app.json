@@ -34,7 +34,6 @@
     },
     "facebookAppId": "654012085033078",
     "notification": {
-      "iosDisplayInForeground": true,
       "icon": "./assets/icontransparent.png"
     }
   }

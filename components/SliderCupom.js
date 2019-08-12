@@ -60,16 +60,7 @@ class ListaCupons extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
 
-    if ((props.cupons !== state.cupons) || (!props.isLoadingUser && !state.cupons && !props.cupons)) {
-      props.atualizaCupons()
-      .then( cupons => {
-        return {
-          cupons: cupons
-        }
-      })
-    }
-
-    if(props.cupons !== state.cupons) {
+    if(!props.cupons.equals(state.cupons)) {
       return {
         cupons: props.cupons
       }

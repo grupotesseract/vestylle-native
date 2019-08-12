@@ -15,6 +15,7 @@ class UserProvider extends React.Component {
     userId: null,
     perfil: null,
     ofertas: [],
+    ofertasComLike: [],
     listaDesejos: [],
     cupons: [],
     cuponsUtilizados: [],
@@ -35,6 +36,7 @@ class UserProvider extends React.Component {
     this.getOfertaById = this.getOfertaById.bind(this)
     this.atualizaListaDesejos = this.atualizaListaDesejos.bind(this)
     this.getOfertasComLike = this.getOfertasComLike.bind(this)
+    this.atualizaOfertasComLike = this.atualizaOfertasComLike.bind(this)
     this.login = this.login.bind(this)
     this.logout = this.logout.bind(this)
     this.receberNotificacoes = this.receberNotificacoes.bind(this)
@@ -183,6 +185,7 @@ class UserProvider extends React.Component {
         const userToken = loginData.token
         this.setToken(userToken)
         this.setPerfil(perfil)
+        this.receberNotificacoes()
         return userToken
       }
       return null
@@ -271,7 +274,8 @@ class UserProvider extends React.Component {
     .catch(erro => console.log('Erro no atualizaOfertas',erro))
     if(res && res.success) {
       const ofertas = res.data;
-      this.setOfertas(ofertas)
+      await this.setOfertas(ofertas)
+      await this.atualizaOfertasComLike()
       return ofertas
     } 
     if(res) {
@@ -279,16 +283,10 @@ class UserProvider extends React.Component {
     }
   }
 
-  /***
-   * Função que recebe um array com ids das ofertas
-   * e retorna todas as ofertas marcando as 
-   * recebidas com like = true 
-   */
-  async getOfertasComLike(idsOfertas) {
-    if(!idsOfertas) {
-      const listaDesejos = this.state.listaDesejos
-      idsOfertas = listaDesejos ? listaDesejos.map((oferta)=> oferta.id) : []
-    }
+  async getOfertasComLike() {
+    const listaDesejos = this.state.listaDesejos
+    const idsOfertas = listaDesejos ? listaDesejos.map((oferta)=> oferta.id) : []
+
     console.log("idsOfertas", idsOfertas)
     if(this.state.ofertas === null) {
       await this.atualizaOfertas()
@@ -305,6 +303,23 @@ class UserProvider extends React.Component {
     return ofertasComLike
   }
 
+  async atualizaOfertasComLike() {
+    const listaDesejos = this.state.listaDesejos
+    const idsListaDesejos = listaDesejos ? listaDesejos.map((oferta)=> oferta.id) : []
+
+    const ofertasComLike = this.state.ofertas.map((oferta) => {
+      if(idsListaDesejos.indexOf(oferta.id) !== -1) {
+        oferta.liked = true
+      } else {
+        oferta.liked = false
+      }
+      return oferta
+    })
+    console.log("ofertasComLike", ofertasComLike)
+
+    this.setState({ofertasComLike})
+  }
+
   async getOfertaById(idOferta) {
     if(!this.state.ofertas) {
       await this.atualizaOfertas()
@@ -314,7 +329,6 @@ class UserProvider extends React.Component {
     })
     return oferta
   }
-
 
   async atualizaCupons() {
     const userToken = this.state.userToken
@@ -408,7 +422,6 @@ class UserProvider extends React.Component {
     }
   }
 
-
   async buscaCupom(codigoCupom) {
     if(!codigoCupom) {
       const msgErro = { erro: "Sem código cupom" }
@@ -467,6 +480,7 @@ class UserProvider extends React.Component {
     .catch(error => console.log('Ativa cupom error', error));
     return res;
   }
+
   async toggleDesejo(oferta_id) {
     console.log("liked clicked na oferta de id ", oferta_id)
     if(!this.state.userId) {
@@ -484,13 +498,13 @@ class UserProvider extends React.Component {
     })
     .then(response => response.json())
     .catch(erro => Promise.reject(erro))
-    console.log(res)
     if(!res) {
       throw { error: "sem resposta"}
     }
     if(res.success) {
       const ofertas = res.data.ofertas
       this.setListaDesejos(ofertas)
+      this.atualizaOfertasComLike()
       return ofertas
     } else {
       throw res.message
@@ -657,7 +671,7 @@ class UserProvider extends React.Component {
       body: JSON.stringify({"expo_token":token})
     })
     .then(response => response.json())
-    .catch(erro => console.error('Erro no enviaExpoToken',erro))
+    .catch(erro => console.log('Erro no enviaExpoToken',erro))
     if(!res) {
       return
     }
@@ -691,6 +705,8 @@ class UserProvider extends React.Component {
         value={{ 
           atualizaOfertas: this.atualizaOfertas,
           getOfertasComLike: this.getOfertasComLike,
+          atualizaOfertasComLike: this.atualizaOfertasComLike,
+          ofertasComLike: this.state.ofertasComLike,
           getOfertaById: this.getOfertaById,
           ativaCupom: this.ativaCupom,
           atualizaCupons: this.atualizaCupons,
@@ -725,7 +741,6 @@ class UserProvider extends React.Component {
     )
   }
 
-  
 }
 
 const UserConsumer = UserContext.Consumer
