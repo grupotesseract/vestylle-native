@@ -21,6 +21,10 @@ class FormContato extends React.Component {
     mensagemEnviada: false
   }
 
+  componentDidMount() {
+    this.sendData = this.sendData.bind(this)
+  }
+
   render() {
     return (
       <View>
@@ -28,25 +32,25 @@ class FormContato extends React.Component {
       <TextInput 
         style={this.style.inputRound} 
         value={this.state.nome}
-        onChange={(e) => this.setState({nome: e.target.value})}
+        onChangeText={(nome) => this.setState({nome})}
         placeholder="Nome"
         />
       <TextInput 
         style={this.style.inputRound} 
         value={this.state.contato}
-        onChange={(e) => this.setState({contato: e.target.value})}
+        onChangeText={(contato) => this.setState({contato})}
         placeholder="Email ou telefone para contato"
         />
       <TextInput 
         style={this.style.inputRound} 
         value={this.state.assunto}
-        onChange={(e) => this.setState({assunto: e.target.value})}
+        onChangeText={(assunto) => this.setState({assunto})}
         placeholder="Assunto"
         />
       <TextInput
         style={Object.assign({}, this.style.inputRound, {marginTop: 12, marginBottom: 30})} 
         value={this.state.mensagem}
-        onChange={(e) => this.setState({mensagem: e.target.value})}
+        onChangeText={(mensagem) => this.setState({mensagem})}
         placeholder="Escreva sua mensagem aqui."
         multiline = {true}
         numberOfLines = {4}
@@ -105,7 +109,8 @@ class FormContato extends React.Component {
     this.setState({
       loading: true
     })
-    await this.props.faleConosco(
+    console.log("senData:", this.state.nome)
+    return this.props.faleConosco(
       this.state.nome,
       this.state.contato,
       this.state.assunto,

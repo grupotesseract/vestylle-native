@@ -168,7 +168,7 @@ class ListagemDesejos extends React.Component {
               <Produto
                 key={key}
                 id={desejo.id}
-                img={desejo.urlFoto}
+                urlFoto={desejo.urlFoto}
                 liked={true}
                 titulo={desejo.titulo}
                 subtitulo={desejo.subtitulo}

@@ -581,7 +581,7 @@ class UserProvider extends React.Component {
 
   async faleConosco(nome, contato, assunto, mensagem) {
     const params = JSON.stringify({
-      nome,
+      nome: nome,
       assunto,
       mensagem,
       contato
@@ -611,7 +611,7 @@ class UserProvider extends React.Component {
         return jsonRes
       })
     })
-    .catch(error => console.error('Erro no fale conosco', error));
+    .catch(error => console.log('Erro no fale conosco', error));
     return res;
   }
 
