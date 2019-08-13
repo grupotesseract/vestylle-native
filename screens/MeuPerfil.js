@@ -262,7 +262,7 @@ class FormMeuPerfil extends React.Component {
     const day = splittedDate[2]
     const month = splittedDate[1]
     const year = splittedDate[0]
-    return day+''+month+''+year;
+    return day+'/'+month+'/'+year;
   }
 }
 

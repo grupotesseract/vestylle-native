@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "1.2.0",
+    "version": "1.2.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -28,7 +28,7 @@
       "buildNumber": "5.0"
     },
     "android": {
-      "versionCode": 6,
+      "versionCode": 7,
       "package": "com.tesseract.vestylle",
       "googleServicesFile": "./google-services.json"
     },
