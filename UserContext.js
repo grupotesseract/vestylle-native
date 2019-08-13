@@ -645,7 +645,7 @@ class UserProvider extends React.Component {
     // Stop here if the user did not grant permissions
     if (finalStatus !== 'granted') {
       console.log("notification permission not granted")
-      return;
+      return Promise.reject()
     }
 
     // Get the token that uniquely identifies this device
@@ -673,7 +673,7 @@ class UserProvider extends React.Component {
     .then(response => response.json())
     .catch(erro => console.log('Erro no enviaExpoToken',erro))
     if(!res) {
-      return
+      return Promise.reject()
     }
     if(res.status === 'succeeded') {
       return Promise.resolve(res)
@@ -703,29 +703,30 @@ class UserProvider extends React.Component {
     return (
       <UserContext.Provider
         value={{ 
-          atualizaOfertas: this.atualizaOfertas,
-          getOfertasComLike: this.getOfertasComLike,
-          atualizaOfertasComLike: this.atualizaOfertasComLike,
-          ofertasComLike: this.state.ofertasComLike,
-          getOfertaById: this.getOfertaById,
           ativaCupom: this.ativaCupom,
           atualizaCupons: this.atualizaCupons,
           atualizaCuponsUtilizados: this.atualizaCuponsUtilizados,
+          atualizaListaDesejos: this.atualizaListaDesejos,
+          atualizaOfertas: this.atualizaOfertas,
+          atualizaOfertasComLike: this.atualizaOfertasComLike,
           buscaCupom: this.buscaCupom,
           cupons: this.state.cupons,
           cuponsUtilizados: this.state.cuponsUtilizados,
           faleConosco: this.faleConosco, 
           getCupomById: this.getCupomById,
           getDadosMeuPerfil: this.getDadosMeuPerfil,
-          atualizaListaDesejos: this.atualizaListaDesejos,
+          getOfertaById: this.getOfertaById,
+          getOfertasComLike: this.getOfertasComLike,
           isAuth: this.state.isAuth,
           isLoadingUser: this.state.isLoadingUser,
           listaDesejos: this.state.listaDesejos, 
           login: this.login,
           logout: this.logout,
           ofertas: this.state.ofertas,
+          ofertasComLike: this.state.ofertasComLike,
           perfil: this.state.perfil,
           receberNotificacoes: this.receberNotificacoes,
+          recoverPassword: this.recoverPassword,
           setDadosMeuPerfil: this.setDadosMeuPerfil,
           setFacebookToken: this.setFacebookToken,
           setPerfil: this.setPerfil,
@@ -733,7 +734,6 @@ class UserProvider extends React.Component {
           signup: this.signup,
           toggleDesejo: this.toggleDesejo, 
           userToken: this.state.userToken,
-          recoverPassword: this.recoverPassword,
         }}
       >
         {this.props.children}

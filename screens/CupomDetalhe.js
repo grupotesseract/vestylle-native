@@ -342,7 +342,7 @@ class DadosCupom extends React.Component {
                     <Image 
                         resizeMode="cover"
                         source={{ uri : "https:"+(foto.urlCloudinary || "//via.placeholder.com/500x500?text=Vestylle")}}
-                        style={{ backgroundColor: 'blue', width:'100%',flex: 1 }}
+                        style={{ width:'100%',flex: 1 }}
                     />
                     </View>
               })}
@@ -399,7 +399,9 @@ export default class CupomDetalhe extends React.Component {
 
       <View>
         <Breadcrumb>
-            <RubikText style={{color: '#585756'}}>Meus cupons &gt;&nbsp;</RubikText>
+            <Link to="MeusCupons">
+                <RubikText style={{color: '#585756'}}>Meus cupons &gt;&nbsp;</RubikText>
+            </Link>
             <RubikText bold={true} style={{color: '#585756'}}>Detalhes do cupom</RubikText>
         </Breadcrumb>
       </View>

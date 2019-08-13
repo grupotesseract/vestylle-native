@@ -108,7 +108,7 @@ class ProdutoDetalhado extends React.Component {
                     <Image 
                         resizeMode="cover"
                         source={{ uri : "https:"+(foto.urlCloudinary || "//via.placeholder.com/500x500?Text=Oferta+Vestylle")}}
-                        style={{ backgroundColor: 'blue', width:'100%',flex: 1 }}
+                        style={{ width:'100%',flex: 1 }}
                     />
                     </View>
               })}
@@ -197,7 +197,9 @@ export default class Oferta extends React.Component {
   render() {
     return ( <ScrollView>
       <Breadcrumb>
-        <RubikText bold={true} style={{color: '#585756'}}>Produtos</RubikText>
+        <Link to="Produtos">
+          <RubikText bold={true} style={{color: '#585756'}}>Produtos</RubikText>
+        </Link>
       </Breadcrumb>
 
       <View>

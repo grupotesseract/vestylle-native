@@ -264,11 +264,10 @@ class ListaCupons extends React.Component {
 
 class MeusCupons extends React.Component {
 
-
   state = {
-      cupons: 'ativos',
-      cuponsAtivos: [],
-      cuponsUtilizados: []
+    cupons: 'ativos',
+    cuponsAtivos: [],
+    cuponsUtilizados: []
   }
 
   render() {

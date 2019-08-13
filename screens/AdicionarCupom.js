@@ -230,8 +230,8 @@ class AdicionarCupom extends React.Component {
     return ( <ScrollView>
 
       <Breadcrumb>
-        <Link to="/areacliente"><RubikText style={{color: '#585756'}}>Área do Cliente &gt;&nbsp;</RubikText></Link>
-        <Link to="/meuscupons">
+        <Link to="AreaCliente"><RubikText style={{color: '#585756'}}>Área do Cliente &gt;&nbsp;</RubikText></Link>
+        <Link to="MeusCupons">
           <RubikText style={{color: '#585756'}}>Meus Cupons &gt;&nbsp;</RubikText>
         </Link>
         <RubikText bold={true} style={{color: '#585756'}}>Novo</RubikText>
