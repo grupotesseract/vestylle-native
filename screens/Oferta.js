@@ -92,7 +92,7 @@ class ProdutoDetalhado extends React.Component {
         { oferta.fotos && oferta.fotos.length > 0 &&
           <View style={{marginBottom: 50}}>
             <Swiper 
-                style={{backgroundColor: 'magenta', height: 300}}
+                style={{height: 300}}
                 dot={<View style={{backgroundColor:'#aaaaaa', width: 5, height: 5,borderRadius: 4, margin: 3,marginTop: 50, marginBottom: -70,  borderColor: '#aaaaaa', borderWidth:1}} />}
                 activeDot={<View style={{backgroundColor:'#555555', width: 6, height: 6,borderRadius: 4, margin: 3,marginTop: 50, marginBottom: -70,  borderColor: '#555555', borderWidth:1}} />}
             >

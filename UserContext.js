@@ -315,7 +315,6 @@ class UserProvider extends React.Component {
       }
       return oferta
     })
-    console.log("ofertasComLike", ofertasComLike)
 
     this.setState({ofertasComLike})
   }
@@ -645,7 +644,7 @@ class UserProvider extends React.Component {
     // Stop here if the user did not grant permissions
     if (finalStatus !== 'granted') {
       console.log("notification permission not granted")
-      return Promise.reject()
+      return Promise.reject(finalStatus)
     }
 
     // Get the token that uniquely identifies this device

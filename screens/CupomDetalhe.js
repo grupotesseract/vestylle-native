@@ -326,7 +326,7 @@ class DadosCupom extends React.Component {
         { this.state.cupom.fotos_listagem && this.state.cupom.fotos_listagem.length > 0 &&
           <View style={{marginBottom: 50}}>
             <Swiper 
-                style={{backgroundColor: 'magenta', height: width/2}}
+                style={{height: width/2}}
                 dot={<View style={{backgroundColor:'#aaaaaa', width: 5, height: 5,borderRadius: 4, margin: 3,marginTop: 50, marginBottom: -70,  borderColor: '#aaaaaa', borderWidth:1}} />}
                 activeDot={<View style={{backgroundColor:'#444444', width: 6, height: 6,borderRadius: 4, margin: 3,marginTop: 50, marginBottom: -70,  borderColor: '#333333', borderWidth:1}} />}
             >

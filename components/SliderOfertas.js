@@ -22,7 +22,6 @@ class ListaOfertas extends React.Component {
   static getDerivedStateFromProps(props, state) {
 
     if(!props.ofertasComLike.equals(state.ofertas)) {
-      console.log("ofertas recebidas", props.ofertasComLike)
       return {
         ofertas: props.ofertasComLike
       }

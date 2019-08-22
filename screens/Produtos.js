@@ -15,45 +15,23 @@ class ListaProdutos extends React.Component {
 
   state = {
     ofertas: [],
-    listaDesejos: [],
     visualizacao: 'full',
-    atualizaOfertas: null
-  }
-
-  constructor() {
-    super();
-    this.atualizaOfertas = this.atualizaOfertas.bind(this)
-  }
-
-  atualizaOfertas() {
-    this.props.atualizaListaDesejos();
-    this.props.atualizaOfertas();
-    this.props.getOfertasComLike()
-    .then((ofertas) => {
-      this.setState({ofertas})
-    })
   }
 
   componentDidMount() {
+    this.props.atualizaListaDesejos();
+    this.props.atualizaOfertas();
     this.setState({
-      atualizaOfertas: this.atualizaOfertas
+      ofertas: this.props.ofertasComLike
     })
-    this.atualizaOfertas();
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.listaDesejos !== state.listaDesejos) {
-      if(state.atualizaOfertas) {
-        state.atualizaOfertas()
+
+    if(!props.ofertasComLike.equals(state.ofertas)) {
+      return {
+        ofertas: props.ofertasComLike
       }
-      return {
-        listaDesejos: props.listaDesejos,
-      };
-    }
-    if (props.visualizacao !== state.visualizacao) {
-      return {
-        visualizacao: props.visualizacao,
-      };
     }
 
     // Return null to indicate no change to state.
@@ -182,12 +160,11 @@ export default class Produtos extends React.Component {
 
       <View>
         <UserConsumer>
-        {({listaDesejos, getOfertasComLike, atualizaOfertas, atualizaListaDesejos}) => (
+        {({ofertasComLike, atualizaOfertas, atualizaListaDesejos}) => (
           <ListaProdutos
             atualizaOfertas={atualizaOfertas}
             atualizaListaDesejos={atualizaListaDesejos}
-            getOfertasComLike={getOfertasComLike}
-            listaDesejos={listaDesejos}
+            ofertasComLike={ofertasComLike}
             visualizacao={this.state.visualizacao}
           />
         )}

@@ -190,7 +190,7 @@ class ListaCupons extends React.Component {
                 >
                     <RubikText style={{
                         color: 'white'
-                    }}>{ this.state.cuponsSelecionados === 'utilizados' ? "VER DETALHES" : "ATIVAR CUPOM"} </RubikText>
+                    }}>ENTRAR</RubikText>
                 </Link>
             </View>
         })}
