@@ -50,16 +50,8 @@ export default class CadastroScreen extends React.Component {
     return (
       <ImageBackground
         source={require('../assets/fundocadastro.jpg')}
-        style={{width: '100%', height: '100%', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
+        style={{width: '100%', height: '100%', justifyContent: 'space-evenly', alignItems: 'flex-end'}}>
 
-        <Link to="Home"
-          style={{width: '80%', alignSelf: 'flex-start', marginLeft: 15, marginBottom: 'auto', justifyContent: 'center'}}>
-        <Image
-          source={require('../assets/logobranco.png')}
-          resizeMode="contain"
-          style={{ width:'80%' }}
-        />
-        </Link>
 
         <View style={styles.rightAlign}>
           <RubikText style={{color:'#FFFFFF'}}>Entre ou faça seu cadastro e receba benefícios exclusivos</RubikText>
