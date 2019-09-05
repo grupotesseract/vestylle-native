@@ -21,8 +21,8 @@ export default class HomeScreen extends React.Component {
             <RubikText bold={true} style={{fontSize: 25}}>
             Preparamos
             </RubikText>
-            <LaughingSmiling style={{fontSize: 26, paddingBottom: 10}}>
-            benefícios exclusivos
+            <LaughingSmiling style={{fontSize: 26, paddingBottom: 20}}>
+            &nbsp;benefícios exclusivos&nbsp;
             </LaughingSmiling>
             <RubikText bold={true} style={{fontSize: 25, marginTop: -6}}>
             para você

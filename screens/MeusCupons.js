@@ -83,6 +83,7 @@ class ListaCupons extends React.Component {
             </TouchableHighlight>
         {this.state.cupons && 
          this.state.cupons.map((cupom,key) => {
+            const sourceImgCupom = "https:" + ( (cupom.fotos_listagem && cupom.fotos_listagem.length > 0) && cupom.fotos_listagem[0].urlCloudinary || ((cupom.oferta && cupom.oferta.urlFoto) && cupom.oferta.urlFoto));
             return <View 
             key={key}
             style={Object.assign({},{
@@ -145,7 +146,7 @@ class ListaCupons extends React.Component {
                     }}>
                     <Image
                         resizeMode="cover"
-                        source={{uri: "https://" + ( (cupom.fotos_listagem && cupom.fotos_listagem.length > 0) && cupom.fotos_listagem[0].urlCloudinary || ((cupom.oferta && cupom.oferta.urlFoto) && cupom.oferta.urlFoto))}}
+                        source={{ uri: sourceImgCupom}}
                         style={{
                             width:'100%',
                             position: 'absolute',
@@ -313,7 +314,7 @@ class MeusCupons extends React.Component {
             </Link>
             <RubikText bold={true} style={{color: 'white'}}>Meus cupons</RubikText>
         </Breadcrumb>
-        <View style={{alignItems: 'center'}}>
+        <View style={{alignItems: 'center', position: 'relative'}}>
             <UserConsumer>
             {({cupons, cuponsUtilizados, atualizaCupons, atualizaCuponsUtilizados }) => {
                 if(cupons) {

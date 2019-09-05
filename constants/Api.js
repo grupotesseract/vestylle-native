@@ -1,3 +1,3 @@
 export default { 
-    url: 'https://api.vestylle.grupotesseract.com.br/api',
+    url: 'https://api.vestylle.com.br/api',
 }
