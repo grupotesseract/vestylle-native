@@ -111,7 +111,7 @@ export default class Loja extends React.Component {
         <View style={{alignItems: 'center'}}>
           <View style={{alignItems: 'center', padding: 20}}>
             <LaughingSmiling>Vista-se bem e com a qualidade</LaughingSmiling>
-            <LaughingSmiling>das melhores marcas!</LaughingSmiling>
+            <LaughingSmiling>&nbsp;das melhores marcas!&nbsp;</LaughingSmiling>
           </View>
         </View>
         <View style={{padding: 20, alignItems: 'center'}}>

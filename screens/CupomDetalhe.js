@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, Image, TouchableHighlight, Dimensions } from 'react-native';
+import { View, ScrollView, Text, Image, TouchableHighlight, Dimensions } from 'react-native';
 import RubikText from '../ui/RubikText';
 import RodapeCompleto from '../components/RodapeCompleto';
 import Breadcrumb from '../ui/Breadcrumb';
@@ -331,6 +331,7 @@ class DadosCupom extends React.Component {
                 activeDot={<View style={{backgroundColor:'#444444', width: 6, height: 6,borderRadius: 4, margin: 3,marginTop: 50, marginBottom: -70,  borderColor: '#333333', borderWidth:1}} />}
             >
               {this.state.cupom.fotos_listagem.map((foto, key) => {
+                    const sourceImgCupom = "https:"+(foto.urlCloudinary || "//via.placeholder.com/500x500?text=Vestylle");
                     return <View 
                     key={key}
                     style={{
@@ -341,7 +342,7 @@ class DadosCupom extends React.Component {
 
                     <Image 
                         resizeMode="cover"
-                        source={{ uri : "https:"+(foto.urlCloudinary || "//via.placeholder.com/500x500?text=Vestylle")}}
+                        source={{ uri : sourceImgCupom}}
                         style={{ width:'100%',flex: 1 }}
                     />
                     </View>

@@ -20,7 +20,10 @@ class LaughingSmiling extends Component {
       textAlign: 'center',
       fontFamily: 'LaughingSmiling',
       fontSize: 18,
-      padding:0
+      paddingTop: 10,
+      marginTop: -12,
+      paddingBottom: 12,
+      marginBottom: -10,
     },
     bold: {
       fontFamily: 'RubikBold'

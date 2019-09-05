@@ -49,7 +49,7 @@ class Produto extends Component {
   }
 
   onShare = async () => {
-    const urlProduto = 'https://vestylle.grupotesseract.com.br/produtos/'+this.props.id;
+    const urlProduto = 'https://vestylle.com.br/produtos/'+this.props.id;
     try {
       const result = await Share.share({
         url:urlProduto,

@@ -130,7 +130,7 @@ class MeusPontos extends React.Component {
 
             <View style={{ padding: 20, alignItems: 'center' }}>
               <LaughingSmiling style={{color: 'white', fontSize: 26}}>Suas compras</LaughingSmiling>
-              <LaughingSmiling style={{color: 'white', fontSize: 26, marginBottom: 10}}>acumulam pontos</LaughingSmiling>
+              <LaughingSmiling style={{color: 'white', fontSize: 26, marginBottom: 10}}>&nbsp;acumulam pontos&nbsp;</LaughingSmiling>
               
               <UserConsumer>
               {({ perfil, getDadosMeuPerfil }) => {
