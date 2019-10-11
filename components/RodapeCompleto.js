@@ -49,8 +49,7 @@ class RodapeCompleto extends Component {
             style={{ height: 30, width:30, flexGrow: 0, marginRight: 5, marginLeft: 5 }}
           />
           <View style={this.style.faleComAtendentes}>
-            <RubikText bold={true} style={{color: "#feca03"}}>FALE COM UM DE</RubikText>
-            <RubikText bold={true} style={{color: "#feca03"}}>NOSSOS ATENDENTES</RubikText>
+            <RubikText bold={true} style={{color: "#feca03"}}>FALE CONOSCO</RubikText>
           </View>
         </View>
         <View style={{flexDirection: "row", paddingTop:10}}>
@@ -156,7 +155,8 @@ class RodapeCompleto extends Component {
       flexGrow: 4
     },
     faleComAtendentes: {
-      flexGrow: 8
+      flexGrow: 8,
+      justifyContent: 'center',
     },
     email: {
       borderTopWidth: 1,
