@@ -100,7 +100,7 @@ const AppNavigator = createStackNavigator(
     Produtos: Produtos,
   },
   {
-    initialRouteName: "Home",
+    initialRouteName: "AreaCliente",
     defaultNavigationOptions: ({navigation}) => ({
       headerTitle: <LogoTitle/>,
       headerRight: <MenuIcon navigation={navigation}/>

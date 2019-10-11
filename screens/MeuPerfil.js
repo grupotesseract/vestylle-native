@@ -99,7 +99,7 @@ class FormMeuPerfil extends React.Component {
   }
 
   componentDidUpdate() {
-    this.loadPerfil();
+    // this.loadPerfil();
   }
 
   componentDidMount() {
