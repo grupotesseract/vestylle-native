@@ -1,14 +1,48 @@
 import React, { Component } from 'react';
 import { View, Image, TouchableHighlight, Linking } from 'react-native';
 import { MaterialCommunityIcons} from '@expo/vector-icons'
+import { LojaConsumer } from '../LojaContext';
 import RubikText from '../ui/RubikText';
 import MiniRodape from './MiniRodape'
 
-class RodapeCompleto extends Component {
+class InfosRodape extends React.Component {
+
+  state = {
+    dadosLoja: null,
+    loading: false
+  }
+
+  componentDidMount() {
+    if(this.props.atualizaDadosLoja) {
+      this.props.atualizaDadosLoja()
+      .then((dadosLoja) => {
+        this.setState({dadosLoja})
+      })
+    }    
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.dadosLoja !== state.dadosLoja) {
+      return {
+        dadosLoja: props.dadosLoja
+      };
+    }
+
+    return null;
+  }
 
   render() {
-    return <React.Fragment>
+
+    if(!this.state.dadosLoja) {
+      return <></>
+    }
+
+    const dados = this.state.dadosLoja
+
+    return <View style={{ backgroundColor: '#0f0', width: '100%', padding:5 }}>
+
       <View style={this.style.container}>
+
         <Image
           source={require('../assets/logofull.png')}
           resizeMode="contain"
@@ -35,8 +69,8 @@ class RodapeCompleto extends Component {
           <RubikText bold={true} style={{fontSize: 14, textDecorationLine: 'underline'}}>VER LOCALIZAÇÃO NO MAPA</RubikText>
         </TouchableHighlight>
       </View>
-
       <View style={this.style.faleConosco}>
+
         <View style={this.style.linhaDuvidas}>
           <View style={this.style.duvidas}>
             <RubikText bold={true} style={{color: "white"}}>
@@ -109,9 +143,13 @@ class RodapeCompleto extends Component {
           /> megajau@vestylle.com.br
           </RubikText>
         </TouchableHighlight>
+
       </View>
-      <MiniRodape/>
-    </React.Fragment>
+    </View>
+    
+
+
+
   }
 
   openWhatsapp = () => {
@@ -168,6 +206,29 @@ class RodapeCompleto extends Component {
       justifyContent: 'flex-start'
     }
   }
+
 }
 
-export default RodapeCompleto;
+export default class RodapeCompleto extends React.Component {
+
+  render() { 
+    return ( <React.Fragment>
+    
+      <View>
+        <LojaConsumer>
+          {({ atualizaDadosLoja, dadosLoja }) => (<>
+            <InfosRodape
+              atualizaDadosLoja={atualizaDadosLoja}
+              dadosLoja={dadosLoja}
+            />
+          </>
+          )}
+        </LojaConsumer>
+      </View> 
+      <MiniRodape />
+
+    </React.Fragment>
+    )
+  }
+
+}
