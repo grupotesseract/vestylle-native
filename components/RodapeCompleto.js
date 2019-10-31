@@ -7,6 +7,10 @@ import MiniRodape from './MiniRodape'
 
 class InfosRodape extends React.Component {
 
+  onlyNumbers(str) {
+    return str.replace(/\D/g, '');
+  }
+
   state = {
     dadosLoja: null,
     loading: false
@@ -39,121 +43,118 @@ class InfosRodape extends React.Component {
 
     const dados = this.state.dadosLoja
 
-    return <View style={{ backgroundColor: '#0f0', width: '100%', padding:5 }}>
+    return <View style={{ width: '100%' }}>
 
       <View style={this.style.container}>
-
         <Image
           source={require('../assets/logofull.png')}
           resizeMode="contain"
-          style={{ width:'70%', alignSelf: 'center' }}
+          style={{ width: '70%', alignSelf: 'center' }}
         />
-        <RubikText bold={true} style={{fontSize: 19, marginTop: -20}}>Estamos te esperando</RubikText>
+        <RubikText bold={true} style={{ fontSize: 19, marginTop: -20 }}>Estamos te esperando</RubikText>
         <View style={[this.style.toLeft, this.style.paddingTopBottom]}>
-          <RubikText bold={true} style={{fontSize: 14}}>
-          <MaterialCommunityIcons
-            name="clock-outline"
-            size={14}
-          /> Horário de funcionamento</RubikText>
-          <RubikText style={{fontSize: 14}}>Segunda a Sexta 9h as 18h</RubikText>
-          <RubikText style={{fontSize: 14}}>Sábados 9h as 17h</RubikText>
+          <RubikText bold={true} style={{ fontSize: 14 }}>
+            <MaterialCommunityIcons
+              name="clock-outline"
+              size={14}
+            /> Horário de funcionamento</RubikText>
+          <RubikText style={{ fontSize: 14 }}>Segunda a Sexta 9h as 18h</RubikText>
+          <RubikText style={{ fontSize: 14 }}>Sábados 9h as 17h</RubikText>
         </View>
-        <RubikText style={{fontSize: 14}}>
+        <RubikText style={{ fontSize: 14 }}>
           <MaterialCommunityIcons
             name="map-marker"
             size={14}
           />
-          Rua Edgard Ferraz 281, Jaú - SP | 17201-440
+          {dados.endereco}
         </RubikText>
         <TouchableHighlight onPress={() => Linking.openURL("http://maps.apple.com/?ll=-22.2955408,-48.5574577,17")}>
-          <RubikText bold={true} style={{fontSize: 14, textDecorationLine: 'underline'}}>VER LOCALIZAÇÃO NO MAPA</RubikText>
+          <RubikText bold={true} style={{ fontSize: 14, textDecorationLine: 'underline' }}>VER LOCALIZAÇÃO NO MAPA</RubikText>
         </TouchableHighlight>
       </View>
       <View style={this.style.faleConosco}>
 
         <View style={this.style.linhaDuvidas}>
           <View style={this.style.duvidas}>
-            <RubikText bold={true} style={{color: "white"}}>
+            <RubikText bold={true} style={{ color: "white" }}>
               DÚVIDAS ?
             </RubikText>
           </View>
           <Image
             source={require('../assets/atendente.png')}
             resizeMode="contain"
-            style={{ height: 30, width:30, flexGrow: 0, marginRight: 5, marginLeft: 5 }}
+            style={{ height: 30, width: 30, flexGrow: 0, marginRight: 5, marginLeft: 5 }}
           />
           <View style={this.style.faleComAtendentes}>
-            <RubikText bold={true} style={{color: "#feca03"}}>FALE CONOSCO</RubikText>
+            <RubikText bold={true} style={{ color: "#feca03" }}>FALE CONOSCO</RubikText>
           </View>
         </View>
-        <View style={{flexDirection: "row", paddingTop:10}}>
-          <RubikText style={{color: "white", paddingLeft: 20}}>
-            Iniciar conversa pelo 
+        <View style={{ flexDirection: "row", paddingTop: 10 }}>
+          <RubikText style={{ color: "white", paddingLeft: 20 }}>
+            Iniciar conversa pelo
           </RubikText>
-          <TouchableHighlight onPress={this.openWhatsapp} style={{flexGrow: 1, justifyContent:"flex-start"}}>
+          <TouchableHighlight onPress={this.openWhatsapp} style={{ flexGrow: 1, marginLeft: 2, justifyContent: "flex-start" }}>
             <RubikText style={{ color: "#feca03", textDecorationLine: 'underline' }}>Whatsapp</RubikText>
           </TouchableHighlight>
         </View>
 
-        <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
-          <TouchableHighlight onPress={() => Linking.openURL("http://api.whatsapp.com/send?phone=5514997668707")}>
-            <RubikText style={{ color: "#feca03", textDecorationLine: 'underline',  flexGrow: 0, marginRight: 2 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+          <TouchableHighlight onPress={() => Linking.openURL("http://api.whatsapp.com/send?phone=55" + this.onlyNumbers(dados.whatsapp))}>
+            <RubikText style={{ color: "#feca03", textDecorationLine: 'underline', flexGrow: 0, marginRight: 2 }}>
               <MaterialCommunityIcons
-              name="whatsapp"
-              size={14}
-            />(14) 99766-8707
+                name="whatsapp"
+                size={14}
+              /> {dados.whatsapp}
             </RubikText>
           </TouchableHighlight>
-          <TouchableHighlight onPress={() => Linking.openURL("http://api.whatsapp.com/send?phone=551421043500")}>
-            <RubikText style={{ color: "#feca03", textDecorationLine: 'underline',  flexGrow: 0, marginLeft: 2 }}>
-              <MaterialCommunityIcons
-              name="whatsapp"
-              size={14}
-            />(14) 2104-3500
-            </RubikText>
-          </TouchableHighlight>
+          {dados.whatsapp2 ?
+            <TouchableHighlight onPress={() => Linking.openURL("http://api.whatsapp.com/send?phone=55" + this.onlyNumbers(dados.whatsapp2))}>
+              <RubikText style={{ color: "#feca03", textDecorationLine: 'underline', flexGrow: 0, marginLeft: 2 }}>
+                <MaterialCommunityIcons
+                  name="whatsapp"
+                  size={14}
+                />{dados.whatsapp2}
+              </RubikText>
+            </TouchableHighlight>
+            : <></>
+          }
         </View>
 
-        <View style = {{alignItems: 'flex-start', flexGrow: 1, alignSelf: 'stretch'}}>
-          <RubikText style={{color: "white", paddingTop: 20, paddingLeft: 20 }}>
+        <View style={{ alignItems: 'flex-start', flexGrow: 1, alignSelf: 'stretch' }}>
+          <RubikText style={{ color: "white", paddingTop: 20, paddingLeft: 20 }}>
             Ou se preferir, você pode entrar em
           </RubikText>
-          <RubikText style={{color: "white", paddingLeft: 20}}>
+          <RubikText style={{ color: "white", paddingLeft: 20 }}>
             contato com a loja pelo telefone
           </RubikText>
         </View>
-        <TouchableHighlight onPress={() => Linking.openURL("tel:1421043500")}>
-          <RubikText style={{ color: "white"}}>
+        <TouchableHighlight onPress={() => Linking.openURL("tel:" + this.onlyNumbers(dados.telefone))}>
+          <RubikText style={{ color: "white" }}>
             <MaterialCommunityIcons
-            name="phone"
-            size={14}
-            style={this.style.icon}
-          />(14) 2104-3500
+              name="phone"
+              size={14}
+              style={this.style.icon}
+            /> {dados.telefone}
           </RubikText>
         </TouchableHighlight>
-        <TouchableHighlight 
-          onPress={() => Linking.openURL("mailto:megajau@vestylle.com.br")}
-          style = {this.style.email}
+        <TouchableHighlight
+          onPress={() => Linking.openURL("mailto:" + dados.email)}
+          style={this.style.email}
         >
-          <RubikText style={{ color: "white"}}>
+          <RubikText style={{ color: "white" }}>
             <MaterialCommunityIcons
-            name="email"
-            size={14}
-            style={{color:"#feca03", paddingTop: 5}}
-          /> megajau@vestylle.com.br
+              name="email"
+              size={14}
+              style={{ color: "#feca03", paddingTop: 5 }}
+            /> {dados.email}
           </RubikText>
         </TouchableHighlight>
-
       </View>
     </View>
-    
-
-
-
   }
 
   openWhatsapp = () => {
-    Linking.openURL("http://api.whatsapp.com/send?phone=551421043500")
+    Linking.openURL("http://api.whatsapp.com/send?phone=55"+this.onlyNumbers(dados.whatsapp))
   }
 
   style = {
@@ -213,7 +214,6 @@ export default class RodapeCompleto extends React.Component {
 
   render() { 
     return ( <React.Fragment>
-    
       <View>
         <LojaConsumer>
           {({ atualizaDadosLoja, dadosLoja }) => (<>
@@ -226,7 +226,6 @@ export default class RodapeCompleto extends React.Component {
         </LojaConsumer>
       </View> 
       <MiniRodape />
-
     </React.Fragment>
     )
   }
