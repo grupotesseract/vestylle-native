@@ -46,7 +46,7 @@ class MiniRodape extends Component {
           )}
         </LojaConsumer>
       </View> 
-    </React.Fragment>
+    </>
     )
   }
 }
