@@ -35,7 +35,7 @@ class InfosMiniRodape extends Component {
 class MiniRodape extends Component {
 
   render() {
-    return ( <React.Fragment>
+    return ( <>
       <View>
         <LojaConsumer>
           {({ dadosLoja }) => (<>
