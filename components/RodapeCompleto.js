@@ -61,13 +61,6 @@ class InfosRodape extends React.Component {
           <RubikText style={{ fontSize: 14 }}>Segunda a Sexta 9h as 18h</RubikText>
           <RubikText style={{ fontSize: 14 }}>Sábados 9h as 17h</RubikText>
         </View>
-        <RubikText style={{ fontSize: 14 }}>
-          <MaterialCommunityIcons
-            name="map-marker"
-            size={14}
-          />
-          {dados.endereco}
-        </RubikText>
         <TouchableHighlight onPress={() => Linking.openURL("http://maps.apple.com/?ll=-22.2955408,-48.5574577,17")}>
           <RubikText bold={true} style={{ fontSize: 14, textDecorationLine: 'underline' }}>VER LOCALIZAÇÃO NO MAPA</RubikText>
         </TouchableHighlight>
