@@ -57,10 +57,11 @@ class InfosLoja extends React.Component {
 
     const dados = this.state.dadosLoja
 
-      return <View style={{ alignItems: 'center'}}>
+      return <>
+      <View style={{ alignItems: 'center', marginBottom: 20}}>
         <Swiper 
           autoplay={true}
-            style={{ height: '100%', zIndex:4}}
+            style={{ height: width*0.8, zIndex:4}}
             dot={<View style={{backgroundColor:'#aaaaaa', width: 5, height: 5,borderRadius: 4, margin: 5,marginTop: 40, marginBottom: -20,  borderColor: '#aaaaaa', borderWidth:1}} />}
             activeDot={<View style={{backgroundColor:'#555555', width: 6, height: 6,borderRadius: 4, margin: 5,marginTop: 40, marginBottom: -20,  borderColor: '#555555', borderWidth:1}} />}
         >
@@ -77,6 +78,7 @@ class InfosLoja extends React.Component {
           </View>
         )}
         </Swiper>
+        </View>
       <View style={{padding: 20, backgroundColor: '#ebebeb'}}>
         <RubikText bold={true} style={{fontSize:20}}>COMO CHEGAR</RubikText>
         <RubikText style={{fontSize: 16}}>
@@ -96,7 +98,7 @@ class InfosLoja extends React.Component {
         </TouchableHighlight>
       </View>
 
-    </View>
+    </>
   }
 }
 
