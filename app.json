@@ -38,6 +38,7 @@
     "facebookAppId": "654012085033078",
     "notification": {
       "icon": "./assets/icontransparent.png"
-    }
+    },
+    "description": ""
   }
 }
