@@ -12,13 +12,10 @@ class InfosLoja extends React.Component {
 
   state = {
     dadosLoja: null,
-    currentIndex: 0,
     loading: false
   }
 
   componentDidMount() {
-    const intervalSlide = setInterval( this.avancaSlide , 5000);
-    this.setState({ intervalSlide })
     if(this.props.atualizaDadosLoja) {
       this.props.atualizaDadosLoja()
       .then((dadosLoja) => {
@@ -42,12 +39,6 @@ class InfosLoja extends React.Component {
     clearInterval(this.state.intervalSlide);
   } 
 
-  avancaSlide = () => {
-    let nextIndex = this.state.currentIndex+1;
-    if(nextIndex >= this.state.dadosLoja.fotos.length) nextIndex = 0;
-    this.setState(() => ({ currentIndex: nextIndex }))
-  }
-  
   render() {
 
     const { width } = Dimensions.get('window');
@@ -58,25 +49,30 @@ class InfosLoja extends React.Component {
     const dados = this.state.dadosLoja
 
       return <>
-      <View style={{ alignItems: 'center', marginBottom: 20}}>
+      <View style={{ alignItems: 'center', marginBottom: 70 }}>
         <Swiper 
           autoplay={true}
-            style={{ height: width*0.8, zIndex:4}}
-            dot={<View style={{backgroundColor:'#aaaaaa', width: 5, height: 5,borderRadius: 4, margin: 5,marginTop: 40, marginBottom: -20,  borderColor: '#aaaaaa', borderWidth:1}} />}
-            activeDot={<View style={{backgroundColor:'#555555', width: 6, height: 6,borderRadius: 4, margin: 5,marginTop: 40, marginBottom: -20,  borderColor: '#555555', borderWidth:1}} />}
+          style={{ height: width*0.7, width }}
+          dot={<View style={{ backgroundColor: '#aaaaaa', width: 5, height: 5, borderRadius: 4, margin: 5, marginTop: 40, marginBottom: -70, borderColor: '#aaaaaa', borderWidth: 1 }} />}
+          activeDot={<View style={{ backgroundColor: '#555555', width: 6, height: 6, borderRadius: 4, margin: 5, marginTop: 40, marginBottom: -70, borderColor: '#555555', borderWidth: 1 }} />}
         >
-        { dados.fotos.map( (item,key) => 
-          <View 
-            style={{width, alignItems: 'center'}}
+        { dados.fotos.map( (item,key) => {
+          return <View 
             key={key}
+            style={{
+              width, 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              flex: 1, 
+            }}
           >
             <Image 
-              source={{uri: "https:"+item.urlCloudinary}}
+              source={{ uri : "https:"+(item.urlCloudinary || "//via.placeholder.com/500x500?Text=Oferta+Vestylle")}}
               resizeMode="cover"
-              style={{ width: '94%', height: width*0.66}}
+              style={{ width: width*0.9, flex: 1 }}
               />
           </View>
-        )}
+        })}
         </Swiper>
         </View>
       <View style={{padding: 20, backgroundColor: '#ebebeb'}}>

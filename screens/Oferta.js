@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, Image } from 'react-native';
+import { View, ScrollView, Image, Dimensions } from 'react-native';
 import RubikText from '../ui/RubikText';
 import RodapeCompleto from '../components/RodapeCompleto';
 import Breadcrumb from '../ui/Breadcrumb';
@@ -43,11 +43,11 @@ class ProdutoDetalhado extends React.Component {
   }
 
   render() {
+    const { width } = Dimensions.get('window')
     const oferta = this.state.oferta
     if (!oferta) return <></>
     const cupom = oferta && oferta.cupons && oferta.cupons.length > 0 ? oferta.cupons[0] : null
     const porcentagem_off = cupom && cupom.id ? cupom.porcentagem_off : oferta.porcentagem_off
-    console.log(oferta)
     return (
       <>
       {Number(porcentagem_off) > 0 && (
@@ -92,7 +92,7 @@ class ProdutoDetalhado extends React.Component {
         { oferta.fotos && oferta.fotos.length > 0 &&
           <View style={{marginBottom: 50}}>
             <Swiper 
-                style={{height: 300}}
+                style={{height: width}}
                 dot={<View style={{backgroundColor:'#aaaaaa', width: 5, height: 5,borderRadius: 4, margin: 3,marginTop: 50, marginBottom: -70,  borderColor: '#aaaaaa', borderWidth:1}} />}
                 activeDot={<View style={{backgroundColor:'#555555', width: 6, height: 6,borderRadius: 4, margin: 3,marginTop: 50, marginBottom: -70,  borderColor: '#555555', borderWidth:1}} />}
             >
@@ -108,7 +108,7 @@ class ProdutoDetalhado extends React.Component {
                     <Image 
                         resizeMode="cover"
                         source={{ uri : "https:"+(foto.urlCloudinary || "//via.placeholder.com/500x500?Text=Oferta+Vestylle")}}
-                        style={{ width:'100%',flex: 1 }}
+                        style={{ width:width, height: width, flex: 1 }}
                     />
                     </View>
               })}
