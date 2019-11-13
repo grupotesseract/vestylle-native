@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, Text, Image, TouchableHighlight, Dimensions } from 'react-native';
+import { View, ScrollView, Image, TouchableHighlight, Dimensions } from 'react-native';
 import RubikText from '../ui/RubikText';
 import RodapeCompleto from '../components/RodapeCompleto';
 import Breadcrumb from '../ui/Breadcrumb';
