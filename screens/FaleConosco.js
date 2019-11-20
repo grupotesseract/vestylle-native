@@ -109,7 +109,6 @@ class FormContato extends React.Component {
     this.setState({
       loading: true
     })
-    console.log("senData:", this.state.nome)
     return this.props.faleConosco(
       this.state.nome,
       this.state.contato,
@@ -118,10 +117,8 @@ class FormContato extends React.Component {
     )
     .then((res) => {
       if(res.success) {
-        console.log(res)
         this.setState({mensagemEnviada: true})
       } else {
-        console.log(res)
         this.setState({erroForm: res.message})
       }
 

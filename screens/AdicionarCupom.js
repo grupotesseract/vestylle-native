@@ -38,7 +38,7 @@ class InputCupomQR extends React.Component {
       this.setState({
         scanned: true,
         cupom: cupomValue,
-        status: 'display'
+        status: 'display',
       })
       this.findCupom(cupomValue)
     }
@@ -65,12 +65,11 @@ class InputCupomQR extends React.Component {
   handleChangeCumpom = (e) => {
     let cupomValue = this.removeURI(e)
     this.setState({cupom: cupomValue})
-    clearTimeout(this.state.ativaBuscaCupom)
-    this.setState({
-      ativaBuscaCupom: setTimeout(()=>{
-        this.findCupom(cupomValue)
-      } ,1500)
-    })
+  }
+
+  onPressIR = () => {
+    const { cupom } = this.state;
+    this.findCupom(cupom)
   }
 
   removeURI(cupomValue) {
@@ -92,6 +91,12 @@ class InputCupomQR extends React.Component {
         .then(cupom => {
           console.log(cupom)
           if(cupom && cupom.id) {
+            this.setState({ 
+              loadingCupom: false,
+              scanned: false,
+              ativaBuscaCupom: null,
+              cupom: ''
+            })
             this.props.navigation.navigate("Cupom", {id: cupom.id})
           }
         })
@@ -113,13 +118,14 @@ class InputCupomQR extends React.Component {
   }
 
   render() {
-    var {height, width} = Dimensions.get('window');
+    const { loadingCupom, scanned, status } = this.state;
+    var { height } = Dimensions.get('window');
     return <>
 
-      {this.state.status === 'read' && (
+      {status === 'read' && (
         <View style={{zIndex:9, position: 'absolute', backgroundColor: 'black', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'flex-start', alignItems: 'flex-start', height: height}}>
           <BarCodeScanner
-            onBarCodeScanned={this.state.scanned ? undefined : this.handleScan}
+            onBarCodeScanned={scanned ? undefined : this.handleScan}
             style={{position: 'absolute', alignSelf: 'flex-start', top: 0, left: 0, right: 0, bottom: 0}}
           />
           <TouchableHighlight 
@@ -177,30 +183,46 @@ class InputCupomQR extends React.Component {
         Insira seu código no campo abaixo
       </RubikText>
 
-      <TextInput
-        type="text"
-        style={{
-          borderWidth: 2,
-          borderStyle: 'solid',
-          borderRadius: 7,
-          borderColor: '#bdbabc',
-          backgroundColor: '#ebeaeb',
-          alignSelf: 'center',
-          padding: 10,
-          fontSize: 20,
-          marginTop: 10,
-          marginBottom: 30,
-          textAlign: 'center',
-          width:200
-        }}
-        value={this.state.cupom}
-        onChangeText={(e) => this.handleChangeCumpom(e)}
-      />
-      { this.state.loadingCupom && (
-          <View style={{ alignItems: 'center', alignSelf: 'stretch', paddingBottom: 10}}>
-            <FontAwesome name="spinner" color="black" style={{fontSize: 36}} />
-          </View>
-      )}
+      <View style={{ 
+        display: 'flex', 
+        flexDirection: "row", 
+        justifyContent: 'center',
+        marginTop: 10,
+        marginBottom: 30,
+        }}>
+        <TextInput
+          type="text"
+          style={{
+            borderWidth: 2,
+            borderStyle: 'solid',
+            borderRadius: 7,
+            borderColor: '#bdbabc',
+            backgroundColor: '#ebeaeb',
+            alignSelf: 'center',
+            padding: 10,
+            fontSize: 20,
+            textAlign: 'center',
+            width:200
+          }}
+          value={this.state.cupom}
+          onChangeText={(e) => this.handleChangeCumpom(e)}
+        />
+        <TouchableHighlight
+          style={{
+            backgroundColor: '#feca03',
+            padding: 12,
+            alignSelf:'center',
+            borderWidth: 2,
+            borderStyle: 'solid',
+            marginLeft: 5,
+            borderRadius: 7,
+            borderColor: '#eeba13',
+          }}
+          onPress={() => this.onPressIR()}
+        >
+          <FontAwesome name={loadingCupom ? "spinner" : "search"} color="black" style={{fontSize: 20}} />
+        </TouchableHighlight>
+      </View>
       { this.state.alertMessage && (
         <Alert
           title = "Adicionando Cupom"
