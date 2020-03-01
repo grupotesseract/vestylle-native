@@ -8,7 +8,7 @@ const UserContext = React.createContext();
 
 class UserProvider extends React.Component {
 
-  state = { 
+  state = {
     isAuth: false,
     userToken: null,
     fbData: null,
@@ -65,7 +65,6 @@ class UserProvider extends React.Component {
   }
 
   componentDidMount() {
-    this._notificationSubscription = Notifications.addListener(this._handleNotification);
     this.atualizaInfosUser()
   }
 
@@ -168,7 +167,7 @@ class UserProvider extends React.Component {
     if(!fbToken || fbToken === '') {
       return null
     }
-    
+
     // Get the user's name using Facebook's Graph API
     const response = await fetch('https://graph.facebook.com/me?fields=name,email&access_token=' + fbToken);
     const fbData = await response.json()
@@ -277,7 +276,7 @@ class UserProvider extends React.Component {
       await this.setOfertas(ofertas)
       await this.atualizaOfertasComLike()
       return ofertas
-    } 
+    }
     if(res) {
       throw res.message
     }
@@ -457,7 +456,7 @@ class UserProvider extends React.Component {
       pessoa_id: this.state.userId
     })
     const res = await fetch(Api.url+'/cupons/'+idCupom+'/ativar', {
-      method: 'POST', 
+      method: 'POST',
       credentials: 'include',
       headers: {
         'Authorization': 'Bearer '+this.state.userToken,
@@ -651,10 +650,6 @@ class UserProvider extends React.Component {
     let token = await Notifications.getExpoPushTokenAsync();
     return this.enviaExpoToken(token)
   }
-  
-  _handleNotification = (notification) => {
-    console.log(JSON.stringify(notification))
-  };
 
   enviaExpoToken = async (token) => {
     console.log('userId:', this.state.userId, 'expo token:', token);
@@ -701,7 +696,7 @@ class UserProvider extends React.Component {
   render() {
     return (
       <UserContext.Provider
-        value={{ 
+        value={{
           ativaCupom: this.ativaCupom,
           atualizaCupons: this.atualizaCupons,
           atualizaCuponsUtilizados: this.atualizaCuponsUtilizados,
@@ -711,14 +706,14 @@ class UserProvider extends React.Component {
           buscaCupom: this.buscaCupom,
           cupons: this.state.cupons,
           cuponsUtilizados: this.state.cuponsUtilizados,
-          faleConosco: this.faleConosco, 
+          faleConosco: this.faleConosco,
           getCupomById: this.getCupomById,
           getDadosMeuPerfil: this.getDadosMeuPerfil,
           getOfertaById: this.getOfertaById,
           getOfertasComLike: this.getOfertasComLike,
           isAuth: this.state.isAuth,
           isLoadingUser: this.state.isLoadingUser,
-          listaDesejos: this.state.listaDesejos, 
+          listaDesejos: this.state.listaDesejos,
           login: this.login,
           logout: this.logout,
           ofertas: this.state.ofertas,
@@ -731,7 +726,7 @@ class UserProvider extends React.Component {
           setPerfil: this.setPerfil,
           setToken: this.setToken,
           signup: this.signup,
-          toggleDesejo: this.toggleDesejo, 
+          toggleDesejo: this.toggleDesejo,
           userToken: this.state.userToken,
         }}
       >

@@ -8,8 +8,29 @@ import SliderOfertas from '../components/SliderOfertas';
 import RubikText from '../ui/RubikText';
 import LaughingSmiling from '../ui/LaughingSmiling';
 import Link from '../ui/Link';
+import { withNavigation } from 'react-navigation';
+import { Notifications } from 'expo';
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
+
+  componentDidMount() {
+    this._notificationSubscription = Notifications.addListener(this._handleNotification);
+  }
+
+  _handleNotification = (notification) => {
+    const { navigation } = this.props;
+    const { data } = notification;
+    const { cupom_id, produto_id } = data;
+
+    console.log(JSON.stringify(data))
+
+    if(produto_id) {
+      navigation.navigate("Oferta", {id: produto_id});
+    }
+    if(cupom_id) {
+      navigation.navigate("Cupom", {id: cupom_id});
+    }
+  };
 
   render() {
     return (
@@ -28,10 +49,10 @@ export default class HomeScreen extends React.Component {
             para você
             </RubikText>
           </View>
-          <View 
+          <View
           style={{
-            alignItems: 'center', 
-            margin: 28, 
+            alignItems: 'center',
+            margin: 28,
             paddingTop: 15,
             paddingBottom: 10,
             borderTopWidth: 1,
@@ -74,5 +95,6 @@ export default class HomeScreen extends React.Component {
       alignSelf: 'center'
     }
   }
-
 }
+
+export default withNavigation(HomeScreen);

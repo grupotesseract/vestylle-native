@@ -50,14 +50,14 @@ class AuthLoadingScreen extends React.Component {
   // Fetch the token from storage then navigate to our appropriate place
   _bootstrapAsync = async () => {
     //this.props.navigation.navigate('Cadastro');
-    
+
     const userToken = await AsyncStorage.getItem('userToken');
 
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
     //const userToken = false;
     this.props.navigation.navigate(userToken ? 'Home' : 'Cadastro');
-    
+
   };
 
   // Render any loading content that you like here
@@ -71,11 +71,11 @@ class AuthLoadingScreen extends React.Component {
 }
 
 const AuthStack = createStackNavigator(
-  { 
-    Cadastro: CadastroScreen, 
-    CadastroSimples: CadastroSimples, 
+  {
+    Cadastro: CadastroScreen,
+    CadastroSimples: CadastroSimples,
     EsqueceuSenha: EsqueceuSenha,
-    Login: LoginScreen, 
+    Login: LoginScreen,
   },
   {
     mode: 'modal',
@@ -131,7 +131,7 @@ const AppContainer = createAppContainer(createSwitchNavigator(
   }
 ));
 
-export default class App extends React.Component {
+class App extends React.Component {
 
   state = {
     fontLoaded: false
@@ -147,6 +147,7 @@ export default class App extends React.Component {
       fontLoaded: true
     })
   }
+
   render() {
     if ( !this.state.fontLoaded ) {
       return <AppLoading />;
@@ -158,6 +159,8 @@ export default class App extends React.Component {
     </LojaProvider>;
   }
 }
+
+export default App;
 
 const styles = StyleSheet.create({
   container: {
@@ -174,7 +177,7 @@ Array.prototype.equals = function (array) {
     if (!array)
         return false;
 
-    // compare lengths - can save a lot of time 
+    // compare lengths - can save a lot of time
     if (this.length != array.length)
         return false;
 
@@ -183,13 +186,13 @@ Array.prototype.equals = function (array) {
         if (this[i] instanceof Array && array[i] instanceof Array) {
             // recurse into the nested arrays
             if (!this[i].equals(array[i]))
-                return false;       
-        }           
-        else if (this[i] != array[i]) { 
+                return false;
+        }
+        else if (this[i] != array[i]) {
             // Warning - two different object instances will never be equal: {x:20} != {x:20}
-            return false;   
-        }           
-    }       
+            return false;
+        }
+    }
     return true;
 }
 // Hide method from for-in loops
