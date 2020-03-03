@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
-import { TouchableHighlight, View } from 'react-native';
+import { TouchableHighlight, View, Linking } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons'
 import { withNavigation } from 'react-navigation';
+import { LojaConsumer } from '../LojaContext';
 
 class SimpleMenu extends Component {
+
+  onlyNumbers(str) {
+    return str.replace(/\D/g, '');
+  }
 
   constructor() {
     super();
@@ -38,15 +43,21 @@ class SimpleMenu extends Component {
           style={this.style.icon}
         />
       </TouchableHighlight>
-      <TouchableHighlight
-        onPress = {() => this.goTo("FaleConosco")}
-      >
-        <MaterialCommunityIcons
-          name="whatsapp"
-          size={26}
-          style={this.style.icon}
-        />
-      </TouchableHighlight>
+      <LojaConsumer>
+        {({ dadosLoja }) =>
+
+          <TouchableHighlight
+            onPress={() => Linking.openURL("http://api.whatsapp.com/send?phone=55" + this.onlyNumbers(dadosLoja ? dadosLoja.whatsapp : null))}
+          >
+            <MaterialCommunityIcons
+              name="whatsapp"
+              size={26}
+              style={this.style.icon}
+            />
+          </TouchableHighlight>
+        }
+      </LojaConsumer>
+
     </View>
   }
 
