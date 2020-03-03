@@ -5,7 +5,7 @@ import { withNavigation } from 'react-navigation';
 import { LojaConsumer } from '../LojaContext';
 
 class SimpleMenu extends Component {
-  
+
   onlyNumbers(str) {
     return str.replace(/\D/g, '');
   }
@@ -45,8 +45,9 @@ class SimpleMenu extends Component {
       </TouchableHighlight>
       <LojaConsumer>
         {({ dadosLoja }) =>
+
           <TouchableHighlight
-            onPress={() => Linking.openURL("http://api.whatsapp.com/send?phone=55" + this.onlyNumbers(dadosLoja.whatsapp))}
+            onPress={() => Linking.openURL("http://api.whatsapp.com/send?phone=55" + this.onlyNumbers(dadosLoja ? dadosLoja.whatsapp : null))}
           >
             <MaterialCommunityIcons
               name="whatsapp"
@@ -56,7 +57,7 @@ class SimpleMenu extends Component {
           </TouchableHighlight>
         }
       </LojaConsumer>
-      
+
     </View>
   }
 
